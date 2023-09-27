@@ -75,7 +75,7 @@ flutter:
     # - assets/images/3x/
     # - assets/images/2x/
     - assets/images/
-    - assets/icons/
+    # - assets/icons/
     - assets/fonts/
     - assets/fonts/sen/
     - assets/fonts/roboto/
