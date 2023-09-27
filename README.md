@@ -17,6 +17,6 @@ samples, guidance on mobile development, and a full API reference.
 
 ### You will find in this repo the following stuff:
 
-- The
+- Comming soon
 
 #### © 2023 minhduc-fu, Inc.
