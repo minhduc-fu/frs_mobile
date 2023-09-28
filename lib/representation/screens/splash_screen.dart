@@ -8,7 +8,6 @@ import 'package:demo_frs_app/representation/screens/intro_screen.dart';
 // import 'package:demo_frs_app/representation/screens/login_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -25,8 +24,6 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    // ẩn thanh ngày giờ
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
     redirectIntroScreen();
   }
 

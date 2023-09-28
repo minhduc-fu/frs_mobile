@@ -11,10 +11,13 @@ class AssetHelper {
   static const String imageBanner1 = 'assets/images/banner_1.png';
   static const String imageBanner2 = 'assets/images/banner_2.png';
   static const String imageBanner3 = 'assets/images/banner_3.png';
-  static const String imageLogoFRS = 'assets/images/logo_frs.png';
-  static const String imageFRS = 'assets/images/frs.png';
+  static const String imageLogoFRS = 'assets/images/logofrs.png';
   static const String imageSplash = 'assets/images/splash.png';
   static const String imageSushi = 'assets/images/sushi.png';
   static const String imageSushi2 = 'assets/images/sushi2.png';
   static const String imageSushi3 = 'assets/images/sushi3.png';
+  static const String imageDior = 'assets/images/dior.png';
+  static const String imageGucci = 'assets/images/gucci.png';
+  static const String imageChanel = 'assets/images/chanel.png';
+  static const String imageLV = 'assets/images/lv.png';
 }

@@ -7,7 +7,7 @@ import 'package:demo_frs_app/representation/screens/FoodScreen/menu_screen.dart'
 
 import 'package:demo_frs_app/representation/screens/chat_screen.dart';
 import 'package:demo_frs_app/representation/screens/favorite_screen.dart';
-import 'package:demo_frs_app/representation/screens/home_screen.dart';
+import 'package:demo_frs_app/representation/screens/home_screen_food.dart';
 import 'package:demo_frs_app/representation/screens/login_or_register/register_screen.dart';
 // import 'package:demo_frs_app/representation/screens/login_screen.dart';
 
@@ -56,7 +56,8 @@ class _MainAppState extends State<MainApp> {
           FavoriteScreen(),
           ChatScreen(),
           // HomeScreen(),
-          MenuScreen(),
+          // MenuScreen(),
+          HomeScreen(),
           CartFoodScreen(),
           // AccountScreen(),
           AccountScreen(),
@@ -71,7 +72,7 @@ class _MainAppState extends State<MainApp> {
         },
         currentIndex: _currentIndex,
         selectedItemColor: ColorPalette.primaryColor,
-        unselectedItemColor: ColorPalette.secondColor,
+        unselectedItemColor: ColorPalette.hideColor,
         margin: EdgeInsets.symmetric(
             horizontal: kMediumPadding, vertical: kDefaultPadding),
         items: [

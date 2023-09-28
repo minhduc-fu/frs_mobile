@@ -28,9 +28,10 @@ class AppBarContainer extends StatelessWidget {
                     // decoration: BoxDecoration(color: ColorPalette.appBarColor),
                     ),
                 Positioned(
+                  top: 14,
                   left: 15,
-                  child: ImageHelper.loadFromAsset(AssetHelper.imageFRS,
-                      height: 56, width: 56),
+                  child: ImageHelper.loadFromAsset(AssetHelper.imageLogoFRS,
+                      height: 35, width: 35),
                 ),
                 // Positioned(
                 //   left: 0,

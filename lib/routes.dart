@@ -7,7 +7,7 @@ import 'package:demo_frs_app/representation/screens/FoodScreen/menu_screen.dart'
 import 'package:demo_frs_app/representation/screens/chat_screen.dart';
 import 'package:demo_frs_app/representation/screens/favorite_screen.dart';
 import 'package:demo_frs_app/representation/screens/login_or_register/auth_screen.dart';
-import 'package:demo_frs_app/representation/screens/home_screen.dart';
+import 'package:demo_frs_app/representation/screens/home_screen_food.dart';
 import 'package:demo_frs_app/representation/screens/login_or_register/forgot_password_screen.dart';
 import 'package:demo_frs_app/representation/screens/login_or_register/login_or_register_screen.dart';
 import 'package:demo_frs_app/representation/screens/login_or_register/login_screen.dart';

@@ -1,5 +1,7 @@
 import 'package:demo_frs_app/core/constants/color_constants.dart';
 import 'package:demo_frs_app/core/constants/textstyle_constants.dart';
+import 'package:demo_frs_app/core/helper/asset_helper.dart';
+import 'package:demo_frs_app/core/helper/image_helper.dart';
 import 'package:demo_frs_app/representation/screens/FoodScreen/cart_food_screen.dart';
 
 import 'package:flutter/material.dart';
@@ -54,7 +56,8 @@ class AppBarMain extends StatelessWidget {
                               color: ColorPalette.primaryColor,
                             ),
                           )
-                        : SizedBox()),
+                        : ImageHelper.loadFromAsset(AssetHelper.imageLogoFRS,
+                            height: 35, width: 35)),
                 // Positioned(
                 //   left: 15,
                 //   child: ImageHelper.loadFromAsset(AssetHelper.imageFRS,

@@ -2,6 +2,7 @@ import 'package:demo_frs_app/core/helper/local_storage_helper.dart';
 import 'package:demo_frs_app/representation/screens/FoodScreen/shop.dart';
 import 'package:demo_frs_app/routes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -19,6 +20,9 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  // ẩn status bar
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+
   runApp(
     ChangeNotifierProvider(
       create: (context) => Shop(),

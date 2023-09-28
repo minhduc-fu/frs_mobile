@@ -16,6 +16,7 @@ class ColorPalette {
   static const Color black5 = Color(0xff2c2e33);
   // static const Color primaryColor = Color(0xff008000);
   static const Color primaryColor = Color(0xff5cb85c);
+  static const Color hideColor = Color(0x665cb85c);
 }
 
 // Linear Gradient từ topLeft với màu secondColor xuống bottomLeft với màu primaryColor
