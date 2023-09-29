@@ -4,7 +4,9 @@ import 'package:demo_frs_app/core/helper/asset_helper.dart';
 import 'package:demo_frs_app/core/helper/image_helper.dart';
 import 'package:demo_frs_app/models/product.dart';
 import 'package:demo_frs_app/representation/widgets/app_bar_main.dart';
+import 'package:demo_frs_app/representation/widgets/product_card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
@@ -57,7 +59,49 @@ class _HomeScreenState extends State<HomeScreen> {
         brand: 'Gucci'),
     Product(
         name: 'Túi Louis Vuitton',
-        price: '400.000',
+        price: '1.200.000',
+        imagePath: AssetHelper.imageLV,
+        rating: '4.1',
+        brand: 'Louis Vuitton'),
+    Product(
+        name: 'Túi Louis Vuitton',
+        price: '1.100.000',
+        imagePath: AssetHelper.imageLV,
+        rating: '4.1',
+        brand: 'Louis Vuitton'),
+    Product(
+        name: 'Túi Louis Vuitton',
+        price: '1.000.000',
+        imagePath: AssetHelper.imageLV,
+        rating: '4.1',
+        brand: 'Louis Vuitton'),
+    Product(
+        name: 'Túi Louis Vuitton',
+        price: '900.000',
+        imagePath: AssetHelper.imageLV,
+        rating: '4.1',
+        brand: 'Louis Vuitton'),
+    Product(
+        name: 'Túi Louis Vuitton',
+        price: '800.000',
+        imagePath: AssetHelper.imageLV,
+        rating: '4.1',
+        brand: 'Louis Vuitton'),
+    Product(
+        name: 'Túi Louis Vuitton',
+        price: '700.000',
+        imagePath: AssetHelper.imageLV,
+        rating: '4.1',
+        brand: 'Louis Vuitton'),
+    Product(
+        name: 'Túi Louis Vuitton',
+        price: '500.000',
+        imagePath: AssetHelper.imageLV,
+        rating: '4.1',
+        brand: 'Louis Vuitton'),
+    Product(
+        name: 'Túi Louis Vuitton',
+        price: '600.000',
         imagePath: AssetHelper.imageLV,
         rating: '4.1',
         brand: 'Louis Vuitton'),
@@ -87,7 +131,7 @@ class _HomeScreenState extends State<HomeScreen> {
         body: SingleChildScrollView(
           child: SafeArea(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25),
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -127,6 +171,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   Column(
                     children: [
+                      SizedBox(
+                        height: 10,
+                      ),
                       Container(
                         height: 40,
                         child: ListView.builder(
@@ -140,50 +187,98 @@ class _HomeScreenState extends State<HomeScreen> {
                                 setState(() {
                                   _currentIndexBrand == index;
 
-                                  if (brand == "All Items") {
-                                    filteredProducts = allProducts;
-                                  } else {
-                                    filteredProducts = allProducts
-                                        .where(
-                                            (product) => product.brand == brand)
-                                        .toList();
-                                  }
+                                  filteredProducts = allProducts
+                                      .where(
+                                          (product) => product.brand == brand)
+                                      .toList();
                                 });
                               },
-                              child: Container(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 10, vertical: 5),
-                                margin: EdgeInsets.only(right: 10),
-                                decoration: BoxDecoration(
-                                  color: isSelected
-                                      ? ColorPalette.primaryColor
-                                      : ColorPalette.hideColor,
-                                  borderRadius: BorderRadius.circular(15),
-                                ),
-                                child: Text(
-                                  brand,
-                                  style: TextStyle(
+                              // cục hiển thị cho các brand
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Container(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 10, vertical: 5),
+                                    margin: EdgeInsets.only(right: 10),
+                                    decoration: BoxDecoration(
                                       color: isSelected
-                                          ? Colors.white
-                                          : Colors.black,
-                                      fontWeight: isSelected
-                                          ? FontWeight.bold
-                                          : FontWeight.normal),
-                                ),
+                                          ? ColorPalette.primaryColor
+                                          : ColorPalette.hideColor,
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+
+                                    // Text của brand
+                                    child: Text(
+                                      brand,
+                                      style: TextStyle(
+                                          color: isSelected
+                                              ? Colors.white
+                                              : Colors.black,
+                                          fontWeight: isSelected
+                                              ? FontWeight.bold
+                                              : FontWeight.normal),
+                                    ),
+                                  ),
+                                ],
                               ),
                             );
                           },
                         ),
                       ),
-                      ListView.builder(
+                      SizedBox(
+                        height: 10,
+                      ),
+                      // load sản phẩm
+                      GridView.builder(
+                        physics: NeverScrollableScrollPhysics(),
+                        scrollDirection: Axis.vertical,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          childAspectRatio:
+                              (MediaQuery.of(context).size.width - 30 - 15) /
+                                  (2 * 290),
+                          mainAxisSpacing: 10,
+                          crossAxisSpacing: 10,
+                        ),
                         shrinkWrap: true,
                         itemCount: filteredProducts.length,
-                        itemBuilder: (context, index) {
-                          return ListTile(
-                            title: Text(filteredProducts[index].name),
+                        itemBuilder: ((context, index) {
+                          if (index % 2 == 0) {
+                            return GestureDetector(
+                              onTap: () {
+                                print('aaaa');
+                              },
+                              child:
+                                  ProductCard(product: filteredProducts[index]),
+                            );
+                          }
+                          return OverflowBox(
+                            maxHeight: 290.0 + 70.0,
+                            child: GestureDetector(
+                                onTap: () {
+                                  print('object');
+                                },
+                                child: Container(
+                                  margin: EdgeInsets.only(top: 70),
+                                  child: ProductCard(
+                                      product: filteredProducts[index]),
+                                )),
                           );
-                        },
-                      )
+                        }),
+                      ),
+
+                      // những sản phẩm
+                      // ListView.builder(
+                      //   shrinkWrap: true,
+                      //   itemCount: filteredProducts.length,
+                      //   itemBuilder: (context, index) {
+                      //     return ListTile(
+                      //       title: Text(filteredProducts[index].name),
+                      //     );
+                      //   },
+                      // )
                     ],
                   ),
                   // ListView.builder(
