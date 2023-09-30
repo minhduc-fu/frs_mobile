@@ -15,34 +15,34 @@ class TextStyles {
 
   static TextStyle defaultStyle = TextStyle(
       fontSize: 14,
-      color: ColorPalette.primaryColor,
+      color: ColorPalette.textColor,
       fontWeight: FontWeight.w400,
       height: 16 / 14,
       fontFamily: FontFamilyRoboto.roboto);
   static TextStyle h1 = TextStyle(
       fontFamily: FontFamilyRoboto.roboto,
       fontSize: 109.66,
-      color: ColorPalette.primaryColor);
+      color: ColorPalette.textColor);
   static TextStyle h2 = TextStyle(
       fontFamily: FontFamilyRoboto.roboto,
       fontSize: 67.77,
-      color: ColorPalette.primaryColor);
+      color: ColorPalette.textColor);
   static TextStyle h3 = TextStyle(
       fontFamily: FontFamilyRoboto.roboto,
       fontSize: 41.89,
-      color: ColorPalette.primaryColor);
+      color: ColorPalette.textColor);
   static TextStyle h4 = TextStyle(
       fontFamily: FontFamilyRoboto.roboto,
       fontSize: 25.89,
-      color: ColorPalette.primaryColor);
+      color: ColorPalette.textColor);
   static TextStyle h5 = TextStyle(
       fontFamily: FontFamilyRoboto.roboto,
       fontSize: 16,
-      color: ColorPalette.primaryColor);
+      color: ColorPalette.textColor);
   static TextStyle h6 = TextStyle(
       fontFamily: FontFamilyRoboto.roboto,
       fontSize: 9.89,
-      color: ColorPalette.primaryColor);
+      color: ColorPalette.textColor);
 }
 
 extension ExtendedTextStyle on TextStyle {
@@ -79,7 +79,7 @@ extension ExtendedTextStyle on TextStyle {
   }
 
   TextStyle get blackTextColor {
-    return copyWith(color: ColorPalette.primaryColor);
+    return copyWith(color: ColorPalette.textColor);
   }
 
   TextStyle get whiteTextColor {

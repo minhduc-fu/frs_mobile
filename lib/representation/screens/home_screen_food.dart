@@ -1,12 +1,15 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:demo_frs_app/core/constants/color_constants.dart';
+import 'package:demo_frs_app/core/constants/dismension_constants.dart';
+import 'package:demo_frs_app/core/constants/textstyle_constants.dart';
 import 'package:demo_frs_app/core/helper/asset_helper.dart';
-import 'package:demo_frs_app/core/helper/image_helper.dart';
+
 import 'package:demo_frs_app/models/product.dart';
 import 'package:demo_frs_app/representation/widgets/app_bar_main.dart';
 import 'package:demo_frs_app/representation/widgets/product_card.dart';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
@@ -24,11 +27,11 @@ class _HomeScreenState extends State<HomeScreen> {
   int _currentIndexBanner = 0;
   int _currentIndexBrand = 0;
 
-  final List<Widget> _bannerImages = [
-    ImageHelper.loadFromAsset(AssetHelper.imageBanner1),
-    ImageHelper.loadFromAsset(AssetHelper.imageBanner2),
-    ImageHelper.loadFromAsset(AssetHelper.imageBanner3),
-  ];
+  // final List<Widget> _bannerImages = [
+  //   ImageHelper.loadFromAsset(AssetHelper.imageBanner1),
+  //   ImageHelper.loadFromAsset(AssetHelper.imageBanner2),
+  //   ImageHelper.loadFromAsset(AssetHelper.imageBanner3),
+  // ];
 
   //
   List<String> brandList = [
@@ -36,6 +39,8 @@ class _HomeScreenState extends State<HomeScreen> {
     "Chanel",
     "Gucci",
     "Louis Vuitton",
+    'ahihi',
+    'ahuhu',
   ];
 
   List<Product> allProducts = [
@@ -110,6 +115,18 @@ class _HomeScreenState extends State<HomeScreen> {
   String selectedBrand = ""; // Không có thương hiệu nào được chọn ban đầu
   List<Product> filteredProducts = [];
 
+  void filterProductByBrand(String brand) {
+    setState(() {
+      selectedBrand = brand;
+      if (brand.isNotEmpty) {
+        filteredProducts =
+            allProducts.where((product) => product.brand == brand).toList();
+      } else {
+        filteredProducts = allProducts;
+      }
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -135,45 +152,99 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  CarouselSlider.builder(
-                    carouselController: _controller,
-                    itemCount: _bannerImages.length,
-                    itemBuilder:
-                        (BuildContext context, int index, int realIndex) {
-                      return _bannerImages[index];
-                    },
-                    options: CarouselOptions(
-                      autoPlay: false,
-                      enlargeCenterPage: true, // phóng to trung tâm trang
-                      // height: 200,
-                      aspectRatio: 16 / 9,
-                      onPageChanged: (index, reason) {
-                        setState(() {
-                          _currentIndexBanner = index;
-                        });
-                      },
-                    ),
-                  ),
-                  Container(
-                    height: 8,
-                    // margin: EdgeInsets.symmetric(vertical: 13, horizontal: 30), //
-                    child: ListView.builder(
-                      // nằm giữa hay không là nó nằm ở shrinWrap này nè
-                      shrinkWrap:
-                          true, // Cho phép ListView.builder co lại theo nội dung
-                      itemCount: _bannerImages.length,
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (context, index) {
-                        return buildIndicator(
-                            index == _currentIndexBanner, size);
-                      },
-                    ),
-                  ),
+                  // CarouselSlider.builder(
+                  //   carouselController: _controller,
+                  //   itemCount: _bannerImages.length,
+                  //   itemBuilder:
+                  //       (BuildContext context, int index, int realIndex) {
+                  //     return _bannerImages[index];
+                  //   },
+                  //   options: CarouselOptions(
+                  //     autoPlay: false,
+                  //     enlargeCenterPage: true, // phóng to trung tâm trang
+                  //     // height: 200,
+                  //     aspectRatio: 16 / 9,
+                  //     onPageChanged: (index, reason) {
+                  //       setState(() {
+                  //         _currentIndexBanner = index;
+                  //       });
+                  //     },
+                  //   ),
+                  // ),
+                  // Container(
+                  //   height: 8,
+                  //   // margin: EdgeInsets.symmetric(vertical: 13, horizontal: 30), //
+                  //   child: ListView.builder(
+                  //     // nằm giữa hay không là nó nằm ở shrinWrap này nè
+                  //     shrinkWrap:
+                  //         true, // Cho phép ListView.builder co lại theo nội dung
+                  //     itemCount: _bannerImages.length,
+                  //     scrollDirection: Axis.horizontal,
+                  //     itemBuilder: (context, index) {
+                  //       return buildIndicator(
+                  //           index == _currentIndexBanner, size);
+                  //     },
+                  //   ),
+                  // ),
                   Column(
                     children: [
-                      SizedBox(
-                        height: 10,
+                      // SizedBox(
+                      //   height: 10,
+                      // ),
+
+                      // Search
+                      Row(
+                        children: [
+                          Expanded(
+                            child: TextField(
+                              decoration: InputDecoration(
+                                hintText: 'Tìm kiếm',
+                                hintStyle: TextStyles.defaultStyle,
+                                prefixIcon: Padding(
+                                  padding: EdgeInsets.all(kTopPadding),
+                                  child: Icon(
+                                    FontAwesomeIcons.magnifyingGlass,
+                                    color: ColorPalette.primaryColor,
+                                    size: kDefaultIconSize,
+                                  ),
+                                ),
+                                filled: true,
+                                fillColor: ColorPalette.hideColor,
+                                focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: ColorPalette.primaryColor),
+                                    borderRadius: BorderRadius.circular(14)),
+                                border: OutlineInputBorder(
+                                  borderSide: BorderSide.none,
+                                  borderRadius: BorderRadius.circular(14),
+                                ),
+                                contentPadding: EdgeInsets.symmetric(
+                                    horizontal: kItemPadding),
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: 10),
+
+                          // filter category
+                          GestureDetector(
+                            child: Icon(
+                              FontAwesomeIcons.sliders,
+                              size: kDefaultIconSize,
+                            ),
+                          ),
+                        ],
                       ),
+                      SizedBox(height: 10),
+                      Row(
+                        children: [
+                          Text(
+                            'Thương hiệu',
+                            style: TextStyles.defaultStyle.bold,
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 10),
+                      //brand
                       Container(
                         height: 40,
                         child: ListView.builder(
@@ -206,7 +277,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       color: isSelected
                                           ? ColorPalette.primaryColor
                                           : ColorPalette.hideColor,
-                                      borderRadius: BorderRadius.circular(15),
+                                      borderRadius: BorderRadius.circular(14),
                                     ),
 
                                     // Text của brand
@@ -215,10 +286,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                       style: TextStyle(
                                           color: isSelected
                                               ? Colors.white
-                                              : Colors.black,
+                                              : ColorPalette.textColor,
                                           fontWeight: isSelected
                                               ? FontWeight.bold
-                                              : FontWeight.normal),
+                                              : FontWeight.normal,
+                                          fontFamily: FontFamilyRoboto.roboto),
                                     ),
                                   ),
                                 ],
@@ -230,6 +302,15 @@ class _HomeScreenState extends State<HomeScreen> {
                       SizedBox(
                         height: 10,
                       ),
+                      Row(
+                        children: [
+                          Text(
+                            'Sản phẩm',
+                            style: TextStyles.defaultStyle.bold,
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 10),
                       // load sản phẩm
                       GridView.builder(
                         physics: NeverScrollableScrollPhysics(),

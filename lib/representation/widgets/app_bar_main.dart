@@ -1,4 +1,5 @@
 import 'package:demo_frs_app/core/constants/color_constants.dart';
+import 'package:demo_frs_app/core/constants/dismension_constants.dart';
 import 'package:demo_frs_app/core/constants/textstyle_constants.dart';
 import 'package:demo_frs_app/core/helper/asset_helper.dart';
 import 'package:demo_frs_app/core/helper/image_helper.dart';
@@ -87,6 +88,7 @@ class AppBarMain extends StatelessWidget {
                   right: 60,
                   child: Icon(
                     FontAwesomeIcons.bell,
+                    size: kDefaultIconSize,
                     color: ColorPalette.primaryColor,
                   ),
                 ),
@@ -101,6 +103,7 @@ class AppBarMain extends StatelessWidget {
                           },
                           child: Icon(
                             FontAwesomeIcons.cartShopping,
+                            size: kDefaultIconSize,
                             color: ColorPalette.primaryColor,
                           ),
                         )
