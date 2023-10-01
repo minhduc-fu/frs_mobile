@@ -5,12 +5,12 @@ import 'package:flutter/material.dart';
 class AccountTile extends StatelessWidget {
   AccountTile(
       {super.key,
-      required this.icons,
+      this.icons,
       required this.title,
       this.trailing,
       required this.onTap});
   final void Function()? onTap;
-  final IconData icons;
+  final IconData? icons;
   final IconData? trailing;
   final String title;
 

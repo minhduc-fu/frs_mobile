@@ -1,0 +1,279 @@
+import 'dart:math';
+
+import 'package:demo_frs_app/core/constants/color_constants.dart';
+import 'package:demo_frs_app/core/constants/dismension_constants.dart';
+import 'package:demo_frs_app/core/constants/textstyle_constants.dart';
+import 'package:demo_frs_app/core/helper/local_storage_helper.dart';
+import 'package:demo_frs_app/models/product.dart';
+import 'package:demo_frs_app/models/search_result.dart';
+import 'package:demo_frs_app/representation/widgets/app_bar_main.dart';
+import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+class SearchScreen extends StatefulWidget {
+  const SearchScreen({super.key, required this.allproducts});
+  final List<Product> allproducts;
+  @override
+  State<SearchScreen> createState() => _SearchScreenState();
+}
+
+class _SearchScreenState extends State<SearchScreen> {
+  FocusNode _focusNode = FocusNode();
+  TextEditingController _searchController = TextEditingController();
+  List<String> searchHistory = [];
+  String searchTerm = "";
+  List<Product> searchResults = [];
+
+  bool showAllSearchHistory = false;
+  @override
+  void initState() {
+    super.initState();
+    _focusNode = FocusNode();
+
+// lấy danh sách lịch sử tìm kiếm
+    searchHistory = LocalStorageHelper.getSearchHistory();
+  }
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
+  }
+
+  // void perfomrSearch(String searchTerm) {
+  //    final normalizedSearchTerm = searchTerm.toLowerCase();
+  //   final List<Product> searchResults = widget.allproducts.where((product) {
+  //     final normalizedProductName = product.name.toLowerCase();
+  //     return normalizedProductName.contains(normalizedSearchTerm);
+  //   }).toList();
+
+  //   if(searchTerm.isNotEmpty){
+  //     LocalStorageHelper.addToSearchHistory(searchTerm);
+  //   }
+  //   setState(() {
+
+  //     this.searchTerm = searchTerm;
+  //     this.searchResults = searchResults;
+
+  //   });
+  // }
+  void _selectSearchHistory(String searchTerm) {
+    _searchController.text = searchTerm;
+    _onSearch(_searchController.text);
+  }
+
+  void _onSearch(String searchTerm) {
+    final normalizedSearchTerm = searchTerm.toLowerCase();
+    final List<Product> searchResults = widget.allproducts.where((product) {
+      final normalizedProductName = product.name.toLowerCase();
+      return normalizedProductName.contains(normalizedSearchTerm);
+    }).toList();
+
+    if (searchTerm.isNotEmpty) {
+      if (searchHistory.contains(searchTerm)) {
+        searchHistory.remove(searchTerm);
+      }
+
+      searchHistory.insert(0, searchTerm);
+      LocalStorageHelper.setSearchHistory(searchHistory);
+      // LocalStorageHelper.addToSearchHistory(searchTerm);
+    }
+
+    // Trả về kết quả tìm kiếm về màn hình trước (HomeScreen)
+    // Navigator.of(context).pop(searchResults);
+    Navigator.of(context).pop(
+        SearchResults(searchTerm: searchTerm, searchResults: searchResults));
+
+    // if (_focusNode.hasFocus) {
+    //   _focusNode.unfocus();
+    // }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AppBarMain(
+      // titleAppbar: 'Tìm kiếm',
+      child: GestureDetector(
+        onTap: () {
+          if (_focusNode.hasFocus) {
+            _focusNode.unfocus();
+          }
+        },
+        child: Scaffold(
+          resizeToAvoidBottomInset: true,
+          body: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                children: [
+                  TextField(
+                    focusNode: _focusNode,
+                    controller: _searchController,
+                    enableSuggestions: true,
+                    onSubmitted: _onSearch,
+                    autofocus: true,
+                    decoration: InputDecoration(
+                      hintText: 'Bạn muốn tìm tên sản phẩm gì?',
+                      hintStyle: TextStyles.defaultStyle,
+                      prefixIcon: Padding(
+                        padding: EdgeInsets.all(kTopPadding),
+                        child: Icon(
+                          FontAwesomeIcons.magnifyingGlass,
+                          color: ColorPalette.primaryColor,
+                          size: kDefaultIconSize,
+                        ),
+                      ),
+                      filled: true,
+                      fillColor: ColorPalette.hideColor,
+                      focusedBorder: OutlineInputBorder(
+                          borderSide:
+                              BorderSide(color: ColorPalette.primaryColor),
+                          borderRadius: BorderRadius.circular(14)),
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                        borderRadius: BorderRadius.circular(14),
+                      ),
+                      contentPadding:
+                          EdgeInsets.symmetric(horizontal: kItemPadding),
+                    ),
+                  ),
+                  SizedBox(height: 10),
+
+                  // nội dung tìm kiếm gần đây
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Nội dung tìm kiếm gần đây',
+                        style: TextStyles.h5.bold,
+                      ),
+                    ],
+                  ),
+
+                  // lịch sử tìm kiếm
+                  if (searchHistory.isNotEmpty)
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(height: 5),
+                        ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: showAllSearchHistory
+                              ? searchHistory.length
+                              : min(searchHistory.length, 5),
+                          itemBuilder: (context, index) {
+                            return Container(
+                              decoration: BoxDecoration(
+                                border: Border(
+                                  bottom:
+                                      BorderSide(color: ColorPalette.hideColor),
+                                ),
+                              ),
+                              child: ListTile(
+                                onTap: () {
+                                  _selectSearchHistory(searchHistory[index]);
+                                },
+                                horizontalTitleGap: 30,
+                                leading: Icon(
+                                  FontAwesomeIcons.clockRotateLeft,
+                                  size: kDefaultIconSize,
+                                ),
+
+                                // xóa từng thằng
+                                trailing: GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      searchHistory.removeAt(index);
+                                      LocalStorageHelper.setSearchHistory(
+                                          searchHistory);
+                                    });
+                                  },
+                                  child: Icon(
+                                    FontAwesomeIcons.xmark,
+                                    size: kDefaultIconSize,
+                                  ),
+                                ),
+                                iconColor: ColorPalette.primaryColor,
+                                title: Text(
+                                  searchHistory[index],
+                                  style:
+                                      TextStyles.defaultStyle.setTextSize(18),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+
+                        // Thu gọn và Hiển thị thêm
+                        SizedBox(height: 10),
+                        if (searchHistory.length > 5)
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                showAllSearchHistory = !showAllSearchHistory;
+                              });
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  padding: EdgeInsets.only(
+                                      left: 13, right: 13, top: 5, bottom: 5),
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                        color: ColorPalette.primaryColor),
+                                    color: ColorPalette.backgroundScaffoldColor,
+                                    borderRadius: BorderRadius.circular(14),
+                                  ),
+                                  child: Text(
+                                    showAllSearchHistory
+                                        ? "Thu gọn"
+                                        : "Hiển thị thêm",
+                                    style: TextStyles.defaultStyle.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        SizedBox(height: 10),
+
+                        // Xóa lịch sử tìm kiếm
+                        GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              searchHistory.clear();
+                              LocalStorageHelper.setSearchHistory(
+                                  searchHistory);
+                            });
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                padding: EdgeInsets.only(
+                                    left: 13, right: 13, top: 5, bottom: 5),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(14),
+                                  border: Border.all(
+                                      color: ColorPalette.primaryColor),
+                                ),
+                                child: Text(
+                                  "Xóa nội dung tìm kiếm gần đây",
+                                  style: TextStyles.defaultStyle.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

@@ -47,6 +47,8 @@ class _SplashScreenState extends State<SplashScreen> {
       // khi nó nhảy vào IntroScreen thì sẽ setValue cho ignoreIntroScreen này = true
       // vì khi User lần đầu dùng app thì ignoreIntroScreen = false
       LocalStorageHelper.setValue('ignoreIntroScreen', true);
+      LocalStorageHelper.closeBox();
+
       Navigator.of(context).pushNamed(IntroScreen.routeName);
     }
   }

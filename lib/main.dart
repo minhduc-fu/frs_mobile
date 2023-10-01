@@ -17,6 +17,7 @@ void main() async {
   await Hive.initFlutter();
   // khởi tạo LoalStorageHelper
   await LocalStorageHelper.initLocalStorageHelper();
+  await LocalStorageHelper.initSearchBox();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );

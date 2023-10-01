@@ -10,13 +10,23 @@ class LocalStorageHelper {
 
   Box<dynamic>? hiveBox;
 
+  Box<dynamic>? searchBox;
+  static initSearchBox() async {
+    _instance.searchBox = await Hive.openBox('SearchBox');
+  }
+
+  static closeSearchBox() async {
+    _instance.searchBox?.close();
+  }
+
   // get danh sách SearchHistory
   // Kiểm tra xem searchHistory có tồn tại trong hiveBox không với key là searchHistory
   // nếu có thì nó trả về danh sách dữ liệu as List<String>
   // nếu searchHistory == nul thì nó return []
   static List<String> getSearchHistory() {
+    if (_instance.searchBox == null) {}
     final List<String>? searchHistory =
-        _instance.hiveBox?.get('searchHistory') as List<String>?;
+        _instance.searchBox?.get('searchHistory') as List<String>?;
     return searchHistory ?? [];
   }
 
@@ -27,11 +37,15 @@ class LocalStorageHelper {
   static void addToSearchHistory(String searchTerm) {
     List<String> searchHistory = getSearchHistory();
     searchHistory.insert(0, searchTerm);
-    _instance.hiveBox?.put('searchHistory', searchHistory);
+    _instance.searchBox?.put('searchHistory', searchHistory);
+  }
+
+  static void setSearchHistory(List<String> searchHistory) {
+    _instance.searchBox?.put('searchHistory', searchHistory);
   }
 
   static void clearSearchHistory() {
-    _instance.hiveBox?.delete('searchHistory');
+    _instance.searchBox?.delete('searchHistory');
   }
 
   static initLocalStorageHelper() async {
@@ -44,5 +58,9 @@ class LocalStorageHelper {
 
   static setValue(String key, dynamic val) {
     _instance.hiveBox?.put(key, val);
+  }
+
+  static closeBox() async {
+    _instance.hiveBox?.close();
   }
 }
