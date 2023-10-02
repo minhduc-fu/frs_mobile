@@ -13,6 +13,7 @@ class ForgotPasswordScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AppBarMain(
+      leading: GestureDetector(),
       titleAppbar: 'Forgot Password',
       child: Scaffold(
         body: Center(

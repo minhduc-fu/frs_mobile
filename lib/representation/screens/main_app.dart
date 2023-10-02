@@ -77,28 +77,28 @@ class _MainAppState extends State<MainApp> {
             horizontal: kMediumPadding, vertical: kDefaultPadding),
         items: [
           SalomonBottomBarItem(
-            title: Text('Favorite'),
+            title: Text('Yêu thích'),
             icon: Icon(
               FontAwesomeIcons.solidHeart,
               size: kDefaultIconSize,
             ),
           ),
           SalomonBottomBarItem(
-            title: Text('Chat'),
+            title: Text('Tin nhắn'),
             icon: Icon(
               FontAwesomeIcons.solidMessage,
               size: kDefaultIconSize,
             ),
           ),
           SalomonBottomBarItem(
-            title: Text('Home'),
+            title: Text('Trang chủ'),
             icon: Icon(
               FontAwesomeIcons.house,
               size: kDefaultIconSize,
             ),
           ),
           SalomonBottomBarItem(
-            title: Text('Cart'),
+            title: Text('Giỏ hàng'),
             icon: Icon(
               FontAwesomeIcons.cartShopping,
               size: kDefaultIconSize,

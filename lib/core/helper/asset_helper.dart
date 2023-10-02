@@ -20,4 +20,8 @@ class AssetHelper {
   static const String imageGucci = 'assets/images/gucci.png';
   static const String imageChanel = 'assets/images/chanel.png';
   static const String imageLV = 'assets/images/lv.png';
+  static const String imageKinhGucci = 'assets/images/kinh_gucci.png';
+  static const String imageQuanVersace = 'assets/images/quan_versace.png';
+  static const String imageAoKhoacGucci = 'assets/images/ao_khoac_gucci.png';
+  static const String imgaeAoVersace = 'assets/images/ao_versace.png';
 }

@@ -65,7 +65,7 @@ class _SearchScreenState extends State<SearchScreen> {
   void _onSearch(String searchTerm) {
     final normalizedSearchTerm = searchTerm.toLowerCase();
     final List<Product> searchResults = widget.allproducts.where((product) {
-      final normalizedProductName = product.name.toLowerCase();
+      final normalizedProductName = product.productName.toLowerCase();
       return normalizedProductName.contains(normalizedSearchTerm);
     }).toList();
 
@@ -92,6 +92,15 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     return AppBarMain(
+      leading: GestureDetector(
+        onTap: () {
+          Navigator.pop(context);
+        },
+        child: Icon(
+          FontAwesomeIcons.angleLeft,
+          size: kDefaultIconSize,
+        ),
+      ),
       // titleAppbar: 'Tìm kiếm',
       child: GestureDetector(
         onTap: () {

@@ -3,6 +3,8 @@ import 'package:demo_frs_app/core/constants/color_constants.dart';
 import 'package:demo_frs_app/core/constants/dismension_constants.dart';
 import 'package:demo_frs_app/core/constants/textstyle_constants.dart';
 import 'package:demo_frs_app/core/helper/asset_helper.dart';
+import 'package:demo_frs_app/core/helper/image_helper.dart';
+import 'package:demo_frs_app/models/brand.dart';
 import 'package:demo_frs_app/models/product.dart';
 import 'package:demo_frs_app/models/search_result.dart';
 import 'package:demo_frs_app/representation/screens/search_screen.dart';
@@ -28,6 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final CarouselController _controller = CarouselController();
   int _currentIndexBanner = 0;
   int _currentIndexBrand = 0;
+  int _currentIndexCategory = 0;
   String searchTerm = '';
 
   // final List<Widget> _bannerImages = [
@@ -38,84 +41,92 @@ class _HomeScreenState extends State<HomeScreen> {
 
   //
   List<String> brandList = [
-    "Dior",
-    "Chanel",
-    "Gucci",
-    "Louis Vuitton",
-    'ahihi',
-    'ahuhu',
+    "DIOR",
+    "CHANEL",
+    "GUCCI",
+    "LOUIS VUITTON",
+    'PRADA',
+    'VERSACE',
   ];
+  List<String> categoryList = [
+    'QUẦN',
+    'ÁO',
+    'TÚI',
+    'KÍNH',
+    'GIÀY',
+    'ÁO KHOÁC',
+  ];
+
+  // List<Brand> brandList1 = [
+  //   Brand(brandID: 1, brandName: 'DIOR'),
+  //   Brand(brandID: 2, brandName: 'CHANEL'),
+  //   Brand(brandID: 3, brandName: 'GUCCI'),
+  //   Brand(brandID: 4, brandName: 'LOUIS VUITTON'),
+  //   Brand(brandID: 5, brandName: 'PRADA'),
+  //   Brand(brandID: 6, brandName: 'VERSACE'),
+  // ];
 
   List<Product> allProducts = [
     Product(
-        name: 'Túi Dior',
-        price: '100.000',
-        imagePath: AssetHelper.imageDior,
-        rating: '4.9',
-        brand: 'Dior'),
+        productName: 'Túi Dior',
+        productPrice: 100000,
+        productImg: AssetHelper.imageDior,
+        productRating: '4.9',
+        productBrand: 'DIOR',
+        productCategory: 'TÚI'),
     Product(
-        name: 'Túi Chanel',
-        price: '200.000',
-        imagePath: AssetHelper.imageChanel,
-        rating: '4.2',
-        brand: 'Chanel'),
+        productName: 'Quần Versace',
+        productPrice: 1100000,
+        productImg: AssetHelper.imageQuanVersace,
+        productRating: '4.1',
+        productBrand: 'VERSACE',
+        productCategory: 'QUẦN'),
     Product(
-        name: 'Túi Gucci',
-        price: '300.000',
-        imagePath: AssetHelper.imageGucci,
-        rating: '4.4',
-        brand: 'Gucci'),
+        productName: 'Kính Gucci',
+        productPrice: 1000000,
+        productImg: AssetHelper.imageKinhGucci,
+        productRating: '4.1',
+        productBrand: 'GUCCI',
+        productCategory: 'KÍNH'),
     Product(
-        name: 'Túi Louis Vuitton',
-        price: '1.200.000',
-        imagePath: AssetHelper.imageLV,
-        rating: '4.1',
-        brand: 'Louis Vuitton'),
+        productName: 'Áo khoác Gucci',
+        productPrice: 900000,
+        productImg: AssetHelper.imageAoKhoacGucci,
+        productRating: '4.1',
+        productBrand: 'GUCCI',
+        productCategory: 'ÁO KHOÁC'),
     Product(
-        name: 'Túi Louis Vuitton',
-        price: '1.100.000',
-        imagePath: AssetHelper.imageLV,
-        rating: '4.1',
-        brand: 'Louis Vuitton'),
+        productName: 'Áo Versace',
+        productPrice: 800000,
+        productImg: AssetHelper.imgaeAoVersace,
+        productRating: '4.1',
+        productBrand: 'VERSACE',
+        productCategory: 'ÁO'),
     Product(
-        name: 'Túi Louis Vuitton',
-        price: '1.000.000',
-        imagePath: AssetHelper.imageLV,
-        rating: '4.1',
-        brand: 'Louis Vuitton'),
+        productName: 'Túi Chanel',
+        productPrice: 200000,
+        productImg: AssetHelper.imageChanel,
+        productRating: '4.2',
+        productBrand: 'CHANEL',
+        productCategory: 'TÚI'),
     Product(
-        name: 'Túi Louis Vuitton',
-        price: '900.000',
-        imagePath: AssetHelper.imageLV,
-        rating: '4.1',
-        brand: 'Louis Vuitton'),
+        productName: 'Túi Gucci',
+        productPrice: 300000,
+        productImg: AssetHelper.imageGucci,
+        productRating: '4.4',
+        productBrand: 'GUCCI',
+        productCategory: 'TÚI'),
     Product(
-        name: 'Túi Louis Vuitton',
-        price: '800.000',
-        imagePath: AssetHelper.imageLV,
-        rating: '4.1',
-        brand: 'Louis Vuitton'),
-    Product(
-        name: 'Túi Louis Vuitton',
-        price: '700.000',
-        imagePath: AssetHelper.imageLV,
-        rating: '4.1',
-        brand: 'Louis Vuitton'),
-    Product(
-        name: 'Túi Louis Vuitton',
-        price: '500.000',
-        imagePath: AssetHelper.imageLV,
-        rating: '4.1',
-        brand: 'Louis Vuitton'),
-    Product(
-        name: 'Túi Louis Vuitton',
-        price: '600.000',
-        imagePath: AssetHelper.imageLV,
-        rating: '4.1',
-        brand: 'Louis Vuitton'),
+        productName: 'Túi Louis Vuitton',
+        productPrice: 1200000,
+        productImg: AssetHelper.imageLV,
+        productRating: '4.1',
+        productBrand: 'LOUIS VUITTON',
+        productCategory: 'TÚI'),
   ];
 
   String selectedBrand = ""; // Không có thương hiệu nào được chọn ban đầu
+  String selectedCategory = ""; // Không có thương hiệu nào được chọn ban đầu
   List<Product> filteredProducts = [];
   FocusNode _focusNode = FocusNode();
   @override
@@ -136,8 +147,23 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       selectedBrand = brand;
       if (brand.isNotEmpty) {
-        filteredProducts =
-            allProducts.where((product) => product.brand == brand).toList();
+        filteredProducts = allProducts
+            .where((product) => product.productBrand == brand)
+            .toList();
+      } else {
+        filteredProducts = allProducts;
+      }
+    });
+  }
+
+  // hàm lọc sản phẩm theo category
+  void filterProductByCategory(String category) {
+    setState(() {
+      selectedCategory = category;
+      if (category.isNotEmpty) {
+        filteredProducts = allProducts
+            .where((product) => product.productCategory == category)
+            .toList();
       } else {
         filteredProducts = allProducts;
       }
@@ -194,11 +220,23 @@ class _HomeScreenState extends State<HomeScreen> {
     // );
   }
 
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size; // get screen size
     return AppBarMain(
-      isBack: false,
+      leading: Builder(builder: (context) {
+        return GestureDetector(
+          onTap: () {
+            _scaffoldKey.currentState?.openDrawer();
+          },
+          child: Icon(
+            FontAwesomeIcons.bars,
+            size: kDefaultIconSize,
+            color: ColorPalette.primaryColor,
+          ),
+        );
+      }),
       child: GestureDetector(
         onTap: () {
           if (_focusNode.hasFocus) {
@@ -206,6 +244,96 @@ class _HomeScreenState extends State<HomeScreen> {
           }
         },
         child: Scaffold(
+          key: _scaffoldKey,
+          drawer: Drawer(
+            elevation: 0,
+            shape:
+                const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+            backgroundColor: ColorPalette.backgroundScaffoldColor,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  children: [
+                    // logo
+                    DrawerHeader(
+                        child: ImageHelper.loadFromAsset(
+                            AssetHelper.imageLogoFRS)),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 25),
+                      child: ListTile(
+                        leading: Icon(
+                          FontAwesomeIcons.house,
+                          size: kDefaultIconSize,
+                          color: ColorPalette.primaryColor,
+                        ),
+                        title: Text(
+                          'Trang chủ',
+                          style: TextStyles.defaultStyle.setTextSize(18),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 25),
+                      child: ListTile(
+                        leading: Icon(
+                          FontAwesomeIcons.userShield,
+                          size: kDefaultIconSize,
+                          color: ColorPalette.primaryColor,
+                        ),
+                        title: Text(
+                          'Chính sách bảo mật',
+                          style: TextStyles.defaultStyle.setTextSize(18),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 25),
+                      child: ListTile(
+                        leading: Icon(
+                          FontAwesomeIcons.solidAddressBook,
+                          size: kDefaultIconSize,
+                          color: ColorPalette.primaryColor,
+                        ),
+                        title: Text(
+                          'Điều khoản dịch vụ',
+                          style: TextStyles.defaultStyle.setTextSize(18),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 25),
+                      child: ListTile(
+                        leading: Icon(
+                          FontAwesomeIcons.users,
+                          size: kDefaultIconSize,
+                          color: ColorPalette.primaryColor,
+                        ),
+                        title: Text(
+                          'Về chúng tôi',
+                          style: TextStyles.defaultStyle.setTextSize(18),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25),
+                  child: ListTile(
+                    leading: Icon(
+                      FontAwesomeIcons.rightFromBracket,
+                      size: kDefaultIconSize,
+                      color: ColorPalette.primaryColor,
+                    ),
+                    title: Text(
+                      'Đăng xuất',
+                      style: TextStyles.defaultStyle.setTextSize(18),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
           extendBodyBehindAppBar: true,
           body: SingleChildScrollView(
             child: SafeArea(
@@ -214,6 +342,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
+                    // banner
                     // CarouselSlider.builder(
                     //   carouselController: _controller,
                     //   itemCount: _bannerImages.length,
@@ -298,6 +427,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         SizedBox(height: 10),
 
+                        // Text Thương hiệu
                         Row(
                           children: [
                             Text(
@@ -322,8 +452,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                   setState(() {
                                     _currentIndexBrand == index;
                                     filteredProducts = allProducts
-                                        .where(
-                                            (product) => product.brand == brand)
+                                        .where((product) =>
+                                            product.productBrand == brand)
                                         .toList();
                                   });
                                 },
@@ -364,6 +494,76 @@ class _HomeScreenState extends State<HomeScreen> {
                             },
                           ),
                         ),
+                        SizedBox(height: 10),
+
+                        // category
+                        Row(
+                          children: [
+                            Text(
+                              'Loại sản phẩm',
+                              style: TextStyles.defaultStyle.bold,
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 10),
+
+                        //brand
+                        Container(
+                          height: 40,
+                          child: ListView.builder(
+                            itemCount: categoryList.length,
+                            scrollDirection: Axis.horizontal,
+                            itemBuilder: (context, index) {
+                              String category = categoryList[index];
+                              bool isSelectedCategory =
+                                  index == _currentIndexCategory;
+                              return GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    _currentIndexCategory == index;
+                                    filteredProducts = allProducts
+                                        .where((product) =>
+                                            product.productCategory == category)
+                                        .toList();
+                                  });
+                                },
+
+                                // cục hiển thị cho các brand
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Container(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 10, vertical: 5),
+                                      margin: EdgeInsets.only(right: 10),
+                                      decoration: BoxDecoration(
+                                        color: isSelectedCategory
+                                            ? ColorPalette.primaryColor
+                                            : ColorPalette.hideColor,
+                                        borderRadius: BorderRadius.circular(14),
+                                      ),
+
+                                      // Text của brand
+                                      child: Text(
+                                        category,
+                                        style: TextStyle(
+                                            color: isSelectedCategory
+                                                ? Colors.white
+                                                : ColorPalette.textColor,
+                                            fontWeight: isSelectedCategory
+                                                ? FontWeight.bold
+                                                : FontWeight.normal,
+                                            fontFamily:
+                                                FontFamilyRoboto.roboto),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
+                        ),
                         SizedBox(
                           height: 10,
                         ),
@@ -386,7 +586,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             crossAxisCount: 2,
                             childAspectRatio:
                                 (MediaQuery.of(context).size.width - 30 - 15) /
-                                    (2 * 290),
+                                    (2 * 260),
                             mainAxisSpacing: 10,
                             crossAxisSpacing: 10,
                           ),
@@ -403,7 +603,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               );
                             }
                             return OverflowBox(
-                              maxHeight: 290.0 + 70.0,
+                              maxHeight: 260.0 + 70.0,
                               child: GestureDetector(
                                   onTap: () {
                                     print('object');

@@ -15,12 +15,16 @@ class AppBarMain extends StatelessWidget {
     this.titleAppbar,
     this.isBack = true,
     this.isCart = true,
+    required this.leading,
+    // this.onTap,
   });
 
   final Widget child;
   final String? titleAppbar;
   final bool isBack;
   final bool isCart;
+  final Widget leading;
+  // final Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +33,7 @@ class AppBarMain extends StatelessWidget {
         SizedBox(
           height: 56,
           child: AppBar(
+            leading: leading,
             title: Text(
               titleAppbar ?? '',
               style: TextStyles.h5.setTextSize(25),
@@ -44,21 +49,23 @@ class AppBarMain extends StatelessWidget {
                 Container(
                     // decoration: BoxDecoration(color: ColorPalette.appBarColor),
                     ),
-                Positioned(
-                    top: 14,
-                    left: 15,
-                    child: isBack
-                        ? GestureDetector(
-                            onTap: () {
-                              Navigator.pop(context);
-                            },
-                            child: Icon(
-                              FontAwesomeIcons.angleLeft,
-                              color: ColorPalette.primaryColor,
-                            ),
-                          )
-                        : ImageHelper.loadFromAsset(AssetHelper.imageLogoFRS,
-                            height: 35, width: 35)),
+                // Positioned(
+                //   top: 14,
+                //   left: 15,
+                //   child: isBack
+                //       ? GestureDetector(
+                //           onTap: () {
+                //             Navigator.pop(context);
+                //           },
+                //           child: Icon(
+                //             FontAwesomeIcons.angleLeft,
+                //             color: ColorPalette.primaryColor,
+                //           ),
+                //         )
+                //       : ImageHelper.loadFromAsset(AssetHelper.imageLogoFRS,
+                //           height: 35, width: 35),
+                // ),
+                // Positioned(top: 14, left: 20, child: leading),
                 // Positioned(
                 //   left: 15,
                 //   child: ImageHelper.loadFromAsset(AssetHelper.imageFRS,
@@ -84,7 +91,7 @@ class AppBarMain extends StatelessWidget {
                 //   ),
                 // ),
                 Positioned(
-                  top: 14,
+                  top: 18,
                   right: 60,
                   child: Icon(
                     FontAwesomeIcons.bell,
@@ -93,8 +100,8 @@ class AppBarMain extends StatelessWidget {
                   ),
                 ),
                 Positioned(
-                  top: 14,
-                  right: 15,
+                  top: 18,
+                  right: 20,
                   child: isCart
                       ? GestureDetector(
                           onTap: () {

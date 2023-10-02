@@ -1,4 +1,5 @@
 import 'package:demo_frs_app/core/constants/color_constants.dart';
+import 'package:demo_frs_app/core/constants/dismension_constants.dart';
 import 'package:demo_frs_app/core/constants/textstyle_constants.dart';
 import 'package:demo_frs_app/models/food.dart';
 import 'package:demo_frs_app/representation/screens/FoodScreen/shop.dart';
@@ -95,6 +96,15 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
   Widget build(BuildContext context) {
     ToastContext().init(context);
     return AppBarMain(
+      leading: GestureDetector(
+        onTap: () {
+          Navigator.pop(context);
+        },
+        child: Icon(
+          FontAwesomeIcons.angleLeft,
+          size: kDefaultIconSize,
+        ),
+      ),
       titleAppbar: 'Details',
       child: Scaffold(
         body: Column(

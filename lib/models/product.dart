@@ -1,21 +1,26 @@
+import 'dart:ffi';
+
 class Product {
-  String name;
-  String price;
-  String imagePath;
-  String rating;
-  String brand;
+  String productName;
+  double productPrice;
+  String productImg;
+  String productRating;
+  String productBrand;
+  String productCategory;
 
   Product({
-    required this.name,
-    required this.price,
-    required this.imagePath,
-    required this.rating,
-    required this.brand,
+    required this.productName,
+    required this.productPrice,
+    required this.productImg,
+    required this.productRating,
+    required this.productBrand,
+    required this.productCategory,
   });
 
-  String get _name => name;
-  String get _price => price;
-  String get _imagePath => imagePath;
-  String get _rating => rating;
-  String get _brand => brand;
+  String get _productName => productName;
+  double get _productPrice => productPrice;
+  String get _productImg => productImg;
+  String get _productRating => productRating;
+  String get _productBrand => productBrand;
+  String get _productCategory => productCategory;
 }

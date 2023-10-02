@@ -56,6 +56,8 @@ class __MenuScreenState extends State<MenuScreen> {
     final shop = context.read<Shop>();
     final foodMenu = shop.foodMenu;
     return AppBarMain(
+      leading: GestureDetector(
+          child: ImageHelper.loadFromAsset(AssetHelper.imageLogoFRS)),
       isBack: false,
       titleAppbar: 'Home',
       child: Scaffold(
