@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 class Product {
   String productName;
   double productPrice;

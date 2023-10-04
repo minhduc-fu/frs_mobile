@@ -12,9 +12,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 class RegisterScreen extends StatefulWidget {
   final Function()? onTap;
   const RegisterScreen({super.key, required this.onTap});
-  // text editing controllers
-  // final passwordController = TextEditingController();
-  // final userNameController = TextEditingController();
   static const String routeName = '/register_screen';
 
   @override
@@ -24,8 +21,12 @@ class RegisterScreen extends StatefulWidget {
 // text editing controllers
 // final passwordController = TextEditingController();
 // final emailController = TextEditingController();
-final TextEditingController passwordController = new TextEditingController();
 final TextEditingController emailController = new TextEditingController();
+final TextEditingController passwordController = new TextEditingController();
+final TextEditingController fullNameController = new TextEditingController();
+final TextEditingController phoneController = new TextEditingController();
+final TextEditingController addressController = new TextEditingController();
+
 final TextEditingController confirmPasswordController =
     new TextEditingController();
 
@@ -70,7 +71,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             email: emailController.text, password: passwordController.text);
       } else {
         // show error msg if password don't match
-        showErrorMsg("Password don't match!");
+        showErrorMsg("Mật khẩu không khớp!");
       }
       // Signup thành công
       Navigator.pop(context);
@@ -131,7 +132,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // logo
+                // Icon
                 SizedBox(height: 25),
                 Icon(
                   FontAwesomeIcons.userPlus,
@@ -143,7 +144,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 25),
                   child: Container(
                     alignment: Alignment.centerLeft,
-                    child: Text("Sign up", style: TextStyles.h4.bold),
+                    child: Text("Đăng ký", style: TextStyles.h4.bold),
                   ),
                 ),
                 SizedBox(height: 5),
@@ -154,12 +155,26 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   child: Container(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      "Let's create an account for you!",
+                      "Hãy tạo một tài khoản cho bạn!",
                       style: TextStyles.h5.setColor(ColorPalette.textHide),
                     ),
                   ),
                 ),
                 SizedBox(height: 25),
+                MyTextField(
+                  messageError: 'Họ và tên không hợp lệ',
+                  controller: fullNameController,
+                  hintText: 'Họ và tên',
+                  obscureText: false,
+                ),
+                SizedBox(height: 10),
+                MyTextField(
+                  messageError: 'Số điện thoại',
+                  controller: phoneController,
+                  hintText: 'Số điện thoại',
+                  obscureText: false,
+                ),
+                SizedBox(height: 10),
 
                 // email textField
                 Stack(
@@ -188,9 +203,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   alignment: AlignmentDirectional.centerEnd,
                   children: [
                     MyTextField(
-                      messageError: 'Password không hợp lệ',
+                      messageError: 'Mật khẩu không hợp lệ',
                       controller: passwordController,
-                      hintText: 'Password',
+                      hintText: 'Mật khẩu',
                       obscureText: !_showPass,
                     ),
                     GestureDetector(
@@ -215,9 +230,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   alignment: AlignmentDirectional.centerEnd,
                   children: [
                     MyTextField(
-                      messageError: 'Password không hợp lệ',
+                      messageError: 'Mật khẩu không hợp lệ',
                       controller: confirmPasswordController,
-                      hintText: 'Confirm Password',
+                      hintText: 'Xác nhận mật khẩu',
                       obscureText: !_showPass,
                     ),
                     GestureDetector(
@@ -244,7 +259,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   // margin: EdgeInsets.symmetric(horizontal: 25),
                   child: ButtonWidget(
                     height: 70,
-                    title: 'Sign up',
+                    title: 'Đăng ký',
                     onTap: signUpClicked,
                     size: 22,
                   ),
@@ -252,69 +267,69 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 SizedBox(height: 30),
 
                 // or continue with
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Divider(
-                          thickness: 0.5,
-                          color: ColorPalette.primaryColor,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 4),
-                        child: Text(
-                          'Or continue with',
-                          style: TextStyles.defaultStyle,
-                        ),
-                      ),
-                      Expanded(
-                        child: Divider(
-                          thickness: 0.5,
-                          color: ColorPalette.primaryColor,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(height: 50),
+                // Padding(
+                //   padding: const EdgeInsets.symmetric(horizontal: 25),
+                //   child: Row(
+                //     children: [
+                //       Expanded(
+                //         child: Divider(
+                //           thickness: 0.5,
+                //           color: ColorPalette.primaryColor,
+                //         ),
+                //       ),
+                //       Padding(
+                //         padding: const EdgeInsets.symmetric(horizontal: 4),
+                //         child: Text(
+                //           'Hoặc tiếp tục với',
+                //           style: TextStyles.defaultStyle,
+                //         ),
+                //       ),
+                //       Expanded(
+                //         child: Divider(
+                //           thickness: 0.5,
+                //           color: ColorPalette.primaryColor,
+                //         ),
+                //       ),
+                //     ],
+                //   ),
+                // ),
+                // SizedBox(height: 50),
 
                 // google + apple sign in buttons
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    // google button
-                    SquareTile(
-                      onTap: () {},
-                      child: ImageHelper.loadFromAsset(
-                          AssetHelper.imageLogoGoogle),
-                    ),
-                    SizedBox(width: 25),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   children: [
+                //     // google button
+                //     SquareTile(
+                //       onTap: () {},
+                //       child: ImageHelper.loadFromAsset(
+                //           AssetHelper.imageLogoGoogle),
+                //     ),
+                //     SizedBox(width: 25),
 
-                    // apple button
-                    SquareTile(
-                      onTap: () {},
-                      child:
-                          ImageHelper.loadFromAsset(AssetHelper.imageLogoApple),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 50),
+                //     // apple button
+                //     SquareTile(
+                //       onTap: () {},
+                //       child:
+                //           ImageHelper.loadFromAsset(AssetHelper.imageLogoApple),
+                //     ),
+                //   ],
+                // ),
+                // SizedBox(height: 50),
 
                 // Already hvae an account? Login now
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      "Already have an account?",
+                      "Bạn đã có tài khoản?",
                       style: TextStyles.defaultStyle,
                     ),
                     SizedBox(width: 10),
                     GestureDetector(
                       onTap: widget.onTap,
                       child: Text(
-                        'Login now.',
+                        'Đăng nhập ngay.',
                         style:
                             TextStyles.defaultStyle.bold.setColor(Colors.blue),
                       ),

@@ -62,8 +62,9 @@ class _ButtonWidgetState extends State<ButtonWidget> {
         child: Center(
           child: Text(
             widget.title,
-            style: TextStyles.defaultStyle.bold.whiteTextColor
-                .setTextSize(widget.size!),
+            style: TextStyles.defaultStyle.bold
+                .setTextSize(widget.size!)
+                .whiteTextColor,
           ),
         ),
       ),

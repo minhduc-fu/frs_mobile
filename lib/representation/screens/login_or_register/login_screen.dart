@@ -150,7 +150,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 25),
                   child: Container(
                     alignment: Alignment.centerLeft,
-                    child: Text("Sign in", style: TextStyles.h4.bold),
+                    child: Text("Đăng nhập", style: TextStyles.h4.bold),
                   ),
                 ),
                 SizedBox(height: 5),
@@ -161,7 +161,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Container(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      "Enter your account detail or use Email Google",
+                      "Hãy nhập chi tiết tài khoản của bạn hoặc sử dụng Email Google",
                       style: TextStyles.h5.setColor(ColorPalette.textHide),
                     ),
                   ),
@@ -229,12 +229,14 @@ class _LoginScreenState extends State<LoginScreen> {
                               .pushNamed(ForgotPasswordScreen.routeName);
                         },
                         child: Text(
-                          'Forgot password?',
+                          'Quên mật khẩu?',
                           style: TextStyle(
                               decoration: TextDecoration.underline,
                               decorationThickness: 0.5,
-                              color: ColorPalette.primaryColor,
-                              fontFamily: FontFamilyRoboto.roboto),
+                              decorationColor: Colors.blue,
+                              color: Colors.blue,
+                              fontFamily: FontFamilyRoboto.roboto,
+                              fontWeight: FontWeight.bold),
                         ),
                       ),
                     ],
@@ -250,7 +252,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: ButtonWidget(
                     size: 22,
                     height: 70,
-                    title: 'Sign in',
+                    title: 'Đăng nhập',
                     onTap: signInClicked,
                   ),
                 ),
@@ -270,7 +272,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 4),
                         child: Text(
-                          'Or continue with',
+                          'Hoặc tiếp tục với',
                           style: TextStyles.defaultStyle,
                         ),
                       ),
@@ -312,14 +314,14 @@ class _LoginScreenState extends State<LoginScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      "Don't have an account?",
+                      "Bạn chưa có tài khoản?",
                       style: TextStyles.defaultStyle,
                     ),
                     SizedBox(width: 10),
                     GestureDetector(
                       onTap: widget.onTap,
                       child: Text(
-                        'Register now.',
+                        'Đăng ký ngay.',
                         style:
                             TextStyles.defaultStyle.bold.setColor(Colors.blue),
                       ),

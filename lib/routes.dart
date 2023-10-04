@@ -1,13 +1,12 @@
 import 'package:demo_frs_app/representation/screens/AccountScreen/account_screen.dart';
 import 'package:demo_frs_app/representation/screens/AccountScreen/account_screen_true.dart';
 import 'package:demo_frs_app/representation/screens/FoodScreen/cart_food_screen.dart';
-
 import 'package:demo_frs_app/representation/screens/FoodScreen/menu_screen.dart';
-
 import 'package:demo_frs_app/representation/screens/chat_screen.dart';
+import 'package:demo_frs_app/representation/screens/customer_main.dart';
 import 'package:demo_frs_app/representation/screens/favorite_screen.dart';
 import 'package:demo_frs_app/representation/screens/login_or_register/auth_screen.dart';
-import 'package:demo_frs_app/representation/screens/home_screen_food.dart';
+import 'package:demo_frs_app/representation/screens/home_screen.dart';
 import 'package:demo_frs_app/representation/screens/login_or_register/forgot_password_screen.dart';
 import 'package:demo_frs_app/representation/screens/login_or_register/login_or_register_screen.dart';
 import 'package:demo_frs_app/representation/screens/login_or_register/login_screen.dart';
@@ -53,5 +52,6 @@ final Map<String, WidgetBuilder> routes = {
   //
   MenuScreen.routeName: (context) => const MenuScreen(),
   CartFoodScreen.routeName: (context) => const CartFoodScreen(),
+  CustomerMain.routeName: (context) => const CustomerMain(),
   // FoodDetailsScreen.routeName: (context) => const FoodDetailsScreen( food: ),
 };

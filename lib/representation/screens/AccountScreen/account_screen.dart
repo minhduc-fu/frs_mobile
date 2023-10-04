@@ -1,6 +1,7 @@
 import 'package:demo_frs_app/core/constants/color_constants.dart';
 import 'package:demo_frs_app/core/constants/textstyle_constants.dart';
 import 'package:demo_frs_app/representation/screens/login_or_register/login_screen.dart';
+import 'package:demo_frs_app/representation/screens/login_or_register/register_demo.dart';
 import 'package:demo_frs_app/representation/screens/login_or_register/register_screen.dart';
 import 'package:demo_frs_app/representation/widgets/app_bar_container.dart';
 import 'package:flutter/material.dart';
@@ -53,17 +54,17 @@ class _AccountScreenState extends State<AccountScreen>
                           dividerColor:
                               ColorPalette.primaryColor, // reload mới thay đổi
                           indicator: BoxDecoration(
-                            color: ColorPalette.secondColor,
+                            color: ColorPalette.backgroundScaffoldColor,
                             borderRadius: BorderRadius.circular(5),
                           ),
                           unselectedLabelColor: Colors.white,
                           indicatorSize: TabBarIndicatorSize.tab,
-                          labelColor: ColorPalette.primaryColor,
+                          labelColor: ColorPalette.textColor,
                           labelStyle: TextStyles.defaultStyle,
                           controller: _tabController,
                           tabs: [
-                            Tab(text: 'Login'),
-                            Tab(text: 'Signup'),
+                            Tab(text: 'Đăng nhập'),
+                            Tab(text: 'Đăng ký'),
                           ],
                         ),
                       ),
@@ -76,7 +77,8 @@ class _AccountScreenState extends State<AccountScreen>
                     children: [
                       // RegisterScreen(onTap: () {}),
                       LoginScreen(onTap: () {}),
-                      RegisterScreen(onTap: () {}),
+                      // RegisterScreen(onTap: () {}),
+                      RegisterDemo(),
                     ],
                   ),
                 ),

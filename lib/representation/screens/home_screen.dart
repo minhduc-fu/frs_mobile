@@ -7,6 +7,7 @@ import 'package:demo_frs_app/core/helper/image_helper.dart';
 import 'package:demo_frs_app/models/brand.dart';
 import 'package:demo_frs_app/models/product.dart';
 import 'package:demo_frs_app/models/search_result.dart';
+import 'package:demo_frs_app/representation/screens/customer_main.dart';
 import 'package:demo_frs_app/representation/screens/search_screen.dart';
 import 'package:demo_frs_app/representation/widgets/app_bar_main.dart';
 import 'package:demo_frs_app/representation/widgets/product_card.dart';
@@ -271,6 +272,10 @@ class _HomeScreenState extends State<HomeScreen> {
                           'Trang chủ',
                           style: TextStyles.defaultStyle.setTextSize(18),
                         ),
+                        onTap: () {
+                          Navigator.of(context)
+                              .pushNamed(CustomerMain.routeName);
+                        },
                       ),
                     ),
                     Padding(

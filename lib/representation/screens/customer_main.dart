@@ -16,16 +16,16 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 
-class MainApp extends StatefulWidget {
-  const MainApp({super.key});
+class CustomerMain extends StatefulWidget {
+  const CustomerMain({super.key});
 
-  static const String routeName = '/main_app';
+  static const String routeName = '/customer_main';
 
   @override
-  State<MainApp> createState() => _MainAppState();
+  State<CustomerMain> createState() => _CustomerMain();
 }
 
-class _MainAppState extends State<MainApp> {
+class _CustomerMain extends State<CustomerMain> {
   int _currentIndex = 0;
   // final user = FirebaseAuth.instance.currentUser!;
   User? user;
@@ -54,8 +54,8 @@ class _MainAppState extends State<MainApp> {
         index: _currentIndex,
         children: [
           HomeScreen(),
-          FavoriteScreen(),
-          ChatScreen(),
+          // FavoriteScreen(),
+          // ChatScreen(),
           // HomeScreen(),
           // MenuScreen(),
 
@@ -85,20 +85,20 @@ class _MainAppState extends State<MainApp> {
               size: kDefaultIconSize,
             ),
           ),
-          SalomonBottomBarItem(
-            title: Text('Yêu thích'),
-            icon: Icon(
-              FontAwesomeIcons.solidHeart,
-              size: kDefaultIconSize,
-            ),
-          ),
-          SalomonBottomBarItem(
-            title: Text('Tin nhắn'),
-            icon: Icon(
-              FontAwesomeIcons.solidMessage,
-              size: kDefaultIconSize,
-            ),
-          ),
+          // SalomonBottomBarItem(
+          //   title: Text('Yêu thích'),
+          //   icon: Icon(
+          //     FontAwesomeIcons.solidHeart,
+          //     size: kDefaultIconSize,
+          //   ),
+          // ),
+          // SalomonBottomBarItem(
+          //   title: Text('Tin nhắn'),
+          //   icon: Icon(
+          //     FontAwesomeIcons.solidMessage,
+          //     size: kDefaultIconSize,
+          //   ),
+          // ),
           SalomonBottomBarItem(
             title: Text('Giỏ hàng'),
             icon: Icon(
