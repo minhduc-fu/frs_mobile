@@ -4,10 +4,9 @@ import 'package:demo_frs_app/core/constants/dismension_constants.dart';
 import 'package:demo_frs_app/core/constants/textstyle_constants.dart';
 import 'package:demo_frs_app/core/helper/asset_helper.dart';
 import 'package:demo_frs_app/core/helper/image_helper.dart';
-import 'package:demo_frs_app/models/brand.dart';
 import 'package:demo_frs_app/models/product.dart';
 import 'package:demo_frs_app/models/search_result.dart';
-import 'package:demo_frs_app/representation/screens/customer_main.dart';
+import 'package:demo_frs_app/representation/screens/customer_screen/customer_main.dart';
 import 'package:demo_frs_app/representation/screens/search_screen.dart';
 import 'package:demo_frs_app/representation/widgets/app_bar_main.dart';
 import 'package:demo_frs_app/representation/widgets/product_card.dart';
@@ -409,10 +408,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                   focusedBorder: OutlineInputBorder(
                                       borderSide: BorderSide(
                                           color: ColorPalette.primaryColor),
-                                      borderRadius: BorderRadius.circular(14)),
+                                      borderRadius: BorderRadius.circular(
+                                          kDefaultCircle)),
                                   border: OutlineInputBorder(
                                     borderSide: BorderSide.none,
-                                    borderRadius: BorderRadius.circular(14),
+                                    borderRadius:
+                                        BorderRadius.circular(kDefaultCircle),
                                   ),
                                   contentPadding: EdgeInsets.symmetric(
                                       horizontal: kItemPadding),
@@ -476,7 +477,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                         color: isSelected
                                             ? ColorPalette.primaryColor
                                             : ColorPalette.hideColor,
-                                        borderRadius: BorderRadius.circular(14),
+                                        borderRadius: BorderRadius.circular(
+                                            kDefaultCircle),
                                       ),
 
                                       // Text của brand
@@ -546,7 +548,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                         color: isSelectedCategory
                                             ? ColorPalette.primaryColor
                                             : ColorPalette.hideColor,
-                                        borderRadius: BorderRadius.circular(14),
+                                        borderRadius: BorderRadius.circular(
+                                            kDefaultCircle),
                                       ),
 
                                       // Text của brand

@@ -1,4 +1,5 @@
 import 'package:demo_frs_app/core/constants/color_constants.dart';
+import 'package:demo_frs_app/core/constants/dismension_constants.dart';
 import 'package:demo_frs_app/core/constants/textstyle_constants.dart';
 import 'package:flutter/material.dart';
 
@@ -47,7 +48,7 @@ class _ButtonWidgetState extends State<ButtonWidget> {
         height: widget.height,
         width: widget.width,
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(5),
+            borderRadius: BorderRadius.circular(kDefaultCircle),
             color: ColorPalette.primaryColor,
             boxShadow: glowing
                 ? [

@@ -6,6 +6,7 @@ const double kDefaultPadding = 16.0; // standard padding using default items
 const double kItemPadding = 10.0; // default padding between child widgets
 const double kMinPadding = 5.0; // minium default padding
 const double kTopPadding = 8.0; // default top padding
+const double kDefaultCircle = 14.0;
 
 const double kDefaultIconSize = 18;
 

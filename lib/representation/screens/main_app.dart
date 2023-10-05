@@ -1,14 +1,10 @@
 import 'package:demo_frs_app/core/constants/color_constants.dart';
 import 'package:demo_frs_app/core/constants/dismension_constants.dart';
-import 'package:demo_frs_app/representation/screens/AccountScreen/account_screen.dart';
-import 'package:demo_frs_app/representation/screens/AccountScreen/account_screen_true.dart';
+import 'package:demo_frs_app/representation/screens/account_screen.dart';
 import 'package:demo_frs_app/representation/screens/FoodScreen/cart_food_screen.dart';
-import 'package:demo_frs_app/representation/screens/FoodScreen/menu_screen.dart';
-
-import 'package:demo_frs_app/representation/screens/chat_screen.dart';
-import 'package:demo_frs_app/representation/screens/favorite_screen.dart';
 import 'package:demo_frs_app/representation/screens/home_screen.dart';
 import 'package:demo_frs_app/representation/screens/login_or_register/register_screen.dart';
+import 'package:demo_frs_app/services/auth_service.dart';
 // import 'package:demo_frs_app/representation/screens/login_screen.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -41,7 +37,7 @@ class _MainAppState extends State<MainApp> {
     emailController.text = "";
     passwordController.text = "";
     confirmPasswordController.text = "";
-    FirebaseAuth.instance.signOut();
+    AuthService().signOut;
     setState(() {
       user = null;
     });
@@ -54,13 +50,10 @@ class _MainAppState extends State<MainApp> {
         index: _currentIndex,
         children: [
           HomeScreen(),
-          FavoriteScreen(),
-          ChatScreen(),
-          // HomeScreen(),
+          // FavoriteScreen(),
+          // ChatScreen(),
           // MenuScreen(),
-
           CartFoodScreen(),
-          // AccountScreen(),
           AccountScreen(),
           // AccountScreenTrue(),
         ],
@@ -85,20 +78,20 @@ class _MainAppState extends State<MainApp> {
               size: kDefaultIconSize,
             ),
           ),
-          SalomonBottomBarItem(
-            title: Text('Yêu thích'),
-            icon: Icon(
-              FontAwesomeIcons.solidHeart,
-              size: kDefaultIconSize,
-            ),
-          ),
-          SalomonBottomBarItem(
-            title: Text('Tin nhắn'),
-            icon: Icon(
-              FontAwesomeIcons.solidMessage,
-              size: kDefaultIconSize,
-            ),
-          ),
+          // SalomonBottomBarItem(
+          //   title: Text('Yêu thích'),
+          //   icon: Icon(
+          //     FontAwesomeIcons.solidHeart,
+          //     size: kDefaultIconSize,
+          //   ),
+          // ),
+          // SalomonBottomBarItem(
+          //   title: Text('Tin nhắn'),
+          //   icon: Icon(
+          //     FontAwesomeIcons.solidMessage,
+          //     size: kDefaultIconSize,
+          //   ),
+          // ),
           SalomonBottomBarItem(
             title: Text('Giỏ hàng'),
             icon: Icon(

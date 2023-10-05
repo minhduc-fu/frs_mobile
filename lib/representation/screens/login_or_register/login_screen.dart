@@ -1,4 +1,5 @@
 import 'package:demo_frs_app/core/constants/color_constants.dart';
+import 'package:demo_frs_app/core/constants/dismension_constants.dart';
 import 'package:demo_frs_app/core/constants/my_textfield.dart';
 import 'package:demo_frs_app/core/constants/square_tile.dart';
 import 'package:demo_frs_app/core/constants/textstyle_constants.dart';
@@ -135,92 +136,75 @@ class _LoginScreenState extends State<LoginScreen> {
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // logo
-                SizedBox(height: 25),
-                Icon(
-                  color: ColorPalette.primaryColor,
-                  FontAwesomeIcons.rightToBracket,
-                  size: 50,
-                ),
-                SizedBox(height: 25),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25),
-                  child: Container(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // logo
+                  SizedBox(height: 25),
+                  Icon(
+                    color: ColorPalette.primaryColor,
+                    FontAwesomeIcons.rightToBracket,
+                    size: 50,
+                  ),
+                  SizedBox(height: 25),
+                  Container(
                     alignment: Alignment.centerLeft,
                     child: Text("Đăng nhập", style: TextStyles.h4.bold),
                   ),
-                ),
-                SizedBox(height: 5),
+                  SizedBox(height: 5),
 
-                // Enter your account detail or use Email Google
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25),
-                  child: Container(
+                  // Enter your account detail or use Email Google
+                  Container(
                     alignment: Alignment.centerLeft,
                     child: Text(
                       "Hãy nhập chi tiết tài khoản của bạn hoặc sử dụng Email Google",
                       style: TextStyles.h5.setColor(ColorPalette.textHide),
                     ),
                   ),
-                ),
-                SizedBox(height: 25),
+                  SizedBox(height: 25),
 
-                // email textField
-                Stack(
-                  alignment: AlignmentDirectional.centerEnd,
-                  children: [
-                    MyTextField(
-                      messageError: 'Email không hợp lệ',
-                      controller: emailController,
-                      hintText: 'Email',
-                      obscureText: false,
+                  // email textField
+                  MyTextField(
+                    prefixIcon: Icon(
+                      FontAwesomeIcons.solidEnvelope,
+                      size: kDefaultIconSize,
+                      color: ColorPalette.primaryColor,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 35),
+                    messageError: 'Email không hợp lệ',
+                    controller: emailController,
+                    hintText: 'Email',
+                    obscureText: false,
+                  ),
+                  SizedBox(height: 10),
+
+                  // password textField
+                  MyTextField(
+                    prefixIcon: Icon(
+                      FontAwesomeIcons.key,
+                      size: kDefaultIconSize,
+                      color: ColorPalette.primaryColor,
+                    ),
+                    suffixIcon: GestureDetector(
+                      onTap: onToggleShowPass,
                       child: Icon(
-                        FontAwesomeIcons.solidEnvelope,
-                        size: 18,
+                        _showPass
+                            ? FontAwesomeIcons.eyeSlash
+                            : FontAwesomeIcons.eye,
+                        size: kDefaultIconSize,
                         color: ColorPalette.primaryColor,
                       ),
                     ),
-                  ],
-                ),
-                SizedBox(height: 10),
+                    messageError: 'Password không hợp lệ',
+                    controller: passwordController,
+                    hintText: 'Password',
+                    obscureText: !_showPass,
+                  ),
+                  SizedBox(height: 10),
 
-                // password textField
-                Stack(
-                  alignment: AlignmentDirectional.centerEnd,
-                  children: [
-                    MyTextField(
-                      messageError: 'Password không hợp lệ',
-                      controller: passwordController,
-                      hintText: 'Password',
-                      obscureText: !_showPass,
-                    ),
-                    GestureDetector(
-                      onTap: onToggleShowPass,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 35),
-                        child: Icon(
-                          _showPass
-                              ? FontAwesomeIcons.eyeSlash
-                              : FontAwesomeIcons.eye,
-                          size: 18,
-                          color: ColorPalette.primaryColor,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 10),
-
-                // forgot password?
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25),
-                  child: Row(
+                  // forgot password?
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       GestureDetector(
@@ -231,8 +215,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: Text(
                           'Quên mật khẩu?',
                           style: TextStyle(
+                              fontSize: 16,
                               decoration: TextDecoration.underline,
-                              decorationThickness: 0.5,
+                              decorationThickness: 0.8,
                               decorationColor: Colors.blue,
                               color: Colors.blue,
                               fontFamily: FontFamilyRoboto.roboto,
@@ -241,27 +226,20 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ],
                   ),
-                ),
-                SizedBox(height: 25),
+                  SizedBox(height: 25),
 
-                // sign in button
-                // MyButton(action: 'Sign In', onTap: signInClicked),
-                Container(
-                  padding: EdgeInsets.all(25),
-                  // margin: EdgeInsets.symmetric(horizontal: 25),
-                  child: ButtonWidget(
+                  // sign in button
+                  // MyButton(action: 'Sign In', onTap: signInClicked),
+                  ButtonWidget(
                     size: 22,
                     height: 70,
                     title: 'Đăng nhập',
                     onTap: signInClicked,
                   ),
-                ),
-                SizedBox(height: 30),
+                  SizedBox(height: 30),
 
-                // or continue with
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25),
-                  child: Row(
+                  // or continue with
+                  Row(
                     children: [
                       Expanded(
                         child: Divider(
@@ -273,7 +251,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         padding: const EdgeInsets.symmetric(horizontal: 4),
                         child: Text(
                           'Hoặc tiếp tục với',
-                          style: TextStyles.defaultStyle,
+                          style: TextStyles.h5,
                         ),
                       ),
                       Expanded(
@@ -284,51 +262,40 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ],
                   ),
-                ),
-                SizedBox(height: 50),
+                  SizedBox(height: 40),
 
-                // google + apple sign in buttons
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    // google button
-                    SquareTile(
-                      onTap: () => AuthService().signInWithGoogle(),
-                      child: ImageHelper.loadFromAsset(
-                          AssetHelper.imageLogoGoogle),
-                    ),
-                    SizedBox(width: 25),
+                  // google  sign in buttons
+                  SquareTile(
+                    onTap: () => AuthService().signInWithGoogle(),
+                    child:
+                        ImageHelper.loadFromAsset(AssetHelper.imageLogoGoogle),
+                  ),
+                  SizedBox(height: 40),
 
-                    // apple button
-                    SquareTile(
-                      onTap: () {},
-                      child:
-                          ImageHelper.loadFromAsset(AssetHelper.imageLogoApple),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 50),
-
-                // Dont't have an account? register now
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Bạn chưa có tài khoản?",
-                      style: TextStyles.defaultStyle,
-                    ),
-                    SizedBox(width: 10),
-                    GestureDetector(
-                      onTap: widget.onTap,
-                      child: Text(
-                        'Đăng ký ngay.',
-                        style:
-                            TextStyles.defaultStyle.bold.setColor(Colors.blue),
+                  // Dont't have an account? register now
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Bạn chưa có tài khoản?",
+                        style: TextStyles.h5,
                       ),
-                    )
-                  ],
-                ),
-              ],
+                      SizedBox(width: 10),
+                      GestureDetector(
+                        onTap: widget.onTap,
+                        // onTap: () {
+                        //   Navigator.of(context)
+                        //       .pushNamed(RegisterScreen.routeName);
+                        // },
+                        child: Text(
+                          'Đăng ký ngay.',
+                          style: TextStyles.h5.bold.setColor(Colors.blue),
+                        ),
+                      )
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),

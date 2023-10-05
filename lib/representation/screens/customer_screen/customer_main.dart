@@ -1,16 +1,11 @@
 import 'package:demo_frs_app/core/constants/color_constants.dart';
 import 'package:demo_frs_app/core/constants/dismension_constants.dart';
-import 'package:demo_frs_app/representation/screens/AccountScreen/account_screen.dart';
-import 'package:demo_frs_app/representation/screens/AccountScreen/account_screen_true.dart';
-import 'package:demo_frs_app/representation/screens/FoodScreen/cart_food_screen.dart';
-import 'package:demo_frs_app/representation/screens/FoodScreen/menu_screen.dart';
-
 import 'package:demo_frs_app/representation/screens/chat_screen.dart';
+import 'package:demo_frs_app/representation/screens/FoodScreen/cart_food_screen.dart';
+import 'package:demo_frs_app/representation/screens/customer_screen/customer_account_screen/account_screen_true.dart';
 import 'package:demo_frs_app/representation/screens/favorite_screen.dart';
 import 'package:demo_frs_app/representation/screens/home_screen.dart';
 import 'package:demo_frs_app/representation/screens/login_or_register/register_screen.dart';
-// import 'package:demo_frs_app/representation/screens/login_screen.dart';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -54,15 +49,11 @@ class _CustomerMain extends State<CustomerMain> {
         index: _currentIndex,
         children: [
           HomeScreen(),
-          // FavoriteScreen(),
-          // ChatScreen(),
-          // HomeScreen(),
+          FavoriteScreen(),
+          ChatScreen(),
           // MenuScreen(),
-
           CartFoodScreen(),
-          // AccountScreen(),
-          AccountScreen(),
-          // AccountScreenTrue(),
+          AccountScreenTrue(),
         ],
         // child: user != null ? Text('${user!.email}') : Text("Chưa đăng nhập"),
       ),
@@ -85,20 +76,20 @@ class _CustomerMain extends State<CustomerMain> {
               size: kDefaultIconSize,
             ),
           ),
-          // SalomonBottomBarItem(
-          //   title: Text('Yêu thích'),
-          //   icon: Icon(
-          //     FontAwesomeIcons.solidHeart,
-          //     size: kDefaultIconSize,
-          //   ),
-          // ),
-          // SalomonBottomBarItem(
-          //   title: Text('Tin nhắn'),
-          //   icon: Icon(
-          //     FontAwesomeIcons.solidMessage,
-          //     size: kDefaultIconSize,
-          //   ),
-          // ),
+          SalomonBottomBarItem(
+            title: Text('Yêu thích'),
+            icon: Icon(
+              FontAwesomeIcons.solidHeart,
+              size: kDefaultIconSize,
+            ),
+          ),
+          SalomonBottomBarItem(
+            title: Text('Tin nhắn'),
+            icon: Icon(
+              FontAwesomeIcons.solidMessage,
+              size: kDefaultIconSize,
+            ),
+          ),
           SalomonBottomBarItem(
             title: Text('Giỏ hàng'),
             icon: Icon(

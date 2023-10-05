@@ -5,6 +5,7 @@ import 'package:demo_frs_app/core/constants/textstyle_constants.dart';
 import 'package:demo_frs_app/core/helper/asset_helper.dart';
 import 'package:demo_frs_app/core/helper/image_helper.dart';
 import 'package:demo_frs_app/representation/screens/login_or_register/auth_screen.dart';
+import 'package:demo_frs_app/representation/screens/main_app.dart';
 
 import 'package:demo_frs_app/representation/widgets/button_widget.dart';
 import 'package:flutter/material.dart';
@@ -118,8 +119,7 @@ class _IntroScreenState extends State<IntroScreen> {
                                 duration: Duration(milliseconds: 100),
                                 curve: Curves.easeIn);
                           } else {
-                            Navigator.of(context)
-                                .pushNamed(AuthScreen.routeName);
+                            Navigator.of(context).pushNamed(MainApp.routeName);
                           }
                         },
                         height: 40,

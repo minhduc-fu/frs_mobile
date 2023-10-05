@@ -1,9 +1,9 @@
-import 'package:demo_frs_app/representation/screens/AccountScreen/account_screen.dart';
-import 'package:demo_frs_app/representation/screens/AccountScreen/account_screen_true.dart';
+import 'package:demo_frs_app/representation/screens/account_screen.dart';
+import 'package:demo_frs_app/representation/screens/customer_screen/customer_account_screen/account_screen_true.dart';
 import 'package:demo_frs_app/representation/screens/FoodScreen/cart_food_screen.dart';
 import 'package:demo_frs_app/representation/screens/FoodScreen/menu_screen.dart';
 import 'package:demo_frs_app/representation/screens/chat_screen.dart';
-import 'package:demo_frs_app/representation/screens/customer_main.dart';
+import 'package:demo_frs_app/representation/screens/customer_screen/customer_main.dart';
 import 'package:demo_frs_app/representation/screens/favorite_screen.dart';
 import 'package:demo_frs_app/representation/screens/login_or_register/auth_screen.dart';
 import 'package:demo_frs_app/representation/screens/home_screen.dart';

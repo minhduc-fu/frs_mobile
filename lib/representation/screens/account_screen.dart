@@ -1,9 +1,12 @@
 import 'package:demo_frs_app/core/constants/color_constants.dart';
+import 'package:demo_frs_app/core/constants/dismension_constants.dart';
 import 'package:demo_frs_app/core/constants/textstyle_constants.dart';
+import 'package:demo_frs_app/representation/screens/login_or_register/login_or_register_screen.dart';
 import 'package:demo_frs_app/representation/screens/login_or_register/login_screen.dart';
 import 'package:demo_frs_app/representation/screens/login_or_register/register_demo.dart';
 import 'package:demo_frs_app/representation/screens/login_or_register/register_screen.dart';
 import 'package:demo_frs_app/representation/widgets/app_bar_container.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class AccountScreen extends StatefulWidget {
@@ -14,6 +17,8 @@ class AccountScreen extends StatefulWidget {
   State<AccountScreen> createState() => _AccountScreenState();
 }
 
+// int currentTabIndex = 0; // mặc định hiển thị loginScreen()
+
 class _AccountScreenState extends State<AccountScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
@@ -21,6 +26,7 @@ class _AccountScreenState extends State<AccountScreen>
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
+    _tabController.index = 0;
   }
 
   @override
@@ -55,7 +61,7 @@ class _AccountScreenState extends State<AccountScreen>
                               ColorPalette.primaryColor, // reload mới thay đổi
                           indicator: BoxDecoration(
                             color: ColorPalette.backgroundScaffoldColor,
-                            borderRadius: BorderRadius.circular(5),
+                            borderRadius: BorderRadius.circular(kDefaultCircle),
                           ),
                           unselectedLabelColor: Colors.white,
                           indicatorSize: TabBarIndicatorSize.tab,
@@ -75,10 +81,21 @@ class _AccountScreenState extends State<AccountScreen>
                   child: TabBarView(
                     controller: _tabController,
                     children: [
-                      // RegisterScreen(onTap: () {}),
-                      LoginScreen(onTap: () {}),
-                      // RegisterScreen(onTap: () {}),
-                      RegisterDemo(),
+                      LoginScreen(
+                        onTap: () {
+                          _tabController.index = 1;
+                        },
+                      ),
+                      // RegisterScreen(
+                      //   onTap: () {
+                      //     _tabController.index = 0;
+                      //   },
+                      // ),
+                      RegisterDemo(
+                        onTap: () {
+                          _tabController.index = 0;
+                        },
+                      ),
                     ],
                   ),
                 ),

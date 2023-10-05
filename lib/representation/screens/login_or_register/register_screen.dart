@@ -4,6 +4,7 @@ import 'package:demo_frs_app/core/constants/square_tile.dart';
 import 'package:demo_frs_app/core/constants/textstyle_constants.dart';
 import 'package:demo_frs_app/core/helper/asset_helper.dart';
 import 'package:demo_frs_app/core/helper/image_helper.dart';
+import 'package:demo_frs_app/representation/screens/login_or_register/login_screen.dart';
 import 'package:demo_frs_app/representation/widgets/button_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -328,6 +329,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     SizedBox(width: 10),
                     GestureDetector(
                       onTap: widget.onTap,
+                      // onTap: () {
+                      //   Navigator.of(context).pushNamed(LoginScreen.routeName);
+                      // },
                       child: Text(
                         'Đăng nhập ngay.',
                         style:

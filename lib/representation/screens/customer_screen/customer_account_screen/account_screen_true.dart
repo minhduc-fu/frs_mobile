@@ -2,7 +2,7 @@ import 'package:demo_frs_app/core/constants/color_constants.dart';
 import 'package:demo_frs_app/core/constants/textstyle_constants.dart';
 import 'package:demo_frs_app/core/helper/asset_helper.dart';
 import 'package:demo_frs_app/core/helper/image_helper.dart';
-import 'package:demo_frs_app/representation/screens/AccountScreen/account_tile.dart';
+import 'package:demo_frs_app/representation/screens/customer_screen/customer_account_screen/account_tile.dart';
 import 'package:demo_frs_app/representation/widgets/app_bar_container.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
