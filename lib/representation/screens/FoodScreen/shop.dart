@@ -1,5 +1,5 @@
-import 'package:demo_frs_app/core/helper/asset_helper.dart';
 import 'package:demo_frs_app/models/food.dart';
+import 'package:demo_frs_app/utils/asset_helper.dart';
 import 'package:flutter/material.dart';
 
 class Shop extends ChangeNotifier {

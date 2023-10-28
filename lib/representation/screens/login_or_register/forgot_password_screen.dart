@@ -25,7 +25,6 @@ class ForgotPasswordScreen extends StatelessWidget {
                 children: [
                   MyTextField(
                     controller: emailForgot,
-                    messageError: 'Email không hợp lệ',
                     hintText: 'Email',
                     obscureText: false,
                   ),

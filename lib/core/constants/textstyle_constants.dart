@@ -21,26 +21,32 @@ class TextStyles {
       fontFamily: FontFamilyRoboto.roboto);
   static TextStyle h1 = TextStyle(
       fontFamily: FontFamilyRoboto.roboto,
+      // fontFamily: FontFamilySen.sen,
       fontSize: 109.66,
       color: ColorPalette.textColor);
   static TextStyle h2 = TextStyle(
       fontFamily: FontFamilyRoboto.roboto,
+      // fontFamily: FontFamilySen.sen,
       fontSize: 67.77,
       color: ColorPalette.textColor);
   static TextStyle h3 = TextStyle(
       fontFamily: FontFamilyRoboto.roboto,
+      // fontFamily: FontFamilySen.sen,
       fontSize: 41.89,
       color: ColorPalette.textColor);
   static TextStyle h4 = TextStyle(
       fontFamily: FontFamilyRoboto.roboto,
+      // fontFamily: FontFamilySen.sen,
       fontSize: 25.89,
       color: ColorPalette.textColor);
   static TextStyle h5 = TextStyle(
       fontFamily: FontFamilyRoboto.roboto,
+      // fontFamily: FontFamilySen.sen,
       fontSize: 16,
       color: ColorPalette.textColor);
   static TextStyle h6 = TextStyle(
       fontFamily: FontFamilyRoboto.roboto,
+      // fontFamily: FontFamilySen.sen,
       fontSize: 9.89,
       color: ColorPalette.textColor);
 }

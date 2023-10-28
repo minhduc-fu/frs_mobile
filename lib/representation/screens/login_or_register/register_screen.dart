@@ -1,10 +1,6 @@
 import 'package:demo_frs_app/core/constants/color_constants.dart';
 import 'package:demo_frs_app/core/constants/my_textfield.dart';
-import 'package:demo_frs_app/core/constants/square_tile.dart';
 import 'package:demo_frs_app/core/constants/textstyle_constants.dart';
-import 'package:demo_frs_app/core/helper/asset_helper.dart';
-import 'package:demo_frs_app/core/helper/image_helper.dart';
-import 'package:demo_frs_app/representation/screens/login_or_register/login_screen.dart';
 import 'package:demo_frs_app/representation/widgets/button_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -19,9 +15,6 @@ class RegisterScreen extends StatefulWidget {
   State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-// text editing controllers
-// final passwordController = TextEditingController();
-// final emailController = TextEditingController();
 final TextEditingController emailController = new TextEditingController();
 final TextEditingController passwordController = new TextEditingController();
 final TextEditingController fullNameController = new TextEditingController();
@@ -163,14 +156,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 SizedBox(height: 25),
                 MyTextField(
-                  messageError: 'Họ và tên không hợp lệ',
                   controller: fullNameController,
                   hintText: 'Họ và tên',
                   obscureText: false,
                 ),
                 SizedBox(height: 10),
                 MyTextField(
-                  messageError: 'Số điện thoại',
                   controller: phoneController,
                   hintText: 'Số điện thoại',
                   obscureText: false,
@@ -182,7 +173,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   alignment: AlignmentDirectional.centerEnd,
                   children: [
                     MyTextField(
-                      messageError: 'Email không hợp lệ',
                       controller: emailController,
                       hintText: 'Email',
                       obscureText: false,
@@ -204,7 +194,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   alignment: AlignmentDirectional.centerEnd,
                   children: [
                     MyTextField(
-                      messageError: 'Mật khẩu không hợp lệ',
                       controller: passwordController,
                       hintText: 'Mật khẩu',
                       obscureText: !_showPass,
@@ -231,7 +220,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   alignment: AlignmentDirectional.centerEnd,
                   children: [
                     MyTextField(
-                      messageError: 'Mật khẩu không hợp lệ',
                       controller: confirmPasswordController,
                       hintText: 'Xác nhận mật khẩu',
                       obscureText: !_showPass,

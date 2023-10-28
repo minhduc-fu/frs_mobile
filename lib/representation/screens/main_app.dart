@@ -1,11 +1,9 @@
 import 'package:demo_frs_app/core/constants/color_constants.dart';
 import 'package:demo_frs_app/core/constants/dismension_constants.dart';
 import 'package:demo_frs_app/representation/screens/account_screen.dart';
-import 'package:demo_frs_app/representation/screens/FoodScreen/cart_food_screen.dart';
+import 'package:demo_frs_app/representation/screens/cart/main_cart_screen.dart';
 import 'package:demo_frs_app/representation/screens/home_screen.dart';
-import 'package:demo_frs_app/representation/screens/login_or_register/register_screen.dart';
-import 'package:demo_frs_app/services/auth_service.dart';
-// import 'package:demo_frs_app/representation/screens/login_screen.dart';
+import 'package:demo_frs_app/representation/screens/home_screen_demo.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -32,28 +30,20 @@ class _MainAppState extends State<MainApp> {
     user = FirebaseAuth.instance.currentUser;
   }
 
-  // method logout
-  void logout() {
-    emailController.text = "";
-    passwordController.text = "";
-    confirmPasswordController.text = "";
-    AuthService().signOut;
-    setState(() {
-      user = null;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: IndexedStack(
         index: _currentIndex,
         children: [
-          HomeScreen(),
+          // HomeScreen(),
+          HomeScreenDemo(),
           // FavoriteScreen(),
           // ChatScreen(),
           // MenuScreen(),
-          CartFoodScreen(),
+          // CartFoodScreen(),
+          // Register(),
+          MainCartScreen(),
           AccountScreen(),
           // AccountScreenTrue(),
         ],
@@ -67,15 +57,15 @@ class _MainAppState extends State<MainApp> {
         },
         currentIndex: _currentIndex,
         selectedItemColor: ColorPalette.primaryColor,
-        unselectedItemColor: ColorPalette.hideColor,
+        unselectedItemColor: ColorPalette.textHide,
         margin: EdgeInsets.symmetric(
-            horizontal: kMediumPadding, vertical: kDefaultPadding),
+            horizontal: kMediumPadding24, vertical: kDefaultPadding16),
         items: [
           SalomonBottomBarItem(
             title: Text('Trang chủ'),
             icon: Icon(
               FontAwesomeIcons.house,
-              size: kDefaultIconSize,
+              size: kDefaultIconSize18,
             ),
           ),
           // SalomonBottomBarItem(
@@ -96,14 +86,14 @@ class _MainAppState extends State<MainApp> {
             title: Text('Giỏ hàng'),
             icon: Icon(
               FontAwesomeIcons.cartShopping,
-              size: kDefaultIconSize,
+              size: kDefaultIconSize18,
             ),
           ),
           SalomonBottomBarItem(
             title: Text('Tài khoản'),
             icon: Icon(
               FontAwesomeIcons.solidUser,
-              size: kDefaultIconSize,
+              size: kDefaultIconSize18,
             ),
           ),
         ],

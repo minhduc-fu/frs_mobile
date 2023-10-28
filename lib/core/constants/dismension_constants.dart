@@ -1,13 +1,9 @@
-import 'package:flutter/material.dart';
+const double kMediumPadding24 = 24.0; // bigger default padding
+const double kBottomBarIconSize20 = 20.0; // size of icon on the bottom bar
+const double kDefaultPadding16 = 16.0; // standard padding using default items
+const double kItemPadding10 = 10.0; // default padding between child widgets
+const double kMinPadding5 = 5.0; // minium default padding
+const double kTopPadding8 = 8.0; // default top padding
+const double kDefaultCircle14 = 14.0;
 
-const double kMediumPadding = 24.0; // bigger default padding
-const double kBottomBarIconSize = 20.0; // size of icon on the bottom bar
-const double kDefaultPadding = 16.0; // standard padding using default items
-const double kItemPadding = 10.0; // default padding between child widgets
-const double kMinPadding = 5.0; // minium default padding
-const double kTopPadding = 8.0; // default top padding
-const double kDefaultCircle = 14.0;
-
-const double kDefaultIconSize = 18;
-
-const BorderRadius kDefaultBorderRadius = BorderRadius.all(Radius.circular(8));
+const double kDefaultIconSize18 = 18;

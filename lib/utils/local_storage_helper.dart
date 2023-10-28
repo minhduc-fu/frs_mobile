@@ -11,7 +11,7 @@ class LocalStorageHelper {
   Box<dynamic>? hiveBox;
 
   Box<dynamic>? searchBox;
-  
+
   static initSearchBox() async {
     _instance.searchBox = await Hive.openBox('SearchBox');
   }

@@ -102,7 +102,7 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
         },
         child: Icon(
           FontAwesomeIcons.angleLeft,
-          size: kDefaultIconSize,
+          size: kDefaultIconSize18,
         ),
       ),
       titleAppbar: 'Details',

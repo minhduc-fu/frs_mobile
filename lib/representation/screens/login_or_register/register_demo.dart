@@ -1,10 +1,14 @@
+import 'dart:typed_data';
 import 'package:demo_frs_app/core/constants/color_constants.dart';
 import 'package:demo_frs_app/core/constants/dismension_constants.dart';
 import 'package:demo_frs_app/core/constants/my_textfield.dart';
 import 'package:demo_frs_app/core/constants/textstyle_constants.dart';
 import 'package:demo_frs_app/representation/screens/login_or_register/register_screen.dart';
+import 'package:demo_frs_app/utils/asset_helper.dart';
+import 'package:demo_frs_app/utils/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:image_picker/image_picker.dart';
 
 class RegisterDemo extends StatefulWidget {
   final Function()? onTap;
@@ -27,6 +31,22 @@ class _RegisterDemoState extends State<RegisterDemo> {
   bool _showPass = false;
   bool _showConfirmPass = false;
 
+  Uint8List?
+      _image; // lưu trữ dữ liệu của ảnh đã chọn. Uint8List là 1 mảng byte không dấu
+  void selectImage() async {
+    Uint8List img = await pickAImage(ImageSource.gallery);
+    setState(() {
+      _image = img;
+    });
+  }
+
+  void usageCamera() async {
+    Uint8List img = await pickAImage(ImageSource.camera);
+    setState(() {
+      _image = img;
+    });
+  }
+
   // hàm để hide or show pass
   void onToggleShowPass() {
     setState(() {
@@ -46,8 +66,8 @@ class _RegisterDemoState extends State<RegisterDemo> {
       backgroundColor: ColorPalette.primaryColor,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(kDefaultCircle),
-          topRight: Radius.circular(kDefaultCircle),
+          topLeft: Radius.circular(kDefaultCircle14),
+          topRight: Radius.circular(kDefaultCircle14),
         ),
       ),
       context: context,
@@ -62,7 +82,7 @@ class _RegisterDemoState extends State<RegisterDemo> {
                 child: Container(
                   decoration: BoxDecoration(
                     color: ColorPalette.backgroundScaffoldColor,
-                    borderRadius: BorderRadius.circular(kDefaultCircle),
+                    borderRadius: BorderRadius.circular(kDefaultCircle14),
                     border: Border.all(color: ColorPalette.textHide),
                   ),
                   child: ListTile(
@@ -79,7 +99,7 @@ class _RegisterDemoState extends State<RegisterDemo> {
                 child: Container(
                   decoration: BoxDecoration(
                     color: ColorPalette.backgroundScaffoldColor,
-                    borderRadius: BorderRadius.circular(kDefaultCircle),
+                    borderRadius: BorderRadius.circular(kDefaultCircle14),
                     border: Border.all(color: ColorPalette.textHide),
                   ),
                   child: ListTile(
@@ -109,8 +129,8 @@ class _RegisterDemoState extends State<RegisterDemo> {
       backgroundColor: ColorPalette.primaryColor,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(kDefaultCircle),
-          topRight: Radius.circular(kDefaultCircle),
+          topLeft: Radius.circular(kDefaultCircle14),
+          topRight: Radius.circular(kDefaultCircle14),
         ),
       ),
       context: context,
@@ -125,7 +145,7 @@ class _RegisterDemoState extends State<RegisterDemo> {
                 child: Container(
                   decoration: BoxDecoration(
                     color: ColorPalette.backgroundScaffoldColor,
-                    borderRadius: BorderRadius.circular(kDefaultCircle),
+                    borderRadius: BorderRadius.circular(kDefaultCircle14),
                     border: Border.all(color: ColorPalette.textHide),
                   ),
                   child: ListTile(
@@ -145,7 +165,7 @@ class _RegisterDemoState extends State<RegisterDemo> {
                 child: Container(
                   decoration: BoxDecoration(
                     color: ColorPalette.backgroundScaffoldColor,
-                    borderRadius: BorderRadius.circular(kDefaultCircle),
+                    borderRadius: BorderRadius.circular(kDefaultCircle14),
                     border: Border.all(color: ColorPalette.textHide),
                   ),
                   child: ListTile(
@@ -175,14 +195,45 @@ class _RegisterDemoState extends State<RegisterDemo> {
       return Column(
         children: [
           SizedBox(height: 10),
-
+          Stack(
+            children: [
+              _image != null
+                  ? CircleAvatar(
+                      radius: 40,
+                      backgroundImage: MemoryImage(_image!),
+                    )
+                  : CircleAvatar(
+                      radius: 40,
+                      backgroundImage:
+                          AssetImage(AssetHelper.imageCircleAvtMain),
+                    ),
+              Positioned(
+                bottom: 1,
+                left: 50,
+                child: Center(
+                  child: CircleAvatar(
+                    backgroundColor: ColorPalette.primaryColor,
+                    radius: 15,
+                    child: IconButton(
+                      onPressed: selectImage,
+                      icon: Icon(
+                        color: Colors.white,
+                        FontAwesomeIcons.plus,
+                        size: 16,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 10),
           // Họ và tên
           MyTextField(
             prefixIcon: Icon(
               FontAwesomeIcons.signature,
-              size: kDefaultIconSize,
+              size: kDefaultIconSize18,
             ),
-            messageError: 'Họ và tên không hợp lệ!',
             controller: fullNameController,
             hintText: 'Họ và tên',
             obscureText: false,
@@ -193,12 +244,11 @@ class _RegisterDemoState extends State<RegisterDemo> {
           MyTextField(
             prefixIcon: Icon(
               FontAwesomeIcons.phone,
-              size: kDefaultIconSize,
+              size: kDefaultIconSize18,
             ),
             hintText: 'Số điện thoại',
             obscureText: false,
             controller: phoneController,
-            messageError: 'Số điện thoại không hợp lệ!',
           ),
           SizedBox(height: 10),
 
@@ -206,10 +256,9 @@ class _RegisterDemoState extends State<RegisterDemo> {
           MyTextField(
             prefixIcon: Icon(
               FontAwesomeIcons.solidEnvelope,
-              size: kDefaultIconSize,
+              size: kDefaultIconSize18,
             ),
             controller: emailController,
-            messageError: 'Email không hợp lệ!',
             hintText: 'Email',
             obscureText: false,
           ),
@@ -221,16 +270,15 @@ class _RegisterDemoState extends State<RegisterDemo> {
               onTap: onToggleShowPass,
               child: Icon(
                 _showPass ? FontAwesomeIcons.eyeSlash : FontAwesomeIcons.eye,
-                size: kDefaultIconSize,
+                size: kDefaultIconSize18,
                 color: ColorPalette.primaryColor,
               ),
             ),
             prefixIcon: Icon(
               FontAwesomeIcons.key,
-              size: kDefaultIconSize,
+              size: kDefaultIconSize18,
             ),
             controller: passwordController,
-            messageError: 'Mật khẩu không hợp lệ!',
             hintText: 'Mật khẩu',
             obscureText: !_showPass,
           ),
@@ -244,16 +292,15 @@ class _RegisterDemoState extends State<RegisterDemo> {
                 _showConfirmPass
                     ? FontAwesomeIcons.eyeSlash
                     : FontAwesomeIcons.eye,
-                size: kDefaultIconSize,
+                size: kDefaultIconSize18,
                 color: ColorPalette.primaryColor,
               ),
             ),
             prefixIcon: Icon(
               FontAwesomeIcons.check,
-              size: kDefaultIconSize,
+              size: kDefaultIconSize18,
             ),
             controller: confirmPasswordController,
-            messageError: 'Mật khẩu không trùng khớp!',
             hintText: 'Xác nhận mật khẩu',
             obscureText: !_showConfirmPass,
           ),
@@ -262,7 +309,7 @@ class _RegisterDemoState extends State<RegisterDemo> {
           // Giới tính
           Container(
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(kDefaultCircle),
+              borderRadius: BorderRadius.circular(kDefaultCircle14),
               border: Border.all(color: ColorPalette.textHide),
             ),
             child: ListTile(
@@ -279,7 +326,7 @@ class _RegisterDemoState extends State<RegisterDemo> {
                   SizedBox(width: 10),
                   Icon(
                     FontAwesomeIcons.angleRight,
-                    size: kDefaultIconSize,
+                    size: kDefaultIconSize18,
                     color: ColorPalette.primaryColor,
                   )
                 ],
@@ -298,9 +345,8 @@ class _RegisterDemoState extends State<RegisterDemo> {
           MyTextField(
             prefixIcon: Icon(
               FontAwesomeIcons.signature,
-              size: kDefaultIconSize,
+              size: kDefaultIconSize18,
             ),
-            messageError: 'Họ và tên không hợp lệ!',
             controller: fullNameController,
             hintText: 'Họ và tên',
             obscureText: false,
@@ -311,24 +357,22 @@ class _RegisterDemoState extends State<RegisterDemo> {
           MyTextField(
             prefixIcon: Icon(
               FontAwesomeIcons.phone,
-              size: kDefaultIconSize,
+              size: kDefaultIconSize18,
             ),
             hintText: 'Số điện thoại',
             obscureText: false,
             controller: phoneController,
-            messageError: 'Số điện thoại không hợp lệ!',
           ),
           SizedBox(height: 10),
 
           // Email
           MyTextField(
+            hintText: 'Email',
             prefixIcon: Icon(
               FontAwesomeIcons.solidEnvelope,
-              size: kDefaultIconSize,
+              size: kDefaultIconSize18,
             ),
             controller: emailController,
-            messageError: 'Email không hợp lệ!',
-            hintText: 'Email',
             obscureText: false,
           ),
           SizedBox(height: 10),
@@ -339,16 +383,15 @@ class _RegisterDemoState extends State<RegisterDemo> {
               onTap: onToggleShowPass,
               child: Icon(
                 _showPass ? FontAwesomeIcons.eyeSlash : FontAwesomeIcons.eye,
-                size: kDefaultIconSize,
+                size: kDefaultIconSize18,
                 color: ColorPalette.primaryColor,
               ),
             ),
             prefixIcon: Icon(
               FontAwesomeIcons.key,
-              size: kDefaultIconSize,
+              size: kDefaultIconSize18,
             ),
             controller: passwordController,
-            messageError: 'Mật khẩu không hợp lệ!',
             hintText: 'Mật khẩu',
             obscureText: !_showPass,
           ),
@@ -362,16 +405,15 @@ class _RegisterDemoState extends State<RegisterDemo> {
                 _showConfirmPass
                     ? FontAwesomeIcons.eyeSlash
                     : FontAwesomeIcons.eye,
-                size: kDefaultIconSize,
+                size: kDefaultIconSize18,
                 color: ColorPalette.primaryColor,
               ),
             ),
             prefixIcon: Icon(
               FontAwesomeIcons.check,
-              size: kDefaultIconSize,
+              size: kDefaultIconSize18,
             ),
             controller: confirmPasswordController,
-            messageError: 'Mật khẩu không trùng khớp!',
             hintText: 'Xác nhận mật khẩu',
             obscureText: !_showConfirmPass,
           ),
@@ -380,10 +422,9 @@ class _RegisterDemoState extends State<RegisterDemo> {
           MyTextField(
             prefixIcon: Icon(
               FontAwesomeIcons.locationDot,
-              size: kDefaultIconSize,
+              size: kDefaultIconSize18,
             ),
             controller: emailController,
-            messageError: 'Địa chỉ không hợp lệ!',
             hintText: 'Địa chỉ',
             obscureText: false,
           ),
@@ -399,110 +440,104 @@ class _RegisterDemoState extends State<RegisterDemo> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(height: 10),
-                  Icon(
-                    FontAwesomeIcons.userPlus,
-                    size: 30,
-                  ),
-                  SizedBox(height: 25),
-                  Container(
-                    alignment: Alignment.centerLeft,
-                    child: Text("Đăng ký", style: TextStyles.h4.bold),
-                  ),
-                  SizedBox(height: 5),
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(height: 10),
+            Icon(
+              FontAwesomeIcons.userPlus,
+              size: selectedRole == 'Chọn vai trò' ? 50 : 30,
+            ),
+            SizedBox(height: 25),
+            Container(
+              alignment: Alignment.centerLeft,
+              child: Text("Đăng ký", style: TextStyles.h4.bold),
+            ),
+            SizedBox(height: 5),
 
-                  // Let's create an account for you!
-                  Container(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      "Hãy tạo một tài khoản cho bạn!",
-                      style: TextStyles.h5.setColor(ColorPalette.textHide),
-                    ),
-                  ),
-                  SizedBox(height: 25),
-
-                  Container(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      selectedRole == 'Chọn vai trò'
-                          ? 'Đầu tiên, hãy chọn vai trò bạn muốn trở thành!'
-                          : ('Bạn đã chọn ${selectedRole} nên là bạn có thể' +
-                              (selectedRole == "Customer"
-                                  ? ' thuê/mua sản phẩm.'
-                                  : ' cho thuê/bán sản phẩm.')),
-                      style: TextStyles.h5.setColor(ColorPalette.textHide),
-                    ),
-                  ),
-                  SizedBox(height: 10),
-
-                  // chọn vai trò
-                  Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(kDefaultCircle),
-                      border: Border.all(color: ColorPalette.textHide),
-                    ),
-                    child: ListTile(
-                      title: Text(
-                        'Vai trò',
-                        style: TextStyles.h5,
-                      ),
-                      trailing: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            selectedRole == 'Chọn vai trò'
-                                ? 'Chưa chọn vai trò'
-                                : selectedRole,
-                            style: TextStyles.defaultStyle,
-                          ),
-                          SizedBox(width: 10),
-                          Icon(
-                            FontAwesomeIcons.angleRight,
-                            size: kDefaultIconSize,
-                            color: ColorPalette.primaryColor,
-                          )
-                        ],
-                      ),
-                      onTap: _showRoleBottomSheet,
-                    ),
-                  ),
-                  if (showRegistrationForm) _buildRegistrationForm(),
-                  // Already hvae an account? Login now
-                  SizedBox(height: 40),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Bạn đã có tài khoản?",
-                        style: TextStyles.h5,
-                      ),
-                      SizedBox(width: 10),
-                      GestureDetector(
-                        onTap: widget.onTap,
-                        // onTap: () {
-                        //   Navigator.of(context).pushNamed(LoginScreen.routeName);
-                        // },
-                        child: Text(
-                          'Đăng nhập ngay.',
-                          style: TextStyles.h5.bold.setColor(Colors.blue),
-                        ),
-                      )
-                    ],
-                  ),
-                  SizedBox(height: 10),
-                ],
+            // Let's create an account for you!
+            Container(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                "Hãy tạo một tài khoản cho bạn!",
+                style: TextStyles.h5.setColor(ColorPalette.textHide),
               ),
             ),
-          ),
+            SizedBox(height: 25),
+
+            Container(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                selectedRole == 'Chọn vai trò'
+                    ? 'Đầu tiên, hãy chọn vai trò bạn muốn trở thành!'
+                    : ('Bạn đã chọn ${selectedRole} nên là bạn có thể' +
+                        (selectedRole == "Customer"
+                            ? ' thuê/mua sản phẩm.'
+                            : ' cho thuê/bán sản phẩm.')),
+                style: TextStyles.h5.setColor(ColorPalette.textHide),
+              ),
+            ),
+            SizedBox(height: 10),
+
+            // chọn vai trò
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(kDefaultCircle14),
+                border: Border.all(color: ColorPalette.textHide),
+              ),
+              child: ListTile(
+                title: Text(
+                  'Vai trò',
+                  style: TextStyles.h5,
+                ),
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      selectedRole == 'Chọn vai trò'
+                          ? 'Chưa chọn vai trò'
+                          : selectedRole,
+                      style: TextStyles.defaultStyle,
+                    ),
+                    SizedBox(width: 10),
+                    Icon(
+                      FontAwesomeIcons.angleRight,
+                      size: kDefaultIconSize18,
+                      color: ColorPalette.primaryColor,
+                    )
+                  ],
+                ),
+                onTap: _showRoleBottomSheet,
+              ),
+            ),
+            if (showRegistrationForm) _buildRegistrationForm(),
+            // Already hvae an account? Login now
+            SizedBox(height: 40),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "Bạn đã có tài khoản?",
+                  style: TextStyles.h5,
+                ),
+                SizedBox(width: 10),
+                GestureDetector(
+                  onTap: widget.onTap,
+                  // onTap: () {
+                  //   Navigator.of(context).pushNamed(LoginScreen.routeName);
+                  // },
+                  child: Text(
+                    'Đăng nhập ngay.',
+                    style: TextStyles.h5.bold.setColor(Colors.blue),
+                  ),
+                )
+              ],
+            ),
+            SizedBox(height: 10),
+          ],
         ),
       ),
     );

@@ -7,7 +7,7 @@ class MyTextField extends StatelessWidget {
   final controller;
   final String hintText;
   final bool obscureText;
-  final String messageError;
+  // final String messageError;
   final bool invalid = false;
   final Widget? prefixIcon;
   final Widget? suffixIcon;
@@ -17,7 +17,7 @@ class MyTextField extends StatelessWidget {
       required this.controller,
       required this.hintText,
       required this.obscureText,
-      required this.messageError,
+      // required this.messageError,
       this.prefixIcon,
       this.suffixIcon});
 
@@ -35,11 +35,11 @@ class MyTextField extends StatelessWidget {
         suffixIconColor: ColorPalette.primaryColor,
         prefixIcon: prefixIcon,
         suffixIcon: suffixIcon,
-        errorText: invalid ? messageError : null,
+        // errorText: invalid ? messageError : null,
         labelText: hintText,
         labelStyle: TextStyles.defaultStyle.setColor(ColorPalette.textHide),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(kDefaultCircle),
+          borderRadius: BorderRadius.circular(kDefaultCircle14),
           borderSide: BorderSide(color: ColorPalette.textHide),
         ),
         focusedBorder: OutlineInputBorder(

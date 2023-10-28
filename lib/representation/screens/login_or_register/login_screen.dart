@@ -1,33 +1,36 @@
+import 'dart:convert';
+
 import 'package:demo_frs_app/core/constants/color_constants.dart';
 import 'package:demo_frs_app/core/constants/dismension_constants.dart';
 import 'package:demo_frs_app/core/constants/my_textfield.dart';
-import 'package:demo_frs_app/core/constants/square_tile.dart';
 import 'package:demo_frs_app/core/constants/textstyle_constants.dart';
-import 'package:demo_frs_app/core/helper/asset_helper.dart';
-import 'package:demo_frs_app/core/helper/image_helper.dart';
+import 'package:demo_frs_app/models/user_model.dart';
+import 'package:demo_frs_app/representation/screens/customer_screen/customer_main_screen.dart';
 import 'package:demo_frs_app/representation/screens/login_or_register/forgot_password_screen.dart';
+import 'package:demo_frs_app/representation/screens/productowner_screen/productowner_main_screen.dart';
 import 'package:demo_frs_app/representation/widgets/button_widget.dart';
-import 'package:demo_frs_app/services/auth_service.dart';
+import 'package:demo_frs_app/services/authentication_service.dart';
+import 'package:demo_frs_app/services/authprovider.dart';
+import 'package:demo_frs_app/utils/asset_helper.dart';
+import 'package:demo_frs_app/utils/dialog_helper.dart';
+import 'package:demo_frs_app/utils/image_helper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:hive/hive.dart';
+import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
   final Function()? onTap;
   const LoginScreen({super.key, required this.onTap});
-  // text editing controllers
-  // final passwordController = TextEditingController();
-  // final userNameController = TextEditingController();
+
   static const String routeName = '/login_screen';
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
-// text editing controllers
-// final passwordController = TextEditingController();
-// final emailController = TextEditingController();
 final TextEditingController passwordController = new TextEditingController();
 final TextEditingController emailController = new TextEditingController();
 
@@ -37,7 +40,6 @@ class _LoginScreenState extends State<LoginScreen> {
   User? user;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     user = FirebaseAuth.instance.currentUser;
     if (user == null) {
@@ -64,63 +66,86 @@ class _LoginScreenState extends State<LoginScreen> {
 // }
 
   //Sign in
+  // void signInClicked() async {
+  //   //show loading circle
+  //   showDialog(
+  //     context: context,
+  //     builder: (context) {
+  //       return Center(
+  //         child: CircularProgressIndicator(
+  //           color: ColorPalette.primaryColor,
+  //         ),
+  //       );
+  //     },
+  //   );
+  //   // try sign in
+  //   try {
+  //     await FirebaseAuth.instance.signInWithEmailAndPassword(
+  //         email: emailController.text, password: passwordController.text);
+  //     // login thành công
+  //     Navigator.pop(context);
+  //   } on FirebaseAuthException catch (e) {
+  //     // đóng hộp thoại khi xảy ra lỗi
+  //     Navigator.pop(context);
+  //     //show error message
+  //     showErrorMsg(e.code);
+
+  //     // Wrong email
+  //     // if (e.code == 'user-not-found') {
+  //     //   // email không tồn tại
+  //     //   wrongEmailMessage();
+  //     //   // Wrong password
+  //     // } else if (e.code == 'wrong-password') {
+  //     //   // sai password
+  //     //   wrongPasswordMessage();
+  //     // } else if (e.code == 'invalid-email') {
+  //     //   invalidEmailMessage();
+  //     // } else {
+  //     //   // xử lý các lỗi khác
+  //     //   print("Lỗi đăng nhập ${e.code}");
+  //     // }
+  //   }
+  // }
+
   void signInClicked() async {
-    //show loading circle
-    showDialog(
-      context: context,
-      builder: (context) {
-        return Center(
-          child: CircularProgressIndicator(
-            color: ColorPalette.primaryColor,
-          ),
-        );
-      },
-    );
-    // try sign in
-    try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: emailController.text, password: passwordController.text);
-      // login thành công
-      Navigator.pop(context);
-    } on FirebaseAuthException catch (e) {
-      // đóng hộp thoại khi xảy ra lỗi
-      Navigator.pop(context);
-      //show error message
-      showErrorMsg(e.code);
-
-      // Wrong email
-      // if (e.code == 'user-not-found') {
-      //   // email không tồn tại
-      //   wrongEmailMessage();
-      //   // Wrong password
-      // } else if (e.code == 'wrong-password') {
-      //   // sai password
-      //   wrongPasswordMessage();
-      // } else if (e.code == 'invalid-email') {
-      //   invalidEmailMessage();
-      // } else {
-      //   // xử lý các lỗi khác
-      //   print("Lỗi đăng nhập ${e.code}");
-      // }
-    }
-  }
-
-  // error message to user
-  void showErrorMsg(String msg) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          backgroundColor: ColorPalette.secondColor,
-          title: Center(
-            child: Text(
-              msg,
-              style: TextStyle(color: Colors.white),
+    if (emailController.text.isEmpty) {
+      showCustomDialog(context, 'Lỗi', 'Bạn chưa nhập "Email".');
+    } else if (passwordController.text.isEmpty) {
+      showCustomDialog(context, 'Lỗi', 'Bạn chưa nhập "Password".');
+    } else {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return Center(
+            child: CircularProgressIndicator(
+              color: ColorPalette.primaryColor,
             ),
-          ),
-        );
-      },
-    );
+          );
+        },
+      );
+      try {
+        final response = await AuthenticationService.logIn(
+            emailController.text, passwordController.text);
+        Navigator.pop(context);
+        if (response != null) {
+          final userModel = UserModel.fromJson(response);
+          var box = Hive.box('userBox');
+          box.put('user', json.encode(userModel.toJson()));
+          final authProvider =
+              Provider.of<AuthProvider>(context, listen: false);
+          authProvider.setUser(userModel);
+          if (userModel.role.roleName == 'Customer') {
+            Navigator.of(context).pushNamed(CustomerMainScreen.routeName);
+          } else if (userModel.role.roleName == "ProductOwner") {
+            Navigator.of(context).pushNamed(ProductOwnerMainScreen.routeName);
+          }
+        } else {
+          showCustomDialog(context, 'Lỗi', 'Xin lỗi! Đăng nhập thất bại.');
+        }
+      } catch (e) {
+        showCustomDialog(context, 'Lỗi', e.toString());
+      }
+    }
   }
 
   // Show and Hide password
@@ -169,10 +194,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   MyTextField(
                     prefixIcon: Icon(
                       FontAwesomeIcons.solidEnvelope,
-                      size: kDefaultIconSize,
+                      size: kDefaultIconSize18,
                       color: ColorPalette.primaryColor,
                     ),
-                    messageError: 'Email không hợp lệ',
                     controller: emailController,
                     hintText: 'Email',
                     obscureText: false,
@@ -183,7 +207,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   MyTextField(
                     prefixIcon: Icon(
                       FontAwesomeIcons.key,
-                      size: kDefaultIconSize,
+                      size: kDefaultIconSize18,
                       color: ColorPalette.primaryColor,
                     ),
                     suffixIcon: GestureDetector(
@@ -192,11 +216,10 @@ class _LoginScreenState extends State<LoginScreen> {
                         _showPass
                             ? FontAwesomeIcons.eyeSlash
                             : FontAwesomeIcons.eye,
-                        size: kDefaultIconSize,
+                        size: kDefaultIconSize18,
                         color: ColorPalette.primaryColor,
                       ),
                     ),
-                    messageError: 'Password không hợp lệ',
                     controller: passwordController,
                     hintText: 'Password',
                     obscureText: !_showPass,
@@ -220,7 +243,6 @@ class _LoginScreenState extends State<LoginScreen> {
                               decorationThickness: 0.8,
                               decorationColor: Colors.blue,
                               color: Colors.blue,
-                              fontFamily: FontFamilyRoboto.roboto,
                               fontWeight: FontWeight.bold),
                         ),
                       ),
@@ -229,7 +251,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   SizedBox(height: 25),
 
                   // sign in button
-                  // MyButton(action: 'Sign In', onTap: signInClicked),
                   ButtonWidget(
                     size: 22,
                     height: 70,
@@ -262,15 +283,16 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 40),
+                  SizedBox(height: 20),
 
                   // google  sign in buttons
-                  SquareTile(
-                    onTap: () => AuthService().signInWithGoogle(),
+                  GestureDetector(
+                    onTap: () {},
                     child:
                         ImageHelper.loadFromAsset(AssetHelper.imageLogoGoogle),
                   ),
-                  SizedBox(height: 40),
+                  //   onTap: () => AuthService().signInWithGoogle(),
+                  SizedBox(height: 20),
 
                   // Dont't have an account? register now
                   Row(
@@ -283,10 +305,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       SizedBox(width: 10),
                       GestureDetector(
                         onTap: widget.onTap,
-                        // onTap: () {
-                        //   Navigator.of(context)
-                        //       .pushNamed(RegisterScreen.routeName);
-                        // },
                         child: Text(
                           'Đăng ký ngay.',
                           style: TextStyles.h5.bold.setColor(Colors.blue),

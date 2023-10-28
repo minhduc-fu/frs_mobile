@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthService {
@@ -14,7 +13,7 @@ class AuthService {
     // gọi ‘.authentication’ trên GoogleSignInAccount
     // thông tin xác thực bao gồm accessToken và idToken
     // sau đó gán thông tin xác thực này cho GoogleSignInAuthentication để có thể truy cập accessToken và idToken
-    
+
     final GoogleSignInAuthentication gAuth = await gUser!.authentication;
 
     // tạo credential của GoogleAuthProvider bằng cách truyền vào accessToken và idToken lấy từ bước trên

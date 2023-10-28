@@ -2,12 +2,11 @@ import 'dart:async';
 
 import 'package:demo_frs_app/core/constants/dismension_constants.dart';
 import 'package:demo_frs_app/core/constants/textstyle_constants.dart';
-import 'package:demo_frs_app/core/helper/asset_helper.dart';
-import 'package:demo_frs_app/core/helper/image_helper.dart';
-import 'package:demo_frs_app/representation/screens/login_or_register/auth_screen.dart';
 import 'package:demo_frs_app/representation/screens/main_app.dart';
 
 import 'package:demo_frs_app/representation/widgets/button_widget.dart';
+import 'package:demo_frs_app/utils/asset_helper.dart';
+import 'package:demo_frs_app/utils/image_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -48,10 +47,10 @@ class _IntroScreenState extends State<IntroScreen> {
               height: 400, fit: BoxFit.fitHeight),
         ),
         SizedBox(
-          height: kMediumPadding * 2,
+          height: kMediumPadding24 * 2,
         ),
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: kMediumPadding),
+          padding: EdgeInsets.symmetric(horizontal: kMediumPadding24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -61,7 +60,7 @@ class _IntroScreenState extends State<IntroScreen> {
                 style: TextStyles.defaultStyle.bold,
               ),
               SizedBox(
-                height: kMediumPadding,
+                height: kMediumPadding24,
               ),
 
               // description
@@ -101,8 +100,8 @@ class _IntroScreenState extends State<IntroScreen> {
                     controller: _pageController,
                     count: 3,
                     effect: ExpandingDotsEffect(
-                        dotWidth: kMinPadding,
-                        dotHeight: kMinPadding,
+                        dotWidth: kMinPadding5,
+                        dotHeight: kMinPadding5,
                         activeDotColor: Colors.black),
                   ),
                 ),
@@ -131,9 +130,9 @@ class _IntroScreenState extends State<IntroScreen> {
                 )
               ],
             ),
-            left: kMediumPadding,
-            right: kMediumPadding,
-            bottom: kMediumPadding * 3,
+            left: kMediumPadding24,
+            right: kMediumPadding24,
+            bottom: kMediumPadding24 * 3,
           )
         ],
       ),

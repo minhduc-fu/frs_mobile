@@ -16,33 +16,28 @@ class AccountTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 15, vertical: 6),
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.5), // Màu bóng
-            spreadRadius: 2,
-            blurRadius: 4,
-            offset: Offset(0, 2), // Vị trí của bóng
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 15, vertical: 6),
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(5),
+          color: ColorPalette.hideColor,
+        ),
+        height: 100,
+        child: ListTile(
+          horizontalTitleGap: 40, // khoảng cách title với leadding
+          leading: Icon(
+            icons,
           ),
-        ],
-        borderRadius: BorderRadius.circular(5),
-        color: ColorPalette.secondColor,
-      ),
-      height: 100,
-      child: ListTile(
-        horizontalTitleGap: 40, // khoảng cách title với leadding
-        leading: Icon(
-          icons,
+          title: Text(
+            title,
+            style: TextStyles.h5.setTextSize(18),
+          ),
+          trailing: Icon(trailing),
+          iconColor: ColorPalette.primaryColor,
         ),
-        title: Text(
-          title,
-          style: TextStyles.h5.setTextSize(18),
-        ),
-        trailing: Icon(trailing),
-        iconColor: ColorPalette.primaryColor,
       ),
     );
   }

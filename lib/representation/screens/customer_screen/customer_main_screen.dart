@@ -1,26 +1,27 @@
 import 'package:demo_frs_app/core/constants/color_constants.dart';
 import 'package:demo_frs_app/core/constants/dismension_constants.dart';
+import 'package:demo_frs_app/representation/screens/cart/main_cart_screen.dart';
 import 'package:demo_frs_app/representation/screens/chat_screen.dart';
-import 'package:demo_frs_app/representation/screens/FoodScreen/cart_food_screen.dart';
 import 'package:demo_frs_app/representation/screens/customer_screen/customer_account_screen/account_screen_true.dart';
 import 'package:demo_frs_app/representation/screens/favorite_screen.dart';
 import 'package:demo_frs_app/representation/screens/home_screen.dart';
+import 'package:demo_frs_app/representation/screens/home_screen_demo.dart';
 import 'package:demo_frs_app/representation/screens/login_or_register/register_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 
-class CustomerMain extends StatefulWidget {
-  const CustomerMain({super.key});
+class CustomerMainScreen extends StatefulWidget {
+  const CustomerMainScreen({super.key});
 
-  static const String routeName = '/customer_main';
+  static const String routeName = '/customer_main_screen';
 
   @override
-  State<CustomerMain> createState() => _CustomerMain();
+  State<CustomerMainScreen> createState() => _CustomerMainScreen();
 }
 
-class _CustomerMain extends State<CustomerMain> {
+class _CustomerMainScreen extends State<CustomerMainScreen> {
   int _currentIndex = 0;
   // final user = FirebaseAuth.instance.currentUser!;
   User? user;
@@ -48,11 +49,12 @@ class _CustomerMain extends State<CustomerMain> {
       body: IndexedStack(
         index: _currentIndex,
         children: [
-          HomeScreen(),
+          HomeScreenDemo(),
           FavoriteScreen(),
           ChatScreen(),
           // MenuScreen(),
-          CartFoodScreen(),
+          MainCartScreen(),
+          // CartFoodScreen(),
           AccountScreenTrue(),
         ],
         // child: user != null ? Text('${user!.email}') : Text("Chưa đăng nhập"),
@@ -65,43 +67,43 @@ class _CustomerMain extends State<CustomerMain> {
         },
         currentIndex: _currentIndex,
         selectedItemColor: ColorPalette.primaryColor,
-        unselectedItemColor: ColorPalette.hideColor,
+        unselectedItemColor: ColorPalette.textHide,
         margin: EdgeInsets.symmetric(
-            horizontal: kMediumPadding, vertical: kDefaultPadding),
+            horizontal: kMediumPadding24, vertical: kDefaultPadding16),
         items: [
           SalomonBottomBarItem(
             title: Text('Trang chủ'),
             icon: Icon(
               FontAwesomeIcons.house,
-              size: kDefaultIconSize,
+              size: kDefaultIconSize18,
             ),
           ),
           SalomonBottomBarItem(
             title: Text('Yêu thích'),
             icon: Icon(
               FontAwesomeIcons.solidHeart,
-              size: kDefaultIconSize,
+              size: kDefaultIconSize18,
             ),
           ),
           SalomonBottomBarItem(
             title: Text('Tin nhắn'),
             icon: Icon(
               FontAwesomeIcons.solidMessage,
-              size: kDefaultIconSize,
+              size: kDefaultIconSize18,
             ),
           ),
           SalomonBottomBarItem(
             title: Text('Giỏ hàng'),
             icon: Icon(
               FontAwesomeIcons.cartShopping,
-              size: kDefaultIconSize,
+              size: kDefaultIconSize18,
             ),
           ),
           SalomonBottomBarItem(
             title: Text('Tài khoản'),
             icon: Icon(
               FontAwesomeIcons.solidUser,
-              size: kDefaultIconSize,
+              size: kDefaultIconSize18,
             ),
           ),
         ],

@@ -1,14 +1,12 @@
 import 'package:demo_frs_app/core/constants/color_constants.dart';
 import 'package:demo_frs_app/core/constants/textstyle_constants.dart';
-import 'package:demo_frs_app/core/helper/asset_helper.dart';
-import 'package:demo_frs_app/core/helper/image_helper.dart';
-
 import 'package:demo_frs_app/representation/screens/FoodScreen/food_details_screen.dart';
 import 'package:demo_frs_app/representation/screens/FoodScreen/food_tile.dart';
 import 'package:demo_frs_app/representation/screens/FoodScreen/shop.dart';
-
 import 'package:demo_frs_app/representation/widgets/app_bar_main.dart';
 import 'package:demo_frs_app/representation/widgets/button_widget.dart';
+import 'package:demo_frs_app/utils/asset_helper.dart';
+import 'package:demo_frs_app/utils/image_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -58,7 +56,6 @@ class __MenuScreenState extends State<MenuScreen> {
     return AppBarMain(
       leading: GestureDetector(
           child: ImageHelper.loadFromAsset(AssetHelper.imageLogoFRS)),
-      isBack: false,
       titleAppbar: 'Home',
       child: Scaffold(
         body: Column(

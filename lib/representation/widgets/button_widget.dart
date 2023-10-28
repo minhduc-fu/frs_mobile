@@ -48,7 +48,7 @@ class _ButtonWidgetState extends State<ButtonWidget> {
         height: widget.height,
         width: widget.width,
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(kDefaultCircle),
+            borderRadius: BorderRadius.circular(kDefaultCircle14),
             color: ColorPalette.primaryColor,
             boxShadow: glowing
                 ? [
@@ -61,11 +61,14 @@ class _ButtonWidgetState extends State<ButtonWidget> {
                   ]
                 : []),
         child: Center(
-          child: Text(
-            widget.title,
-            style: TextStyles.defaultStyle.bold
-                .setTextSize(widget.size!)
-                .whiteTextColor,
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Text(
+              widget.title,
+              style: TextStyles.defaultStyle.bold
+                  .setTextSize(widget.size!)
+                  .whiteTextColor,
+            ),
           ),
         ),
       ),

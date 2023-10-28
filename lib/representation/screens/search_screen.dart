@@ -3,16 +3,18 @@ import 'dart:math';
 import 'package:demo_frs_app/core/constants/color_constants.dart';
 import 'package:demo_frs_app/core/constants/dismension_constants.dart';
 import 'package:demo_frs_app/core/constants/textstyle_constants.dart';
-import 'package:demo_frs_app/core/helper/local_storage_helper.dart';
 import 'package:demo_frs_app/models/product.dart';
+import 'package:demo_frs_app/models/product_model.dart';
 import 'package:demo_frs_app/models/search_result.dart';
 import 'package:demo_frs_app/representation/widgets/app_bar_main.dart';
+import 'package:demo_frs_app/utils/local_storage_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key, required this.allproducts});
   final List<Product> allproducts;
+  // final List<ProductModel>
   @override
   State<SearchScreen> createState() => _SearchScreenState();
 }
@@ -40,23 +42,6 @@ class _SearchScreenState extends State<SearchScreen> {
     super.dispose();
   }
 
-  // void perfomrSearch(String searchTerm) {
-  //    final normalizedSearchTerm = searchTerm.toLowerCase();
-  //   final List<Product> searchResults = widget.allproducts.where((product) {
-  //     final normalizedProductName = product.name.toLowerCase();
-  //     return normalizedProductName.contains(normalizedSearchTerm);
-  //   }).toList();
-
-  //   if(searchTerm.isNotEmpty){
-  //     LocalStorageHelper.addToSearchHistory(searchTerm);
-  //   }
-  //   setState(() {
-
-  //     this.searchTerm = searchTerm;
-  //     this.searchResults = searchResults;
-
-  //   });
-  // }
   void _selectSearchHistory(String searchTerm) {
     _searchController.text = searchTerm;
     _onSearch(_searchController.text);
@@ -83,10 +68,6 @@ class _SearchScreenState extends State<SearchScreen> {
     // Navigator.of(context).pop(searchResults);
     Navigator.of(context).pop(
         SearchResults(searchTerm: searchTerm, searchResults: searchResults));
-
-    // if (_focusNode.hasFocus) {
-    //   _focusNode.unfocus();
-    // }
   }
 
   @override
@@ -98,7 +79,7 @@ class _SearchScreenState extends State<SearchScreen> {
         },
         child: Icon(
           FontAwesomeIcons.angleLeft,
-          size: kDefaultIconSize,
+          size: kDefaultIconSize18,
         ),
       ),
       // titleAppbar: 'Tìm kiếm',
@@ -125,11 +106,11 @@ class _SearchScreenState extends State<SearchScreen> {
                       hintText: 'Bạn muốn tìm tên sản phẩm gì?',
                       hintStyle: TextStyles.defaultStyle,
                       prefixIcon: Padding(
-                        padding: EdgeInsets.all(kTopPadding),
+                        padding: EdgeInsets.all(kTopPadding8),
                         child: Icon(
                           FontAwesomeIcons.magnifyingGlass,
                           color: ColorPalette.primaryColor,
-                          size: kDefaultIconSize,
+                          size: kDefaultIconSize18,
                         ),
                       ),
                       filled: true,
@@ -143,7 +124,7 @@ class _SearchScreenState extends State<SearchScreen> {
                         borderRadius: BorderRadius.circular(14),
                       ),
                       contentPadding:
-                          EdgeInsets.symmetric(horizontal: kItemPadding),
+                          EdgeInsets.symmetric(horizontal: kItemPadding10),
                     ),
                   ),
                   SizedBox(height: 10),
@@ -185,7 +166,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                 horizontalTitleGap: 30,
                                 leading: Icon(
                                   FontAwesomeIcons.clockRotateLeft,
-                                  size: kDefaultIconSize,
+                                  size: kDefaultIconSize18,
                                 ),
 
                                 // xóa từng thằng
@@ -199,7 +180,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                   },
                                   child: Icon(
                                     FontAwesomeIcons.xmark,
-                                    size: kDefaultIconSize,
+                                    size: kDefaultIconSize18,
                                   ),
                                 ),
                                 iconColor: ColorPalette.primaryColor,

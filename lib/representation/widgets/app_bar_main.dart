@@ -1,8 +1,6 @@
 import 'package:demo_frs_app/core/constants/color_constants.dart';
 import 'package:demo_frs_app/core/constants/dismension_constants.dart';
 import 'package:demo_frs_app/core/constants/textstyle_constants.dart';
-import 'package:demo_frs_app/core/helper/asset_helper.dart';
-import 'package:demo_frs_app/core/helper/image_helper.dart';
 import 'package:demo_frs_app/representation/screens/FoodScreen/cart_food_screen.dart';
 
 import 'package:flutter/material.dart';
@@ -13,7 +11,6 @@ class AppBarMain extends StatelessWidget {
     super.key,
     required this.child,
     this.titleAppbar,
-    this.isBack = true,
     this.isCart = true,
     required this.leading,
     // this.onTap,
@@ -21,7 +18,6 @@ class AppBarMain extends StatelessWidget {
 
   final Widget child;
   final String? titleAppbar;
-  final bool isBack;
   final bool isCart;
   final Widget leading;
   // final Function()? onTap;
@@ -46,56 +42,12 @@ class AppBarMain extends StatelessWidget {
 
             flexibleSpace: Stack(
               children: [
-                Container(
-                    // decoration: BoxDecoration(color: ColorPalette.appBarColor),
-                    ),
-                // Positioned(
-                //   top: 14,
-                //   left: 15,
-                //   child: isBack
-                //       ? GestureDetector(
-                //           onTap: () {
-                //             Navigator.pop(context);
-                //           },
-                //           child: Icon(
-                //             FontAwesomeIcons.angleLeft,
-                //             color: ColorPalette.primaryColor,
-                //           ),
-                //         )
-                //       : ImageHelper.loadFromAsset(AssetHelper.imageLogoFRS,
-                //           height: 35, width: 35),
-                // ),
-                // Positioned(top: 14, left: 20, child: leading),
-                // Positioned(
-                //   left: 15,
-                //   child: ImageHelper.loadFromAsset(AssetHelper.imageFRS,
-                //       height: 56, width: 56),
-                // ),
-                // Positioned(
-                //   left: 0,
-                //   child: ImageHelper.loadFromAsset(AssetHelper.imageOvalLeft),
-                // ),
-                // Positioned(
-                //   right: 0,
-                //   child: ImageHelper.loadFromAsset(AssetHelper.imageOvalRight),
-                // ),
-                // Positioned(
-                //   right: 131,
-                //   left: 131,
-                //   bottom: 0,
-                //   child: Container(
-                //     height: 56,
-                //     decoration: BoxDecoration(
-                //       color: ColorPalette.primaryColor,
-                //     ),
-                //   ),
-                // ),
                 Positioned(
                   top: 18,
                   right: 60,
                   child: Icon(
                     FontAwesomeIcons.bell,
-                    size: kDefaultIconSize,
+                    size: kDefaultIconSize18,
                     color: ColorPalette.primaryColor,
                   ),
                 ),
@@ -105,12 +57,12 @@ class AppBarMain extends StatelessWidget {
                   child: isCart
                       ? GestureDetector(
                           onTap: () {
-                            Navigator.of(context)
-                                .pushNamed(CartFoodScreen.routeName);
+                            // Navigator.of(context)
+                            //     .pushNamed(CartFoodScreen.routeName);
                           },
                           child: Icon(
                             FontAwesomeIcons.cartShopping,
-                            size: kDefaultIconSize,
+                            size: kDefaultIconSize18,
                             color: ColorPalette.primaryColor,
                           ),
                         )

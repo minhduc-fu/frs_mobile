@@ -1,14 +1,20 @@
+import 'dart:convert';
+
 import 'package:demo_frs_app/core/constants/color_constants.dart';
-import 'package:demo_frs_app/core/helper/asset_helper.dart';
-import 'package:demo_frs_app/core/helper/image_helper.dart';
-import 'package:demo_frs_app/core/helper/local_storage_helper.dart';
-import 'package:demo_frs_app/representation/screens/login_or_register/auth_screen.dart';
+import 'package:demo_frs_app/models/user_model.dart';
+import 'package:demo_frs_app/representation/screens/customer_screen/customer_main_screen.dart';
 import 'package:demo_frs_app/representation/screens/main_app.dart';
 import 'package:demo_frs_app/representation/screens/intro_screen.dart';
-// import 'package:demo_frs_app/representation/screens/login_screen.dart';
+import 'package:demo_frs_app/representation/screens/productowner_screen/productowner_main_screen.dart';
+import 'package:demo_frs_app/services/authprovider.dart';
+import 'package:demo_frs_app/utils/asset_helper.dart';
+import 'package:demo_frs_app/utils/image_helper.dart';
+import 'package:demo_frs_app/utils/local_storage_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:provider/provider.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -24,8 +30,71 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    redirectIntroScreen();
+    // redirectIntroScreen();
+    checkUserStatus();
   }
+
+  void checkUserStatus() async {
+    final ignoreIntroScreen =
+        LocalStorageHelper.getValue('ignoreIntroScreen') as bool?;
+
+    await Future.delayed(const Duration(seconds: 3));
+    if (ignoreIntroScreen != null && ignoreIntroScreen) {
+      final authProvider = Provider.of<AuthProvider>(context, listen: false);
+      var box = Hive.box('userBox');
+      if (box.containsKey('user')) {
+        final userMap = box.get('user');
+
+        final userModel = UserModel.fromJson(json.decode(userMap));
+        authProvider.setUser(userModel);
+        if (userModel.role.roleName == 'Customer') {
+          Navigator.of(context).pushNamed(CustomerMainScreen.routeName);
+        } else if (userModel.role.roleName == 'ProductOwner') {
+          Navigator.of(context).pushNamed(ProductOwnerMainScreen.routeName);
+        }
+      } else {
+        // Chuyển đến màn hình MainApp nếu không có thông tin người dùng
+        Navigator.of(context).pushNamed(MainApp.routeName);
+      }
+    } else {
+      LocalStorageHelper.setValue('ignoreIntroScreen', true);
+      LocalStorageHelper.closeBox();
+      Navigator.of(context).pushNamed(IntroScreen.routeName);
+    }
+  }
+
+  // void checkUserStatus() async {
+  //   final ignoreIntroScreen =
+  //       LocalStorageHelper.getValue('ignoreIntroScreen') as bool?;
+
+  //   await Future.delayed(const Duration(seconds: 3));
+  //   if (ignoreIntroScreen != null && ignoreIntroScreen) {
+  //     final authProvider = Provider.of<AuthProvider>(context, listen: false);
+  //     bool isLoggedIn = LocalStorageHelper.getValue('isLoggedIn') ?? false;
+  //     if (isLoggedIn) {
+  //       // UserModel? user = await LocalStorageHelper.getValue('userModel');
+  //       // final  UserModel? user = UserModel.fromJson(LocalStorageHelper.getValue('userModel'));
+  //       final userJson = LocalStorageHelper.getValue('userModel');
+  //       if (userJson != null) {
+  //         final userModel =
+  //             UserModel.fromJson(json.decode(userJson.cast<String, dynamic>()));
+  //         authProvider.setUser(userModel);
+  //         if (userModel.role.roleName == 'Customer') {
+  //           Navigator.of(context).pushNamed(CustomerMainScreen.routeName);
+  //         } else if (userModel.role.roleName == 'ProductOwner') {
+  //           Navigator.of(context).pushNamed(ProductOwnerMainScreen.routeName);
+  //         }
+  //       }
+  //       // final UserModel user = UserModel.fromJson(userJson);
+  //     } else {
+  //       Navigator.of(context).pushNamed(MainApp.routeName);
+  //     }
+  //   } else {
+  //     LocalStorageHelper.setValue('ignoreIntroScreen', true);
+  //     LocalStorageHelper.closeBox();
+  //     Navigator.of(context).pushNamed(IntroScreen.routeName);
+  //   }
+  // }
 
   void redirectIntroScreen() async {
     final ignoreIntroScreen =

@@ -31,7 +31,7 @@ class CartFoodScreen extends StatelessWidget {
           },
           child: Icon(
             FontAwesomeIcons.angleLeft,
-            size: kDefaultIconSize,
+            size: kDefaultIconSize18,
           ),
         ),
         isCart: false,

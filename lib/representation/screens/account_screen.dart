@@ -1,11 +1,11 @@
 import 'package:demo_frs_app/core/constants/color_constants.dart';
 import 'package:demo_frs_app/core/constants/dismension_constants.dart';
 import 'package:demo_frs_app/core/constants/textstyle_constants.dart';
-import 'package:demo_frs_app/representation/screens/login_or_register/login_or_register_screen.dart';
 import 'package:demo_frs_app/representation/screens/login_or_register/login_screen.dart';
-import 'package:demo_frs_app/representation/screens/login_or_register/register_demo.dart';
-import 'package:demo_frs_app/representation/screens/login_or_register/register_screen.dart';
-import 'package:demo_frs_app/representation/widgets/app_bar_container.dart';
+import 'package:demo_frs_app/representation/screens/login_or_register/register_account.dart';
+import 'package:demo_frs_app/representation/widgets/app_bar_main.dart';
+import 'package:demo_frs_app/utils/asset_helper.dart';
+import 'package:demo_frs_app/utils/image_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -37,71 +37,85 @@ class _AccountScreenState extends State<AccountScreen>
 
   @override
   Widget build(BuildContext context) {
-    return AppBarContainer(
+    return AppBarMain(
+      leading: FractionallySizedBox(
+        widthFactor: 0.8,
+        heightFactor: 0.8,
+        child: ImageHelper.loadFromAsset(
+          AssetHelper.imageLogoFRS,
+        ),
+      ),
       child: Scaffold(
-        body: SingleChildScrollView(
-          child: Container(
-            height: MediaQuery.of(context).size.height,
-            child: Column(
-              children: [
-                Container(
-                  width: MediaQuery.of(context).size.height,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                    color: ColorPalette.primaryColor,
-                  ),
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(5),
-                        child: TabBar(
-                          // physics: ClampingScrollPhysics(),
-                          physics: BouncingScrollPhysics(),
-                          dividerColor:
-                              ColorPalette.primaryColor, // reload mới thay đổi
-                          indicator: BoxDecoration(
-                            color: ColorPalette.backgroundScaffoldColor,
-                            borderRadius: BorderRadius.circular(kDefaultCircle),
-                          ),
-                          unselectedLabelColor: Colors.white,
-                          indicatorSize: TabBarIndicatorSize.tab,
-                          labelColor: ColorPalette.textColor,
-                          labelStyle: TextStyles.defaultStyle,
-                          controller: _tabController,
-                          tabs: [
-                            Tab(text: 'Đăng nhập'),
-                            Tab(text: 'Đăng ký'),
-                          ],
-                        ),
+        body: Column(
+          children: [
+            Container(
+              width: MediaQuery.of(context).size.width,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+                color: ColorPalette.primaryColor,
+              ),
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(5),
+                    child: TabBar(
+                      // physics: ClampingScrollPhysics(),
+                      physics: BouncingScrollPhysics(),
+                      dividerColor:
+                          ColorPalette.primaryColor, // reload mới thay đổi
+                      indicator: BoxDecoration(
+                        color: ColorPalette.backgroundScaffoldColor,
+                        borderRadius: BorderRadius.circular(kDefaultCircle14),
                       ),
-                    ],
+                      unselectedLabelColor: Colors.white,
+                      indicatorSize: TabBarIndicatorSize.tab,
+                      labelColor: ColorPalette.textColor,
+                      labelStyle: TextStyles.defaultStyle,
+                      controller: _tabController,
+                      tabs: [
+                        Tab(text: 'Đăng nhập'),
+                        Tab(text: 'Đăng ký'),
+                      ],
+                    ),
                   ),
-                ),
-                Expanded(
-                  child: TabBarView(
-                    controller: _tabController,
-                    children: [
-                      LoginScreen(
-                        onTap: () {
-                          _tabController.index = 1;
-                        },
-                      ),
-                      // RegisterScreen(
-                      //   onTap: () {
-                      //     _tabController.index = 0;
-                      //   },
-                      // ),
-                      RegisterDemo(
-                        onTap: () {
-                          _tabController.index = 0;
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
+            Expanded(
+              child: TabBarView(
+                physics: NeverScrollableScrollPhysics(),
+                controller: _tabController,
+                children: [
+                  LoginScreen(
+                    onTap: () {
+                      _tabController.index = 1;
+                    },
+                  ),
+                  // RegisterScreen(
+                  //   onTap: () {
+                  //     _tabController.index = 0;
+                  //   },
+                  // ),
+                  // RegisterDemo(
+                  //   onTap: () {
+                  //     _tabController.index = 0;
+                  //   },
+                  // ),
+                  //
+                  RegisterAccount(
+                    onTap: () {
+                      _tabController.index = 0;
+                    },
+                  ),
+                  // RegisterStepperScreen(
+                  //   onTap: () {
+                  //     _tabController.index = 0;
+                  //   },
+                  // ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );

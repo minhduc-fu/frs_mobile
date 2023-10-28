@@ -1,20 +1,28 @@
 import 'package:demo_frs_app/core/constants/color_constants.dart';
 import 'package:demo_frs_app/core/constants/dismension_constants.dart';
 import 'package:demo_frs_app/core/constants/textstyle_constants.dart';
-import 'package:demo_frs_app/core/helper/image_helper.dart';
 import 'package:demo_frs_app/models/product.dart';
+import 'package:demo_frs_app/models/product_owner.dart';
+import 'package:demo_frs_app/utils/image_helper.dart';
+import 'package:demo_frs_app/utils/product_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 
 class ProductCard extends StatelessWidget {
+  final List<ProductOwner> allProductOwners;
   final Product product;
-  const ProductCard({super.key, required this.product});
+  const ProductCard({
+    super.key,
+    required this.product,
+    required this.allProductOwners,
+  });
 
   @override
   Widget build(BuildContext context) {
+    ProductOwner owner = getOwnerOfProduct(product, allProductOwners);
     return ClipRRect(
-      borderRadius: BorderRadius.circular(14),
+      borderRadius: BorderRadius.circular(kDefaultCircle14),
       child: Container(
         color: ColorPalette.hideColor,
         child: Column(
@@ -33,7 +41,9 @@ class ProductCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'productOwnerName',
+                    owner.fullName,
+                    // getProductOwnerFullName(
+                    //     product.productOwnerID, allProductOwners),
                     style: TextStyles.h5.bold,
                   ),
                   SizedBox(height: 5),
@@ -66,6 +76,7 @@ class ProductCard extends StatelessWidget {
                             child: Divider(
                               thickness: 1,
                               color: ColorPalette.textColor,
+                              // color: ColorPalette.white1,
                             ),
                           ),
                           SizedBox(width: 40),
@@ -82,8 +93,8 @@ class ProductCard extends StatelessWidget {
                     children: [
                       Icon(
                         FontAwesomeIcons.solidStar,
-                        size: kDefaultIconSize,
-                        color: Colors.yellow,
+                        size: kDefaultCircle14,
+                        color: Colors.amber,
                       ),
                       SizedBox(
                         width: 15,
