@@ -1,5 +1,5 @@
-import 'package:demo_frs_app/core/constants/color_constants.dart';
 import 'package:flutter/material.dart';
+import '../../core/constants/color_constants.dart';
 
 Widget buildIndicator(bool isActive, Size size) {
   return AnimatedContainer(

@@ -1,4 +1,4 @@
-import 'package:demo_frs_app/models/product.dart';
+import 'product.dart';
 
 class SearchResults {
   final String searchTerm;

@@ -1,10 +1,9 @@
-import 'package:demo_frs_app/core/constants/color_constants.dart';
-import 'package:demo_frs_app/core/constants/dismension_constants.dart';
-import 'package:demo_frs_app/core/constants/textstyle_constants.dart';
-import 'package:demo_frs_app/representation/screens/FoodScreen/cart_food_screen.dart';
-
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+import '../../core/constants/color_constants.dart';
+import '../../core/constants/dismension_constants.dart';
+import '../../core/constants/textstyle_constants.dart';
 
 class AppBarMain extends StatelessWidget {
   const AppBarMain({

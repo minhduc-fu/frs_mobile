@@ -1,9 +1,9 @@
-import 'package:demo_frs_app/core/constants/color_constants.dart';
-import 'package:demo_frs_app/core/constants/dismension_constants.dart';
-import 'package:demo_frs_app/representation/widgets/button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
+import '../../core/constants/color_constants.dart';
+import '../../core/constants/dismension_constants.dart';
+import '../widgets/button_widget.dart';
 
 class SelectDateScreen extends StatefulWidget {
   const SelectDateScreen({super.key, this.selectedRentalPeriod});

@@ -1,16 +1,17 @@
-import 'package:demo_frs_app/core/constants/textstyle_constants.dart';
-import 'package:demo_frs_app/representation/screens/customer_screen/customer_account_screen/account_tile.dart';
-import 'package:demo_frs_app/representation/screens/customer_screen/customer_account_screen/profile_customer/customer_profile_screen.dart';
-import 'package:demo_frs_app/representation/screens/main_app.dart';
-import 'package:demo_frs_app/representation/screens/customer_screen/customer_account_screen/orderHistoryCustomer/main_order_history_screen.dart';
-import 'package:demo_frs_app/representation/widgets/app_bar_main.dart';
-import 'package:demo_frs_app/services/authprovider.dart';
-import 'package:demo_frs_app/utils/asset_helper.dart';
-import 'package:demo_frs_app/utils/image_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
+
+import '../../../../core/constants/textstyle_constants.dart';
+import '../../../../services/authprovider.dart';
+import '../../../../utils/asset_helper.dart';
+import '../../../../utils/image_helper.dart';
+import '../../../widgets/app_bar_main.dart';
+import '../../main_app.dart';
+import 'account_tile.dart';
+import 'orderHistoryCustomer/main_order_history_screen.dart';
+import 'profile_customer/customer_profile_screen.dart';
 
 class AccountScreenTrue extends StatefulWidget {
   const AccountScreenTrue({super.key});

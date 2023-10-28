@@ -1,7 +1,7 @@
-import 'package:demo_frs_app/representation/widgets/app_bar_main.dart';
-import 'package:demo_frs_app/utils/asset_helper.dart';
-import 'package:demo_frs_app/utils/image_helper.dart';
 import 'package:flutter/material.dart';
+import '../../utils/asset_helper.dart';
+import '../../utils/image_helper.dart';
+import '../widgets/app_bar_main.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});

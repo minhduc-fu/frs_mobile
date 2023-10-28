@@ -1,27 +1,26 @@
-import 'package:demo_frs_app/representation/screens/account_screen.dart';
-import 'package:demo_frs_app/representation/screens/cart/main_cart_screen.dart';
-import 'package:demo_frs_app/representation/screens/customer_screen/customer_account_screen/account_screen_true.dart';
-import 'package:demo_frs_app/representation/screens/FoodScreen/cart_food_screen.dart';
-import 'package:demo_frs_app/representation/screens/FoodScreen/menu_screen.dart';
-import 'package:demo_frs_app/representation/screens/chat_screen.dart';
-import 'package:demo_frs_app/representation/screens/customer_screen/customer_main_screen.dart';
-import 'package:demo_frs_app/representation/screens/customer_screen/customer_account_screen/profile_customer/customer_profile_screen.dart';
-import 'package:demo_frs_app/representation/screens/favorite_screen.dart';
-import 'package:demo_frs_app/representation/screens/home_screen_demo.dart';
-import 'package:demo_frs_app/representation/screens/login_or_register/auth_screen.dart';
-import 'package:demo_frs_app/representation/screens/home_screen.dart';
-import 'package:demo_frs_app/representation/screens/login_or_register/forgot_password_screen.dart';
-import 'package:demo_frs_app/representation/screens/login_or_register/login_or_register_screen.dart';
-import 'package:demo_frs_app/representation/screens/login_or_register/login_screen.dart';
-import 'package:demo_frs_app/representation/screens/login_or_register/register_screen.dart';
-import 'package:demo_frs_app/representation/screens/main_app.dart';
-import 'package:demo_frs_app/representation/screens/intro_screen.dart';
-import 'package:demo_frs_app/representation/screens/customer_screen/customer_account_screen/orderHistoryCustomer/main_order_history_screen.dart';
-
-import 'package:demo_frs_app/representation/screens/productowner_screen/productowner_main_screen.dart';
-import 'package:demo_frs_app/representation/screens/select_date_screen.dart';
-import 'package:demo_frs_app/representation/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
+import 'representation/screens/FoodScreen/cart_food_screen.dart';
+import 'representation/screens/FoodScreen/menu_screen.dart';
+import 'representation/screens/account_screen.dart';
+import 'representation/screens/cart/main_cart_screen.dart';
+import 'representation/screens/chat_screen.dart';
+import 'representation/screens/customer_screen/customer_account_screen/account_screen_true.dart';
+import 'representation/screens/customer_screen/customer_account_screen/orderHistoryCustomer/main_order_history_screen.dart';
+import 'representation/screens/customer_screen/customer_account_screen/profile_customer/customer_profile_screen.dart';
+import 'representation/screens/customer_screen/customer_main_screen.dart';
+import 'representation/screens/favorite_screen.dart';
+import 'representation/screens/home_screen.dart';
+import 'representation/screens/home_screen_demo.dart';
+import 'representation/screens/intro_screen.dart';
+import 'representation/screens/login_or_register/auth_screen.dart';
+import 'representation/screens/login_or_register/forgot_password_screen.dart';
+import 'representation/screens/login_or_register/login_or_register_screen.dart';
+import 'representation/screens/login_or_register/login_screen.dart';
+import 'representation/screens/login_or_register/register_screen.dart';
+import 'representation/screens/main_app.dart';
+import 'representation/screens/productowner_screen/productowner_main_screen.dart';
+import 'representation/screens/select_date_screen.dart';
+import 'representation/screens/splash_screen.dart';
 
 // Map key:value
 // final Map<String, WidgetBuilder> routes = {

@@ -1,12 +1,13 @@
-import 'package:demo_frs_app/core/constants/color_constants.dart';
-import 'package:demo_frs_app/core/constants/dismension_constants.dart';
-import 'package:demo_frs_app/representation/screens/cart/buy_cart_screen.dart';
-import 'package:demo_frs_app/representation/screens/cart/rental_cart_screen.dart';
-import 'package:demo_frs_app/representation/widgets/app_bar_main.dart';
-import 'package:demo_frs_app/utils/asset_helper.dart';
-import 'package:demo_frs_app/utils/image_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+import '../../../core/constants/color_constants.dart';
+import '../../../core/constants/dismension_constants.dart';
+import '../../../utils/asset_helper.dart';
+import '../../../utils/image_helper.dart';
+import '../../widgets/app_bar_main.dart';
+import 'buy_cart_screen.dart';
+import 'rental_cart_screen.dart';
 
 class MainCartScreen extends StatefulWidget {
   const MainCartScreen({super.key});

@@ -1,22 +1,23 @@
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:demo_frs_app/core/constants/color_constants.dart';
-import 'package:demo_frs_app/core/constants/dismension_constants.dart';
-import 'package:demo_frs_app/core/constants/textstyle_constants.dart';
-import 'package:demo_frs_app/models/product.dart';
-import 'package:demo_frs_app/models/product_owner.dart';
-import 'package:demo_frs_app/representation/screens/select_date_screen.dart';
-import 'package:demo_frs_app/representation/widgets/button_widget.dart';
-import 'package:demo_frs_app/representation/widgets/container_decoration.dart';
-import 'package:demo_frs_app/representation/widgets/indicator_widget.dart';
-import 'package:demo_frs_app/utils/asset_helper.dart';
-import 'package:demo_frs_app/utils/dialog_helper.dart';
-import 'package:demo_frs_app/utils/image_helper.dart';
 import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:demo_frs_app/core/extensions/date_ext.dart';
 import 'package:intl/intl.dart';
+import 'package:frs_mobile/core/extensions/date_ext.dart';
+
+import '../../core/constants/color_constants.dart';
+import '../../core/constants/dismension_constants.dart';
+import '../../core/constants/textstyle_constants.dart';
+import '../../models/product.dart';
+import '../../models/product_owner.dart';
+import '../../utils/asset_helper.dart';
+import '../../utils/dialog_helper.dart';
+import '../../utils/image_helper.dart';
+import '../widgets/button_widget.dart';
+import '../widgets/container_decoration.dart';
+import '../widgets/indicator_widget.dart';
+import 'select_date_screen.dart';
 
 class ProductDetailScreen extends StatefulWidget {
   final ProductOwner productOwner;

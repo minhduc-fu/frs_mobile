@@ -1,8 +1,8 @@
-import 'package:demo_frs_app/representation/screens/login_or_register/login_or_register_screen.dart';
-import 'package:demo_frs_app/representation/screens/main_app.dart';
-// import 'package:demo_frs_app/representation/screens/login_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+import '../main_app.dart';
+import 'login_or_register_screen.dart';
 
 class AuthScreen extends StatelessWidget {
   const AuthScreen({super.key});

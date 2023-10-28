@@ -1,6 +1,6 @@
-import 'package:demo_frs_app/models/customer_model.dart';
-import 'package:demo_frs_app/models/productowner_model.dart';
-import 'package:demo_frs_app/models/role_model.dart';
+import 'customer_model.dart';
+import 'productowner_model.dart';
+import 'role_model.dart';
 
 class UserModel {
   int accountID;

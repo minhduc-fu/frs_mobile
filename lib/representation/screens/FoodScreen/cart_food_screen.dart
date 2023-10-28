@@ -1,13 +1,14 @@
-import 'package:demo_frs_app/core/constants/color_constants.dart';
-import 'package:demo_frs_app/core/constants/dismension_constants.dart';
-import 'package:demo_frs_app/core/constants/textstyle_constants.dart';
-import 'package:demo_frs_app/models/food.dart';
-import 'package:demo_frs_app/representation/screens/FoodScreen/shop.dart';
-import 'package:demo_frs_app/representation/widgets/app_bar_main.dart';
-import 'package:demo_frs_app/representation/widgets/button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+
+import '../../../core/constants/color_constants.dart';
+import '../../../core/constants/dismension_constants.dart';
+import '../../../core/constants/textstyle_constants.dart';
+import '../../../models/food.dart';
+import '../../widgets/app_bar_main.dart';
+import '../../widgets/button_widget.dart';
+import 'shop.dart';
 
 class CartFoodScreen extends StatelessWidget {
   const CartFoodScreen({super.key});

@@ -1,14 +1,15 @@
-import 'package:demo_frs_app/bloc/register_stepper_bloc.dart';
-import 'package:demo_frs_app/core/constants/color_constants.dart';
-import 'package:demo_frs_app/core/constants/dismension_constants.dart';
-import 'package:demo_frs_app/core/constants/my_textfield.dart';
-import 'package:demo_frs_app/core/constants/textstyle_constants.dart';
-import 'package:demo_frs_app/representation/widgets/button_widget.dart';
-import 'package:demo_frs_app/services/authentication_service.dart';
-import 'package:demo_frs_app/utils/dialog_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+import '../../../bloc/register_stepper_bloc.dart';
+import '../../../core/constants/color_constants.dart';
+import '../../../core/constants/dismension_constants.dart';
+import '../../../core/constants/my_textfield.dart';
+import '../../../core/constants/textstyle_constants.dart';
+import '../../../services/authentication_service.dart';
+import '../../../utils/dialog_helper.dart';
+import '../../widgets/button_widget.dart';
 
 class RegisterAccount extends StatefulWidget {
   final Function()? onTap;

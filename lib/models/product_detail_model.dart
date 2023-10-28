@@ -1,4 +1,4 @@
-import 'package:demo_frs_app/models/rental_price_model.dart';
+import 'rental_price_model.dart';
 
 class ProductDetailModel {
   int productID;

@@ -1,7 +1,8 @@
-import 'package:demo_frs_app/core/constants/color_constants.dart';
-import 'package:demo_frs_app/core/constants/dismension_constants.dart';
-import 'package:demo_frs_app/core/constants/textstyle_constants.dart';
 import 'package:flutter/material.dart';
+
+import 'color_constants.dart';
+import 'dismension_constants.dart';
+import 'textstyle_constants.dart';
 
 class MyTextField extends StatelessWidget {
   final controller;

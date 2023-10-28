@@ -1,6 +1,7 @@
-import 'package:demo_frs_app/core/constants/color_constants.dart';
-import 'package:demo_frs_app/core/constants/textstyle_constants.dart';
 import 'package:flutter/material.dart';
+
+import '../../../../core/constants/color_constants.dart';
+import '../../../../core/constants/textstyle_constants.dart';
 
 class AccountTile extends StatelessWidget {
   AccountTile(

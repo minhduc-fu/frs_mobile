@@ -1,6 +1,7 @@
-import 'package:demo_frs_app/models/food.dart';
-import 'package:demo_frs_app/utils/asset_helper.dart';
 import 'package:flutter/material.dart';
+
+import '../../../models/food.dart';
+import '../../../utils/asset_helper.dart';
 
 class Shop extends ChangeNotifier {
   // food menu

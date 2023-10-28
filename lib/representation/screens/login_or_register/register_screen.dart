@@ -1,10 +1,11 @@
-import 'package:demo_frs_app/core/constants/color_constants.dart';
-import 'package:demo_frs_app/core/constants/my_textfield.dart';
-import 'package:demo_frs_app/core/constants/textstyle_constants.dart';
-import 'package:demo_frs_app/representation/widgets/button_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+import '../../../core/constants/color_constants.dart';
+import '../../../core/constants/my_textfield.dart';
+import '../../../core/constants/textstyle_constants.dart';
+import '../../widgets/button_widget.dart';
 
 class RegisterScreen extends StatefulWidget {
   final Function()? onTap;

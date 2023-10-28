@@ -1,5 +1,6 @@
-import 'package:demo_frs_app/core/constants/color_constants.dart';
 import 'package:flutter/material.dart';
+
+import 'color_constants.dart';
 
 class SquareTile extends StatelessWidget {
   final Widget child;

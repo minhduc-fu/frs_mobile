@@ -1,20 +1,20 @@
 import 'dart:convert';
-
-import 'package:demo_frs_app/core/constants/color_constants.dart';
-import 'package:demo_frs_app/models/user_model.dart';
-import 'package:demo_frs_app/representation/screens/customer_screen/customer_main_screen.dart';
-import 'package:demo_frs_app/representation/screens/main_app.dart';
-import 'package:demo_frs_app/representation/screens/intro_screen.dart';
-import 'package:demo_frs_app/representation/screens/productowner_screen/productowner_main_screen.dart';
-import 'package:demo_frs_app/services/authprovider.dart';
-import 'package:demo_frs_app/utils/asset_helper.dart';
-import 'package:demo_frs_app/utils/image_helper.dart';
-import 'package:demo_frs_app/utils/local_storage_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:frs_mobile/representation/screens/productowner_screen/productowner_main_screen.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
+
+import '../../core/constants/color_constants.dart';
+import '../../models/user_model.dart';
+import '../../services/authprovider.dart';
+import '../../utils/asset_helper.dart';
+import '../../utils/image_helper.dart';
+import '../../utils/local_storage_helper.dart';
+import 'customer_screen/customer_main_screen.dart';
+import 'intro_screen.dart';
+import 'main_app.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

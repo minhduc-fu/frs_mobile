@@ -1,14 +1,13 @@
 import 'dart:async';
-
-import 'package:demo_frs_app/core/constants/dismension_constants.dart';
-import 'package:demo_frs_app/core/constants/textstyle_constants.dart';
-import 'package:demo_frs_app/representation/screens/main_app.dart';
-
-import 'package:demo_frs_app/representation/widgets/button_widget.dart';
-import 'package:demo_frs_app/utils/asset_helper.dart';
-import 'package:demo_frs_app/utils/image_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+
+import '../../core/constants/dismension_constants.dart';
+import '../../core/constants/textstyle_constants.dart';
+import '../../utils/asset_helper.dart';
+import '../../utils/image_helper.dart';
+import '../widgets/button_widget.dart';
+import 'main_app.dart';
 
 class IntroScreen extends StatefulWidget {
   const IntroScreen({super.key});

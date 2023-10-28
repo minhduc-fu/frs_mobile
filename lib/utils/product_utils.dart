@@ -1,5 +1,5 @@
-import 'package:demo_frs_app/models/product.dart';
-import 'package:demo_frs_app/models/product_owner.dart';
+import '../models/product.dart';
+import '../models/product_owner.dart';
 
 String getProductOwnerFullName(
     int productOwnerID, List<ProductOwner> allProductOwners) {

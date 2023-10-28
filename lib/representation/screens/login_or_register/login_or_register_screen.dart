@@ -1,6 +1,7 @@
-import 'package:demo_frs_app/representation/screens/login_or_register/login_screen.dart';
-import 'package:demo_frs_app/representation/screens/login_or_register/register_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:frs_mobile/representation/screens/login_or_register/register_screen.dart';
+
+import 'login_screen.dart';
 
 class LoginOrRegisterScreen extends StatefulWidget {
   const LoginOrRegisterScreen({super.key});

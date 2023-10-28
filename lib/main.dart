@@ -1,17 +1,17 @@
-import 'package:demo_frs_app/core/constants/dismension_constants.dart';
-import 'package:demo_frs_app/core/constants/textstyle_constants.dart';
-import 'package:demo_frs_app/routes.dart';
-import 'package:demo_frs_app/services/authprovider.dart';
-import 'package:demo_frs_app/utils/local_storage_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'core/constants/color_constants.dart';
+import 'core/constants/dismension_constants.dart';
+import 'core/constants/textstyle_constants.dart';
 import 'representation/screens/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'routes.dart';
+import 'services/authprovider.dart';
+import 'utils/local_storage_helper.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

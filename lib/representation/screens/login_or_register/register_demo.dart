@@ -1,14 +1,16 @@
 import 'dart:typed_data';
-import 'package:demo_frs_app/core/constants/color_constants.dart';
-import 'package:demo_frs_app/core/constants/dismension_constants.dart';
-import 'package:demo_frs_app/core/constants/my_textfield.dart';
-import 'package:demo_frs_app/core/constants/textstyle_constants.dart';
-import 'package:demo_frs_app/representation/screens/login_or_register/register_screen.dart';
-import 'package:demo_frs_app/utils/asset_helper.dart';
-import 'package:demo_frs_app/utils/image_picker.dart';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:frs_mobile/representation/screens/login_or_register/register_screen.dart';
 import 'package:image_picker/image_picker.dart';
+
+import '../../../core/constants/color_constants.dart';
+import '../../../core/constants/dismension_constants.dart';
+import '../../../core/constants/my_textfield.dart';
+import '../../../core/constants/textstyle_constants.dart';
+import '../../../utils/asset_helper.dart';
+import '../../../utils/image_picker.dart';
 
 class RegisterDemo extends StatefulWidget {
   final Function()? onTap;

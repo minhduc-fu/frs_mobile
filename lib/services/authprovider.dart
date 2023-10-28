@@ -1,10 +1,8 @@
-import 'dart:convert';
-
-import 'package:demo_frs_app/models/customer_model.dart';
-import 'package:demo_frs_app/models/productowner_model.dart';
-import 'package:demo_frs_app/models/user_model.dart';
-import 'package:demo_frs_app/utils/local_storage_helper.dart';
 import 'package:flutter/cupertino.dart';
+
+import '../models/customer_model.dart';
+import '../models/productowner_model.dart';
+import '../models/user_model.dart';
 
 class AuthProvider with ChangeNotifier {
   bool isLoggedIn = false;

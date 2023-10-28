@@ -1,16 +1,16 @@
-import 'package:demo_frs_app/core/constants/color_constants.dart';
-import 'package:demo_frs_app/core/constants/dismension_constants.dart';
-import 'package:demo_frs_app/representation/screens/cart/main_cart_screen.dart';
-import 'package:demo_frs_app/representation/screens/chat_screen.dart';
-import 'package:demo_frs_app/representation/screens/customer_screen/customer_account_screen/account_screen_true.dart';
-import 'package:demo_frs_app/representation/screens/favorite_screen.dart';
-import 'package:demo_frs_app/representation/screens/home_screen.dart';
-import 'package:demo_frs_app/representation/screens/home_screen_demo.dart';
-import 'package:demo_frs_app/representation/screens/login_or_register/register_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
+
+import '../../../core/constants/color_constants.dart';
+import '../../../core/constants/dismension_constants.dart';
+import '../cart/main_cart_screen.dart';
+import '../chat_screen.dart';
+import '../favorite_screen.dart';
+import '../home_screen_demo.dart';
+import '../login_or_register/register_screen.dart';
+import 'customer_account_screen/account_screen_true.dart';
 
 class CustomerMainScreen extends StatefulWidget {
   const CustomerMainScreen({super.key});

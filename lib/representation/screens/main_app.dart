@@ -1,14 +1,13 @@
-import 'package:demo_frs_app/core/constants/color_constants.dart';
-import 'package:demo_frs_app/core/constants/dismension_constants.dart';
-import 'package:demo_frs_app/representation/screens/account_screen.dart';
-import 'package:demo_frs_app/representation/screens/cart/main_cart_screen.dart';
-import 'package:demo_frs_app/representation/screens/home_screen.dart';
-import 'package:demo_frs_app/representation/screens/home_screen_demo.dart';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
+
+import '../../core/constants/color_constants.dart';
+import '../../core/constants/dismension_constants.dart';
+import 'account_screen.dart';
+import 'cart/main_cart_screen.dart';
+import 'home_screen_demo.dart';
 
 class MainApp extends StatefulWidget {
   const MainApp({super.key});

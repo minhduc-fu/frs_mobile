@@ -1,5 +1,6 @@
-import 'package:demo_frs_app/representation/widgets/cart_item_buy.dart';
 import 'package:flutter/material.dart';
+
+import '../../widgets/cart_item_buy.dart';
 
 class RentalCartScreen extends StatefulWidget {
   const RentalCartScreen({super.key});

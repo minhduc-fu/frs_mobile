@@ -1,7 +1,8 @@
-import 'package:demo_frs_app/core/constants/color_constants.dart';
-import 'package:demo_frs_app/core/constants/dismension_constants.dart';
-import 'package:demo_frs_app/representation/screens/customer_screen/customer_account_screen/orderHistoryCustomer/buy_order_history/confirm_buy_order.dart';
 import 'package:flutter/material.dart';
+
+import '../../../../../../core/constants/color_constants.dart';
+import '../../../../../../core/constants/dismension_constants.dart';
+import 'confirm_buy_order.dart';
 
 class BuyOrderHistory extends StatefulWidget {
   const BuyOrderHistory({super.key});

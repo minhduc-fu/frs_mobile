@@ -1,13 +1,14 @@
-import 'package:demo_frs_app/core/constants/color_constants.dart';
-import 'package:demo_frs_app/core/constants/dismension_constants.dart';
-import 'package:demo_frs_app/core/constants/textstyle_constants.dart';
-import 'package:demo_frs_app/models/product.dart';
-import 'package:demo_frs_app/models/product_owner.dart';
-import 'package:demo_frs_app/utils/image_helper.dart';
-import 'package:demo_frs_app/utils/product_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
+
+import '../../core/constants/color_constants.dart';
+import '../../core/constants/dismension_constants.dart';
+import '../../core/constants/textstyle_constants.dart';
+import '../../models/product.dart';
+import '../../models/product_owner.dart';
+import '../../utils/image_helper.dart';
+import '../../utils/product_utils.dart';
 
 class ProductCard extends StatelessWidget {
   final List<ProductOwner> allProductOwners;

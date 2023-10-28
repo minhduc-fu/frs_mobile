@@ -1,9 +1,9 @@
-import 'package:demo_frs_app/core/constants/my_textfield.dart';
-import 'package:demo_frs_app/core/constants/textstyle_constants.dart';
-import 'package:demo_frs_app/representation/widgets/app_bar_main.dart';
-import 'package:demo_frs_app/representation/widgets/button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import '../../../core/constants/my_textfield.dart';
+import '../../../core/constants/textstyle_constants.dart';
+import '../../widgets/app_bar_main.dart';
+import '../../widgets/button_widget.dart';
 
 class ForgotPasswordScreen extends StatelessWidget {
   ForgotPasswordScreen({super.key});

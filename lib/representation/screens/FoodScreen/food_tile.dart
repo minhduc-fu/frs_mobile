@@ -1,10 +1,10 @@
-import 'package:demo_frs_app/core/constants/color_constants.dart';
-import 'package:demo_frs_app/core/constants/textstyle_constants.dart';
-import 'package:demo_frs_app/models/food.dart';
-import 'package:demo_frs_app/utils/image_helper.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+import '../../../core/constants/color_constants.dart';
+import '../../../core/constants/textstyle_constants.dart';
+import '../../../models/food.dart';
+import '../../../utils/image_helper.dart';
 
 class FoodTile extends StatelessWidget {
   final Food food;

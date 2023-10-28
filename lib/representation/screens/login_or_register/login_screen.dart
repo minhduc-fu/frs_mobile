@@ -1,25 +1,25 @@
 import 'dart:convert';
-
-import 'package:demo_frs_app/core/constants/color_constants.dart';
-import 'package:demo_frs_app/core/constants/dismension_constants.dart';
-import 'package:demo_frs_app/core/constants/my_textfield.dart';
-import 'package:demo_frs_app/core/constants/textstyle_constants.dart';
-import 'package:demo_frs_app/models/user_model.dart';
-import 'package:demo_frs_app/representation/screens/customer_screen/customer_main_screen.dart';
-import 'package:demo_frs_app/representation/screens/login_or_register/forgot_password_screen.dart';
-import 'package:demo_frs_app/representation/screens/productowner_screen/productowner_main_screen.dart';
-import 'package:demo_frs_app/representation/widgets/button_widget.dart';
-import 'package:demo_frs_app/services/authentication_service.dart';
-import 'package:demo_frs_app/services/authprovider.dart';
-import 'package:demo_frs_app/utils/asset_helper.dart';
-import 'package:demo_frs_app/utils/dialog_helper.dart';
-import 'package:demo_frs_app/utils/image_helper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
+
+import '../../../core/constants/color_constants.dart';
+import '../../../core/constants/dismension_constants.dart';
+import '../../../core/constants/my_textfield.dart';
+import '../../../core/constants/textstyle_constants.dart';
+import '../../../models/user_model.dart';
+import '../../../services/authentication_service.dart';
+import '../../../services/authprovider.dart';
+import '../../../utils/asset_helper.dart';
+import '../../../utils/dialog_helper.dart';
+import '../../../utils/image_helper.dart';
+import '../../widgets/button_widget.dart';
+import '../customer_screen/customer_main_screen.dart';
+import '../productowner_screen/productowner_main_screen.dart';
+import 'forgot_password_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   final Function()? onTap;
