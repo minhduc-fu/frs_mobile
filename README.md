@@ -1,6 +1,6 @@
 [![Flutter CI](https://github.com/minhduc-fu/demo_frs_app_coppy2/actions/workflows/main.yml/badge.svg)](https://github.com/minhduc-fu/demo_frs_app_coppy2/actions/workflows/main.yml)
 
-# Demo FRS app version 2
+# FRS_MOBILE
 
 A new Flutter project.
 
