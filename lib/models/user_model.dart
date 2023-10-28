@@ -1,5 +1,5 @@
 import 'customer_model.dart';
-import 'productowner_model.dart';
+import 'productOwner_model.dart';
 import 'role_model.dart';
 
 class UserModel {

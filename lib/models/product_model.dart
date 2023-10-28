@@ -5,6 +5,7 @@ import 'rental_price_model.dart';
 class ProductModel {
   int productID;
   String productName;
+  String productCondition;
   String? productAvt;
   double price;
   String checkType;
@@ -15,6 +16,7 @@ class ProductModel {
   ProductModel({
     required this.productID,
     required this.productName,
+    required this.productCondition,
     this.productAvt,
     required this.price,
     required this.checkType,
@@ -27,6 +29,7 @@ class ProductModel {
     return ProductModel(
       productID: json['productID'],
       productName: json['productName'],
+      productCondition: json['productCondition'],
       productAvt: json['productAvt'],
       price: json['price'],
       checkType: json['checkType'],

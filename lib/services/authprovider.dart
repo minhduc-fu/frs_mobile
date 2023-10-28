@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
 import '../models/customer_model.dart';
-import '../models/productowner_model.dart';
+import '../models/productOwner_model.dart';
 import '../models/user_model.dart';
 
 class AuthProvider with ChangeNotifier {

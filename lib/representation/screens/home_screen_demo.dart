@@ -2,10 +2,14 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:frs_mobile/models/product_detail_model.dart';
+import 'package:frs_mobile/models/product_image_model.dart';
+import 'package:frs_mobile/representation/screens/product_detail_demo.dart';
 
 import '../../core/constants/color_constants.dart';
 import '../../core/constants/dismension_constants.dart';
 import '../../core/constants/textstyle_constants.dart';
+import '../../models/productOwner_model.dart';
 import '../../models/product_model.dart';
 import '../../services/authentication_service.dart';
 import '../../utils/asset_helper.dart';
@@ -36,9 +40,9 @@ class _HomeScreenDemoState extends State<HomeScreenDemo> {
   final CarouselController _controller = CarouselController();
   int _currentIndexBanner = 0;
   final List<Widget> _bannerImages = [
-    ImageHelper.loadFromAsset(AssetHelper.imageBanner1),
-    ImageHelper.loadFromAsset(AssetHelper.imageBanner2),
-    ImageHelper.loadFromAsset(AssetHelper.imageBanner3),
+    ImageHelper.loadFromAsset(AssetHelper.imageBanner1, fit: BoxFit.cover),
+    ImageHelper.loadFromAsset(AssetHelper.imageBanner2, fit: BoxFit.cover),
+    ImageHelper.loadFromAsset(AssetHelper.imageBanner3, fit: BoxFit.cover),
   ];
   List<String> brandList = [
     "DIOR",
@@ -102,6 +106,10 @@ class _HomeScreenDemoState extends State<HomeScreenDemo> {
 
   @override
   Widget build(BuildContext context) {
+    double getMainAxisExtent(int index) {
+      return index.isEven ? 200.0 : 150.0;
+    }
+
     Size size = MediaQuery.of(context).size;
     return AppBarMain(
       leading: Builder(builder: (context) {
@@ -275,10 +283,51 @@ class _HomeScreenDemoState extends State<HomeScreenDemo> {
                     itemCount: _bannerImages.length,
                     itemBuilder:
                         (BuildContext context, int index, int realIndex) {
-                      return _bannerImages[index];
+                      return Container(
+                        margin: EdgeInsets.all(5.0),
+                        child: ClipRRect(
+                            borderRadius: BorderRadius.all(
+                                Radius.circular(kDefaultCircle14)),
+                            child: Stack(
+                              children: <Widget>[
+                                _bannerImages[index],
+                                // Image.network(product, fit: BoxFit.cover, width: 1000.0),
+                                Positioned(
+                                  bottom: 0.0,
+                                  left: 0.0,
+                                  right: 0.0,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      gradient: LinearGradient(
+                                        colors: [
+                                          Color.fromARGB(200, 0, 0, 0),
+                                          Color.fromARGB(0, 0, 0, 0)
+                                        ],
+                                        begin: Alignment.bottomCenter,
+                                        end: Alignment.topCenter,
+                                      ),
+                                    ),
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: 10.0, horizontal: 20.0),
+                                    child: Text(
+                                      'No. ${index} image',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 20.0,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            )),
+                      );
                     },
                     options: CarouselOptions(
-                      autoPlay: false,
+                      autoPlayInterval: Duration(
+                          seconds: 3), // xác định thời gian mỗi lần tự động
+                      autoPlayCurve: Curves.fastOutSlowIn,
+                      // autoPlay: true,
                       enlargeCenterPage: true, // phóng to trung tâm trang
                       // height: 200,
                       aspectRatio: 16 / 9,
@@ -442,37 +491,83 @@ class _HomeScreenDemoState extends State<HomeScreenDemo> {
                           gridDelegate:
                               SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2,
-                            childAspectRatio:
-                                (MediaQuery.of(context).size.width - 30 - 15) /
-                                    (2 * 260),
+                            mainAxisExtent: 280,
+                            // tỷ lệ giữa chiều rộng và chiều cao
+                            // childAspectRatio: 1 / 2,
+                            // (MediaQuery.of(context).size.width - 20 - 10) /
+                            //     (2 * 260),
                             mainAxisSpacing: 20,
                             crossAxisSpacing: 10,
                           ),
                           shrinkWrap: true,
                           itemCount: products.length,
                           itemBuilder: ((context, index) {
-                            if (index % 2 == 0) {
-                              return GestureDetector(
-                                onTap: () {
-                                  // selectedProduct = filteredProducts[index];
+                            // double aspectRatio = index.isEven ? 1.5 : 1.0;
+                            // return ProductCardDemo(
+                            //   product: products[index],
+                            //   aspectRatio: aspectRatio,
+                            // );
+
+                            return Transform.translate(
+                              offset: Offset(0, index.isOdd ? 50.0 : 0.0),
+                              child: GestureDetector(
+                                onTap: () async {
+                                  ProductDetailModel? productDetail =
+                                      await AuthenticationService
+                                          .getProductByID(
+                                              products[index].productID);
+                                  int productOwnerID =
+                                      productDetail!.productOwnerID;
+                                  ProductOwnerModel? productOwnerModel =
+                                      await AuthenticationService
+                                          .getProductOwnerByID(productOwnerID);
+
+                                  List<ProductImageModel>? productImages =
+                                      await AuthenticationService
+                                          .getAllProductImgByProductID(
+                                              products[index].productID);
+
+                                  Navigator.of(context).push(
+                                    CupertinoPageRoute(
+                                      builder: (context) => ProductDetailDemo(
+                                        productImageModel: productImages,
+                                        productOwnerModel: productOwnerModel,
+                                        productDetailModel: productDetail,
+                                      ),
+                                    ),
+                                  );
+                                  print(products[index].productID);
                                 },
                                 child: ProductCardDemo(
                                   product: products[index],
-                                ),
-                              );
-                            }
-                            return OverflowBox(
-                              maxHeight: 260.0 + 70.0,
-                              child: GestureDetector(
-                                onTap: () {},
-                                child: Container(
-                                  margin: EdgeInsets.only(top: 70),
-                                  child: ProductCardDemo(
-                                    product: products[index],
-                                  ),
+                                  // aspectRatio: aspectRatio,
                                 ),
                               ),
                             );
+                            // double aspectRatio = index.isEven ? 1.5 : 1.0;
+                            // if (index % 2 == 0) {
+                            //   return GestureDetector(
+                            //     onTap: () {},
+                            //     child: ProductCardDemo(
+                            //       aspectRatio: aspectRatio,
+                            //       product: products[index],
+                            //     ),
+                            //   );
+                            // }
+                            // return OverflowBox(
+                            //   // maxHeight: 260.0 + 70,
+                            //   maxHeight: 400,
+                            //   child: GestureDetector(
+                            //     onTap: () {},
+                            //     child: Container(
+                            //       margin: EdgeInsets.only(top: 70),
+                            //       child: ProductCardDemo(
+                            //         aspectRatio: aspectRatio,
+                            //         product: products[index],
+                            //       ),
+                            //     ),
+                            //   ),
+                            // );
                           }),
                         );
                       } else {

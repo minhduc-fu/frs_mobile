@@ -14,7 +14,6 @@ class ProductOwnerModel {
   });
 
   factory ProductOwnerModel.fromJson(Map<dynamic, dynamic> json) {
-    final productowner = json['productowner'];
     return ProductOwnerModel(
       productOwnerID: json['productownerID'],
       fullName: json['fullName'],

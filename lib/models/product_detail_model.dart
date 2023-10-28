@@ -1,37 +1,36 @@
+import 'dart:convert';
+
+import 'category.dart';
 import 'rental_price_model.dart';
 
 class ProductDetailModel {
   int productID;
   String productName;
   String productReceiptUrl;
+  String? productAvt;
+  String productCondition;
   String description;
   double price;
   String status;
   String checkType;
-  String categoryID;
-  String categoryName;
+  CategoryModel category;
   int productOwnerID;
-  String productOwnerName;
-  String productOwnerPhone;
-  String productOwnerAvatar;
-  Map<String, dynamic> productSpecificationData;
+  Map<String, dynamic>? productSpecificationData;
   RentalPriceModel? rentalPrice;
 
   ProductDetailModel({
     required this.productID,
     required this.productName,
     required this.productReceiptUrl,
+    this.productAvt,
+    required this.productCondition,
     required this.description,
     required this.price,
     required this.status,
     required this.checkType,
-    required this.categoryID,
-    required this.categoryName,
+    required this.category,
     required this.productOwnerID,
-    required this.productOwnerName,
-    required this.productOwnerPhone,
-    required this.productOwnerAvatar,
-    required this.productSpecificationData,
+    this.productSpecificationData,
     this.rentalPrice,
   });
 
@@ -40,17 +39,17 @@ class ProductDetailModel {
       productID: json['productID'],
       productName: json['productName'],
       productReceiptUrl: json['productReceiptUrl'],
+      productAvt: json['productAvt'],
+      productCondition: json['productCondition'],
       description: json['description'],
-      price: json['price'],
+      price: json['price'].toDouble(),
       status: json['status'],
       checkType: json['checkType'],
-      categoryID: json['category']['categoryID'],
-      categoryName: json['category']['categoryName'],
+      category: CategoryModel.fromJson(json['category']),
       productOwnerID: json['productOwnerID'],
-      productOwnerName: json['productOwnerName'],
-      productOwnerPhone: json['productOwnerPhone'],
-      productOwnerAvatar: json['productOwnerAvatar'],
-      productSpecificationData: json['productSpecificationData'],
+      productSpecificationData: json['productSpecificationData'] != null
+          ? jsonDecode(json['productSpecificationData'])
+          : null,
       rentalPrice: json['productRentalPricesDTO'] != null
           ? RentalPriceModel.fromJson(json['productRentalPricesDTO'])
           : null,
