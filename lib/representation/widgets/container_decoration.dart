@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../core/constants/color_constants.dart';
 import '../../core/constants/dismension_constants.dart';
+import '../../core/constants/textstyle_constants.dart';
 
 Widget customContainer(dynamic child) {
   return Container(
@@ -9,8 +10,12 @@ Widget customContainer(dynamic child) {
       color: ColorPalette.primaryColor,
       borderRadius: BorderRadius.circular(kDefaultCircle14),
     ),
-    child: Center(
-      child: child, // Sử dụng child tùy chỉnh
+    child: Text(
+      child,
+      style: TextStyles.defaultStyle.whiteTextColor, // Sử dụng child tùy chỉnh
     ),
+    // child: Center(
+    //   child: child, // Sử dụng child tùy chỉnh
+    // ),
   );
 }

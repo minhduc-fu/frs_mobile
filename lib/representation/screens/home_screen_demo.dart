@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:frs_mobile/models/product_detail_model.dart';
 import 'package:frs_mobile/models/product_image_model.dart';
-import 'package:frs_mobile/representation/screens/product_detail_demo.dart';
+import 'package:frs_mobile/representation/screens/product_detail/product_detail_demo.dart';
 
 import '../../core/constants/color_constants.dart';
 import '../../core/constants/dismension_constants.dart';
@@ -530,7 +530,7 @@ class _HomeScreenDemoState extends State<HomeScreenDemo> {
                                   Navigator.of(context).push(
                                     CupertinoPageRoute(
                                       builder: (context) => ProductDetailDemo(
-                                        productImageModel: productImages,
+                                        productImageModel: productImages!,
                                         productOwnerModel: productOwnerModel,
                                         productDetailModel: productDetail,
                                       ),
