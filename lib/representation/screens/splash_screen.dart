@@ -12,7 +12,7 @@ import '../../services/authprovider.dart';
 import '../../utils/asset_helper.dart';
 import '../../utils/image_helper.dart';
 import '../../utils/local_storage_helper.dart';
-import 'customer_screen/customer_main_screen.dart';
+import 'customer/customer_main_screen.dart';
 import 'intro_screen.dart';
 import 'main_app.dart';
 

@@ -4,7 +4,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import '../../../../core/constants/dismension_constants.dart';
 import '../../../../core/constants/textstyle_constants.dart';
 import '../../../../models/product_image_model.dart';
-import '../full_screen_image.dart';
+import '../full_screen_list_image.dart';
 
 class ImageSlider extends StatelessWidget {
   final List<ProductImageModel> productImages;
@@ -34,7 +34,7 @@ class ImageSlider extends StatelessWidget {
       },
       child: CarouselSlider.builder(
         carouselController: carouselController,
-        itemCount: productImages!.length,
+        itemCount: productImages.length,
         itemBuilder: (BuildContext context, int index, int realIndex) {
           return Container(
             margin: EdgeInsets.all(5.0),

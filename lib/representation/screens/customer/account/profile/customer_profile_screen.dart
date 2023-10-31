@@ -277,6 +277,7 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                       ),
                       SizedBox(height: 10),
                       MyTextField(
+                        textInputType: TextInputType.number,
                         controller: phoneController,
                         hintText: 'Số điện thoại',
                         obscureText: false,

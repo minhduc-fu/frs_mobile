@@ -17,7 +17,7 @@ import '../../../utils/asset_helper.dart';
 import '../../../utils/dialog_helper.dart';
 import '../../../utils/image_helper.dart';
 import '../../widgets/button_widget.dart';
-import '../customer_screen/customer_main_screen.dart';
+import '../customer/customer_main_screen.dart';
 import '../productowner_screen/productowner_main_screen.dart';
 import 'forgot_password_screen.dart';
 
@@ -31,21 +31,20 @@ class LoginScreen extends StatefulWidget {
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
-final TextEditingController passwordController = new TextEditingController();
-final TextEditingController emailController = new TextEditingController();
-
 bool _showPass = false;
 
 class _LoginScreenState extends State<LoginScreen> {
+  final TextEditingController passwordController = new TextEditingController();
+  final TextEditingController emailController = new TextEditingController();
   User? user;
   @override
   void initState() {
     super.initState();
-    user = FirebaseAuth.instance.currentUser;
-    if (user == null) {
-      emailController.text = "";
-      passwordController.text = "";
-    }
+    // user = FirebaseAuth.instance.currentUser;
+    // if (user == null) {
+    //   emailController.text = "";
+    //   passwordController.text = "";
+    // }
   }
   // sign user in method
 // void signInClicked() {

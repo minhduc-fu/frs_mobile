@@ -10,6 +10,7 @@ class MyTextField extends StatelessWidget {
   final bool obscureText;
   // final String messageError;
   final bool invalid = false;
+  final TextInputType? textInputType;
   final Widget? prefixIcon;
   final Widget? suffixIcon;
 
@@ -18,6 +19,7 @@ class MyTextField extends StatelessWidget {
       required this.controller,
       required this.hintText,
       required this.obscureText,
+      this.textInputType,
       // required this.messageError,
       this.prefixIcon,
       this.suffixIcon});
@@ -29,6 +31,7 @@ class MyTextField extends StatelessWidget {
     // var _emailInvalid = false; // hợp lệ
     // var _passwordInvalid = false;
     return TextField(
+      keyboardType: textInputType,
       controller: controller,
       obscureText: obscureText,
       decoration: InputDecoration(

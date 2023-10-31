@@ -10,7 +10,7 @@ import '../chat_screen.dart';
 import '../favorite_screen.dart';
 import '../home_screen_demo.dart';
 import '../login_or_register/register_screen.dart';
-import 'customer_account_screen/account_screen_true.dart';
+import 'account/account_screen_true.dart';
 
 class CustomerMainScreen extends StatefulWidget {
   const CustomerMainScreen({super.key});

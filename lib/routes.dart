@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:frs_mobile/representation/screens/wallet/wallet_screen.dart';
 import 'representation/screens/FoodScreen/cart_food_screen.dart';
 import 'representation/screens/FoodScreen/menu_screen.dart';
-import 'representation/screens/account_screen.dart';
+import 'representation/screens/guest/account_screen.dart';
 import 'representation/screens/cart/main_cart_screen.dart';
 import 'representation/screens/chat_screen.dart';
-import 'representation/screens/customer_screen/customer_account_screen/account_screen_true.dart';
-import 'representation/screens/customer_screen/customer_account_screen/orderHistoryCustomer/main_order_history_screen.dart';
-import 'representation/screens/customer_screen/customer_account_screen/profile_customer/customer_profile_screen.dart';
-import 'representation/screens/customer_screen/customer_main_screen.dart';
+import 'representation/screens/customer/account/account_screen_true.dart';
+import 'representation/screens/customer/account/orderHistoryCustomer/main_order_history_screen.dart';
+import 'representation/screens/customer/account/profile/customer_profile_screen.dart';
+import 'representation/screens/customer/customer_main_screen.dart';
 import 'representation/screens/favorite_screen.dart';
 import 'representation/screens/home_screen.dart';
 import 'representation/screens/home_screen_demo.dart';
@@ -66,5 +67,6 @@ final Map<String, WidgetBuilder> routes = {
   CustomerProfileScreen.routeName: (context) => const CustomerProfileScreen(),
 
   SelectDateScreen.routeName: (context) => SelectDateScreen(),
+  WalletScreen.routeName: (context) => WalletScreen(),
   // FoodDetailsScreen.routeName: (context) => const FoodDetailsScreen( food: ),
 };

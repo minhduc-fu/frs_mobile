@@ -31,7 +31,7 @@ class AppBarMain extends StatelessWidget {
             leading: leading,
             title: Text(
               titleAppbar ?? '',
-              style: TextStyles.h5.setTextSize(25),
+              style: TextStyles.h4,
             ),
             backgroundColor: ColorPalette.backgroundScaffoldColor,
             centerTitle: true,

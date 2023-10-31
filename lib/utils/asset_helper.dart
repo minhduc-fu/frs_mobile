@@ -26,4 +26,6 @@ class AssetHelper {
   static const String imgaeAoVersace = 'assets/images/ao_versace.png';
   static const String imageCircleAvtMain = 'assets/images/circle_avt_main.png';
   static const String imageVector = 'assets/images/profile.png';
+  // static const String imageVnpay = 'assets/images/vnpay.png';
+  static const String imageVnpay = 'assets/images/logo_vnpay.png';
 }

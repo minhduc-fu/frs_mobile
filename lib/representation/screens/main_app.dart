@@ -5,7 +5,7 @@ import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 
 import '../../core/constants/color_constants.dart';
 import '../../core/constants/dismension_constants.dart';
-import 'account_screen.dart';
+import 'guest/account_screen.dart';
 import 'cart/main_cart_screen.dart';
 import 'home_screen_demo.dart';
 
