@@ -60,10 +60,6 @@ class ProductCardDemo extends StatelessWidget {
                   // SizedBox(height: 2),
                   Row(
                     children: [
-                      // Text(
-                      //   'Thương hiệu: ',
-                      //   style: TextStyles.defaultStyle.bold,
-                      // ),
                       Text(
                         'Thương hiệu: ${product.productSpecifications != null ? (product.productSpecifications?['brandName'] ?? "N/A") : "N/A"}',
                       ),
@@ -110,7 +106,8 @@ class ProductCardDemo extends StatelessWidget {
                           style: TextStyles.defaultStyle.bold,
                         ),
                         Text(
-                          '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(product.rentalPrice?.rentPrice1)}',
+                          '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(0.0)}',
+                          // '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(product.rentalPrice != null ? product.rentalPrice?.rentPrice1 : 0.0)}',
                         ),
                       ],
                     )

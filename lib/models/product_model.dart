@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'rental_price_model.dart';
 
 class ProductModel {
@@ -10,7 +9,7 @@ class ProductModel {
   double price;
   String checkType;
   String productOwnerName;
-  RentalPriceModel? rentalPrice;
+  List<RentalPriceModel?>? rentalPrice;
   Map<String, dynamic>? productSpecifications;
 
   ProductModel({
@@ -26,6 +25,17 @@ class ProductModel {
   });
 
   factory ProductModel.fromJson(Map<String, dynamic> json) {
+    final List<dynamic>? rentPricesJson = json['rentprices'];
+    List<RentalPriceModel> rentalPrices = [];
+    if (rentPricesJson != null) {
+      rentalPrices = rentPricesJson.map((rentPrice) {
+        return RentalPriceModel(
+          productRentalPricesID: rentPrice['productRentalPricesID'],
+          mockDay: rentPrice['mockDay'],
+          rentPrice: rentPrice['rentPrice'],
+        );
+      }).toList();
+    }
     return ProductModel(
       productID: json['productID'],
       productName: json['productName'],
@@ -34,9 +44,7 @@ class ProductModel {
       price: json['price'],
       checkType: json['checkType'],
       productOwnerName: json['productOwnerName'],
-      rentalPrice: json['productRentalPricesDTO'] != null
-          ? RentalPriceModel.fromJson(json['productRentalPricesDTO'])
-          : null,
+      rentalPrice: rentalPrices,
       productSpecifications: json['productSpecifications'] != null
           ? jsonDecode(json['productSpecifications'])
           : null,

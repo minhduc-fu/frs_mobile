@@ -3,9 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:frs_mobile/core/constants/color_constants.dart';
 import 'package:frs_mobile/core/constants/textstyle_constants.dart';
-import 'package:frs_mobile/representation/screens/wallet/confirm_method_payment.dart';
+import 'package:frs_mobile/services/authentication_service.dart';
+import 'package:frs_mobile/services/authprovider.dart';
+import 'package:intl/intl.dart';
 
 import '../../../core/constants/dismension_constants.dart';
+import '../../../models/wallet_model.dart';
 import '../../widgets/button_widget.dart';
 import 'widgets/payment_method.dart';
 
@@ -17,8 +20,33 @@ class WalletScreen extends StatefulWidget {
 }
 
 class _WalletScreenState extends State<WalletScreen> {
+  // late AuthProvider authProvider;
+  WalletModel? wallet;
+
+  @override
+  void initState() {
+    super.initState();
+    print(AuthProvider.userModel!.accountID);
+    fetchWalletData();
+  }
+
+  Future<void> fetchWalletData() async {
+    final accountID = AuthProvider.userModel!.accountID;
+    try {
+      final walletData =
+          await AuthenticationService.getWalletByAccountID(accountID);
+      setState(() {
+        wallet = walletData;
+      });
+    } catch (e) {
+      print('Không thể getWalletByAccountID: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    // authProvider = Provider.of<AuthProvider>(context);
+
     return Scaffold(
       appBar: AppBar(
         // elevation: 0,
@@ -56,7 +84,8 @@ class _WalletScreenState extends State<WalletScreen> {
                         ),
                         SizedBox(height: 10),
                         Text(
-                          '0 vnđ',
+                          // '0',
+                          '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(wallet?.balance ?? 0)}',
                           style: TextStyles.h4.bold,
                         )
                       ],

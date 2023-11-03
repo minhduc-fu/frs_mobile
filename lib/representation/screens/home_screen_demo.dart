@@ -106,9 +106,9 @@ class _HomeScreenDemoState extends State<HomeScreenDemo> {
 
   @override
   Widget build(BuildContext context) {
-    double getMainAxisExtent(int index) {
-      return index.isEven ? 200.0 : 150.0;
-    }
+    // double getMainAxisExtent(int index) {
+    //   return index.isEven ? 200.0 : 150.0;
+    // }
 
     Size size = MediaQuery.of(context).size;
     return AppBarMain(

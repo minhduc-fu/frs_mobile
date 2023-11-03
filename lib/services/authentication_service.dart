@@ -1,5 +1,6 @@
 import 'dart:convert'; // để encode và decode JSON
 import 'package:frs_mobile/models/product_image_model.dart';
+import 'package:frs_mobile/models/wallet_model.dart';
 import 'package:http/http.dart' as http;
 
 import '../models/productOwner_model.dart';
@@ -206,6 +207,95 @@ class AuthenticationService {
       }
     } catch (e) {
       throw Exception('Error: $e');
+    }
+  }
+
+  static Future<Map<String, dynamic>?> createWallet(
+      int accountID, double balance) async {
+    final url = Uri.parse('http://fashionrental.online:8080/wallet');
+    final Map<String, dynamic> requestData = {
+      'accountID': accountID,
+      'balance': balance,
+    };
+    final response = await http.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode(requestData),
+    );
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      return null;
+    }
+  }
+
+  static Future<WalletModel?> getWalletByAccountID(int accountID) async {
+    final url = Uri.parse('http://fashionrental.online:8080/wallet/$accountID');
+    try {
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> data = json.decode(response.body);
+        return WalletModel.fromJson(data);
+      } else {
+        throw Exception('Truy xuất thông tin ví không thành công.');
+      }
+    } catch (e) {
+      throw Exception('Lỗi $e');
+    }
+  }
+
+  static Future<WalletModel?> updateBalance(
+      double balance, int walletID) async {
+    final url = Uri.parse(
+        'http://fashionrental.online:8080/wallet?balance=$balance&walletID=$walletID');
+    try {
+      final response = await http.put(url);
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> data = json.decode(response.body);
+        return WalletModel.fromJson(data);
+      } else {
+        throw Exception('Cập nhật số dư không thành công.');
+      }
+    } catch (e) {
+      throw Exception('Lỗi $e');
+    }
+  }
+
+  static Future<String> submitOrder(
+      int accountID, int amount, String orderInfo) async {
+    final url = Uri.parse(
+        'http://fashionrental.online:8080/VNPaycontroller/submitOrder?accountID=$accountID&amount=$amount&orderInfo=$orderInfo');
+    // final Map<String, dynamic> requestData = {
+    //   'amount': amount,
+    //   'orderInfo': orderInfo,
+    // };
+    try {
+      final response = await http.post(url);
+
+      if (response.statusCode == 200) {
+        print(response.body);
+        return response.body;
+      } else {
+        throw Exception('Submit Order không thành công.');
+      }
+    } catch (e) {
+      throw Exception('Lỗi $e');
+    }
+  }
+
+  static Future<void> callGetMapping() async {
+    final url = Uri.parse(
+        'http://fashionrental.online:8080/VNPaycontroller/vnpay-payment');
+
+    final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+      print('Response: ${response.body}');
+    } else {
+      print('Failed to call GET API');
     }
   }
 }

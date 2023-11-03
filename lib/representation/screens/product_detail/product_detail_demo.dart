@@ -57,8 +57,8 @@ class _ProductDetailDemoState extends State<ProductDetailDemo> {
     final productDetailModel = widget.productDetailModel;
     final productOwnerModel = widget.productOwnerModel;
     final List<ProductImageModel> productImages = widget.productImageModel;
-    double rentalPrice1 = productDetailModel!.rentalPrice?.rentPrice1 ?? 0.0;
-    final String checkType = productDetailModel.checkType;
+    // double rentalPrice1 = productDetailModel!.rentalPrice?.rentPrice1 ?? 0.0;
+    final String checkType = productDetailModel!.checkType;
     Size size = MediaQuery.of(context).size; // get screen size
     return AppBarMain(
       titleAppbar: 'Chi tiết sản phẩm',
@@ -484,7 +484,8 @@ class _ProductDetailDemoState extends State<ProductDetailDemo> {
                               Padding(
                                 padding: const EdgeInsets.only(right: 12),
                                 child: Text(
-                                  '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(rentalPrice1)}',
+                                  '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(0.0)}',
+                                  // '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(rentalPrice1)}',
                                 ),
                               ),
                             ],
@@ -503,11 +504,16 @@ class _ProductDetailDemoState extends State<ProductDetailDemo> {
                                   Column(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      GestureDetector(
+                                    children: productDetailModel.rentalPrices!
+                                        .map((rentalPrice) {
+                                      final index = productDetailModel
+                                              .rentalPrices!
+                                              .indexOf(rentalPrice) +
+                                          1;
+                                      return GestureDetector(
                                         onTap: () {
                                           setState(() {
-                                            selectedRentalPeriod = 4;
+                                            selectedRentalPeriod = index;
                                             isRentalPeriodSelected = true;
                                           });
                                         },
@@ -520,7 +526,7 @@ class _ProductDetailDemoState extends State<ProductDetailDemo> {
                                                 Radio(
                                                   activeColor:
                                                       ColorPalette.primaryColor,
-                                                  value: 4,
+                                                  value: index,
                                                   groupValue:
                                                       selectedRentalPeriod,
                                                   onChanged: (value) {
@@ -532,99 +538,141 @@ class _ProductDetailDemoState extends State<ProductDetailDemo> {
                                                     });
                                                   },
                                                 ),
-                                                Text('4 ngày'),
+                                                Text('${rentalPrice!.mockDay}'),
                                               ],
                                             ),
-                                            if (selectedRentalPeriod == 4)
+                                            if (selectedRentalPeriod == index)
                                               Text(
-                                                'Thuê với giá: ${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(ProductDetailBloc.getRentalPrice(selectedRentalPeriod, productDetailModel))}',
+                                                'Thuê với giá: ${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(rentalPrice.rentPrice)}',
                                                 style: TextStyles
                                                     .defaultStyle.bold,
                                               ),
                                           ],
                                         ),
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          setState(() {
-                                            selectedRentalPeriod = 7;
-                                            isRentalPeriodSelected = true;
-                                          });
-                                        },
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Row(
-                                              children: [
-                                                Radio(
-                                                  activeColor:
-                                                      ColorPalette.primaryColor,
-                                                  value: 7,
-                                                  groupValue:
-                                                      selectedRentalPeriod,
-                                                  onChanged: (value) {
-                                                    setState(() {
-                                                      selectedRentalPeriod =
-                                                          value as int;
-                                                      isRentalPeriodSelected =
-                                                          true;
-                                                    });
-                                                  },
-                                                ),
-                                                Text('7 ngày'),
-                                              ],
-                                            ),
-                                            if (selectedRentalPeriod == 7)
-                                              Text(
-                                                'Thuê với giá: ${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(ProductDetailBloc.getRentalPrice(selectedRentalPeriod, productDetailModel))}',
-                                                style: TextStyles
-                                                    .defaultStyle.bold,
-                                              ),
-                                          ],
-                                        ),
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          setState(() {
-                                            selectedRentalPeriod = 10;
-                                            isRentalPeriodSelected = true;
-                                          });
-                                        },
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Row(
-                                              children: [
-                                                Radio(
-                                                  activeColor:
-                                                      ColorPalette.primaryColor,
-                                                  value: 10,
-                                                  groupValue:
-                                                      selectedRentalPeriod,
-                                                  onChanged: (value) {
-                                                    setState(() {
-                                                      selectedRentalPeriod =
-                                                          value as int;
-                                                      isRentalPeriodSelected =
-                                                          true;
-                                                    });
-                                                  },
-                                                ),
-                                                Text('10 ngày'),
-                                              ],
-                                            ),
-                                            if (selectedRentalPeriod == 10)
-                                              Text(
-                                                'Thuê với giá: ${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(ProductDetailBloc.getRentalPrice(selectedRentalPeriod, productDetailModel))}',
-                                                style: TextStyles
-                                                    .defaultStyle.bold,
-                                              ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
+                                      );
+                                    }).toList(),
+                                    // children: [
+                                    //   GestureDetector(
+                                    //     onTap: () {
+                                    //       setState(() {
+                                    //         selectedRentalPeriod = 4;
+                                    //         isRentalPeriodSelected = true;
+                                    //       });
+                                    //     },
+                                    //     child: Row(
+                                    //       mainAxisAlignment:
+                                    //           MainAxisAlignment.spaceBetween,
+                                    //       children: [
+                                    //         Row(
+                                    //           children: [
+                                    //             Radio(
+                                    //               activeColor:
+                                    //                   ColorPalette.primaryColor,
+                                    //               value: 4,
+                                    //               groupValue:
+                                    //                   selectedRentalPeriod,
+                                    //               onChanged: (value) {
+                                    //                 setState(() {
+                                    //                   selectedRentalPeriod =
+                                    //                       value as int;
+                                    //                   isRentalPeriodSelected =
+                                    //                       true;
+                                    //                 });
+                                    //               },
+                                    //             ),
+                                    //             Text('4 ngày'),
+                                    //           ],
+                                    //         ),
+                                    //         // if (selectedRentalPeriod == 4)
+                                    //         //   Text(
+                                    //         //     'Thuê với giá: ${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(ProductDetailBloc.getRentalPrice(selectedRentalPeriod, productDetailModel))}',
+                                    //         //     style: TextStyles
+                                    //         //         .defaultStyle.bold,
+                                    //         //   ),
+                                    //       ],
+                                    //     ),
+                                    //   ),
+                                    //   GestureDetector(
+                                    //     onTap: () {
+                                    //       setState(() {
+                                    //         selectedRentalPeriod = 7;
+                                    //         isRentalPeriodSelected = true;
+                                    //       });
+                                    //     },
+                                    //     child: Row(
+                                    //       mainAxisAlignment:
+                                    //           MainAxisAlignment.spaceBetween,
+                                    //       children: [
+                                    //         Row(
+                                    //           children: [
+                                    //             Radio(
+                                    //               activeColor:
+                                    //                   ColorPalette.primaryColor,
+                                    //               value: 7,
+                                    //               groupValue:
+                                    //                   selectedRentalPeriod,
+                                    //               onChanged: (value) {
+                                    //                 setState(() {
+                                    //                   selectedRentalPeriod =
+                                    //                       value as int;
+                                    //                   isRentalPeriodSelected =
+                                    //                       true;
+                                    //                 });
+                                    //               },
+                                    //             ),
+                                    //             Text('7 ngày'),
+                                    //           ],
+                                    //         ),
+                                    //         // if (selectedRentalPeriod == 7)
+                                    //         //   Text(
+                                    //         //     'Thuê với giá: ${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(ProductDetailBloc.getRentalPrice(selectedRentalPeriod, productDetailModel))}',
+                                    //         //     style: TextStyles
+                                    //         //         .defaultStyle.bold,
+                                    //         //   ),
+                                    //       ],
+                                    //     ),
+                                    //   ),
+                                    //   GestureDetector(
+                                    //     onTap: () {
+                                    //       setState(() {
+                                    //         selectedRentalPeriod = 10;
+                                    //         isRentalPeriodSelected = true;
+                                    //       });
+                                    //     },
+                                    //     child: Row(
+                                    //       mainAxisAlignment:
+                                    //           MainAxisAlignment.spaceBetween,
+                                    //       children: [
+                                    //         Row(
+                                    //           children: [
+                                    //             Radio(
+                                    //               activeColor:
+                                    //                   ColorPalette.primaryColor,
+                                    //               value: 10,
+                                    //               groupValue:
+                                    //                   selectedRentalPeriod,
+                                    //               onChanged: (value) {
+                                    //                 setState(() {
+                                    //                   selectedRentalPeriod =
+                                    //                       value as int;
+                                    //                   isRentalPeriodSelected =
+                                    //                       true;
+                                    //                 });
+                                    //               },
+                                    //             ),
+                                    //             Text('10 ngày'),
+                                    //           ],
+                                    //         ),
+                                    //         // if (selectedRentalPeriod == 10)
+                                    //         //   Text(
+                                    //         //     'Thuê với giá: ${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(ProductDetailBloc.getRentalPrice(selectedRentalPeriod, productDetailModel))}',
+                                    //         //     style: TextStyles
+                                    //         //         .defaultStyle.bold,
+                                    //         //   ),
+                                    //       ],
+                                    //     ),
+                                    //   ),
+                                    // ],
                                   ),
 
                                   if (isRentalPeriodSelected)

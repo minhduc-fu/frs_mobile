@@ -5,8 +5,6 @@ import 'package:frs_mobile/core/constants/textstyle_constants.dart';
 import 'package:frs_mobile/representation/widgets/button_widget.dart';
 import 'package:frs_mobile/utils/asset_helper.dart';
 import 'package:frs_mobile/utils/image_helper.dart';
-
-import '../../../../core/constants/color_constants.dart';
 import '../../../../core/constants/dismension_constants.dart';
 import '../confirm_method_payment.dart';
 

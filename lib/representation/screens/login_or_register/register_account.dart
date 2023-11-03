@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
 import '../../../bloc/register_stepper_bloc.dart';
 import '../../../core/constants/color_constants.dart';
 import '../../../core/constants/dismension_constants.dart';
@@ -70,6 +69,13 @@ class _RegisterAccountState extends State<RegisterAccount> {
             showCustomDialog(
                 context, 'Thành công', 'Bạn đã đăng ký tài khoản thành công.');
             print(accountID);
+            final walletResponse =
+                await AuthenticationService.createWallet(accountID!, 0);
+            if (walletResponse != null) {
+              print('Tạo ví thành công.');
+            } else {
+              print('Thất bại tạo ví.');
+            }
           }
         } else {
           showCustomDialog(
