@@ -17,6 +17,7 @@ class ProductDetailModel {
   int productOwnerID;
   Map<String, dynamic>? productSpecificationData;
   List<RentalPriceModel?>? rentalPrices;
+  bool isChecked;
 
   ProductDetailModel({
     required this.productID,
@@ -32,6 +33,7 @@ class ProductDetailModel {
     required this.productOwnerID,
     this.productSpecificationData,
     required this.rentalPrices,
+    this.isChecked = false,
   });
 
   factory ProductDetailModel.fromJson(Map<String, dynamic> json) {
