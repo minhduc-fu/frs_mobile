@@ -73,7 +73,7 @@ class ProductCardDemo extends StatelessWidget {
                         style: TextStyles.defaultStyle.bold,
                       ),
                       Text(
-                        product.productCondition,
+                        '${product.productCondition}',
                       ),
                     ],
                   ),

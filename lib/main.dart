@@ -11,6 +11,7 @@ import 'firebase_options.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'routes.dart';
 import 'services/authprovider.dart';
+import 'services/cart_provider.dart';
 import 'utils/local_storage_helper.dart';
 
 void main() async {
@@ -32,11 +33,17 @@ void main() async {
 
   runApp(
     // cung cấp 1 provider cho toàn bộ ứng dụng hoặc 1 phần của ứng dụng
-    ChangeNotifierProvider(
-      create: (context) =>
-          AuthProvider(), // tạo một phiên bản mới của AuthProvider
-      // child là MyApp nghĩa là có thể truy cập AuthProvider từ bất kỳ widget nào bên trong MyApp
-      child: const MyApp(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider<AuthProvider>(
+          create: (context) => AuthProvider(),
+        ), // tạo một phiên bản mới của AuthProvider
+        ChangeNotifierProvider<CartProvider>(
+          create: (context) => CartProvider(),
+        ),
+      ],
+      child:
+          const MyApp(), // child là MyApp nghĩa là có thể truy cập AuthProvider từ bất kỳ widget nào bên trong MyApp),
     ),
   );
 }

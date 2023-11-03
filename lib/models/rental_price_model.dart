@@ -1,6 +1,6 @@
 class RentalPriceModel {
   int productRentalPricesID;
-  String mockDay;
+  int mockDay;
   double rentPrice;
 
   RentalPriceModel({

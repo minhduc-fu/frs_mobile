@@ -3,14 +3,16 @@ import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:frs_mobile/models/cart_item_model.dart';
 import 'package:frs_mobile/models/product_detail_model.dart';
 import 'package:frs_mobile/models/product_image_model.dart';
-import 'package:frs_mobile/representation/screens/product_detail/bloc/product_detail_bloc.dart';
 import 'package:frs_mobile/representation/screens/product_detail/full_screen_receipt.dart';
 import 'package:frs_mobile/representation/screens/product_detail/widgets/image_slider.dart';
 import 'package:frs_mobile/representation/widgets/app_bar_main.dart';
+import 'package:frs_mobile/services/cart_provider.dart';
 import 'package:intl/intl.dart';
 import 'package:frs_mobile/core/extensions/date_ext.dart';
+import 'package:provider/provider.dart';
 import '../../../core/constants/color_constants.dart';
 import '../../../core/constants/dismension_constants.dart';
 import '../../../core/constants/textstyle_constants.dart';
@@ -54,6 +56,7 @@ class _ProductDetailDemoState extends State<ProductDetailDemo> {
 
   @override
   Widget build(BuildContext context) {
+    final cartProvider = Provider.of<CartProvider>(context, listen: false);
     final productDetailModel = widget.productDetailModel;
     final productOwnerModel = widget.productOwnerModel;
     final List<ProductImageModel> productImages = widget.productImageModel;
@@ -538,7 +541,8 @@ class _ProductDetailDemoState extends State<ProductDetailDemo> {
                                                     });
                                                   },
                                                 ),
-                                                Text('${rentalPrice!.mockDay}'),
+                                                Text(
+                                                    '${rentalPrice!.mockDay} ngày'),
                                               ],
                                             ),
                                             if (selectedRentalPeriod == index)
@@ -819,7 +823,49 @@ class _ProductDetailDemoState extends State<ProductDetailDemo> {
                                   // add to cart button
                                   ButtonWidget(
                                     title: 'Thêm vào giỏ hàng Mua',
-                                    onTap: () {},
+                                    onTap: () {
+                                      final cartItem = CartItemModel(
+                                        productOwnerID:
+                                            productOwnerModel.productOwnerID,
+                                        productOwnerName:
+                                            productOwnerModel.fullName,
+                                        productDetailModel: [
+                                          ProductDetailModel(
+                                              productAvt: productDetailModel
+                                                  .productAvt!,
+                                              productID:
+                                                  productDetailModel.productID,
+                                              productName: productDetailModel
+                                                  .productName,
+                                              productReceiptUrl:
+                                                  productDetailModel
+                                                      .productReceiptUrl,
+                                              productCondition:
+                                                  productDetailModel
+                                                      .productCondition,
+                                              description: productDetailModel
+                                                  .description,
+                                              price: productDetailModel.price,
+                                              status: productDetailModel.status,
+                                              checkType:
+                                                  productDetailModel.checkType,
+                                              category:
+                                                  productDetailModel.category,
+                                              productOwnerID: productDetailModel
+                                                  .productOwnerID,
+                                              rentalPrices: productDetailModel
+                                                      .rentalPrices ??
+                                                  null)
+                                        ],
+                                      );
+
+                                      cartProvider.addToCart(cartItem);
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(
+                                        content: Text(
+                                            'Sản phẩm đã được thêm vào giỏ hàng.'),
+                                      ));
+                                    },
                                     height: 70,
                                     size: 18,
                                   ),
