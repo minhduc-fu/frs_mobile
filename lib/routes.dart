@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frs_mobile/representation/screens/customer/account/address/address_screen.dart';
 import 'package:frs_mobile/representation/screens/wallet/wallet_screen.dart';
 import 'representation/screens/FoodScreen/cart_food_screen.dart';
 import 'representation/screens/FoodScreen/menu_screen.dart';
@@ -68,5 +69,6 @@ final Map<String, WidgetBuilder> routes = {
 
   SelectDateScreen.routeName: (context) => SelectDateScreen(),
   WalletScreen.routeName: (context) => WalletScreen(),
+  AddressScreen.routeName: (context) => AddressScreen(),
   // FoodDetailsScreen.routeName: (context) => const FoodDetailsScreen( food: ),
 };

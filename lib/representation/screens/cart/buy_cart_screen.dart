@@ -1,11 +1,18 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:frs_mobile/models/cart_item_model.dart';
+import 'package:frs_mobile/representation/screens/checkout/checkout_for_buy.dart';
+import 'package:frs_mobile/representation/screens/wallet/wallet_screen.dart';
+import 'package:frs_mobile/utils/dialog_helper.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-
+import 'package:auto_size_text/auto_size_text.dart';
 import '../../../core/constants/color_constants.dart';
 import '../../../core/constants/dismension_constants.dart';
 import '../../../core/constants/textstyle_constants.dart';
+import '../../../services/authentication_service.dart';
+import '../../../services/authprovider.dart';
 import '../../../services/cart_provider.dart';
 import '../../widgets/button_widget.dart';
 
@@ -17,20 +24,89 @@ class BuyCartScreen extends StatefulWidget {
 }
 
 class _BuyCartScreenState extends State<BuyCartScreen> {
-  bool isAllChecked = false;
-  List<bool> productOwnerCheckStates = [];
-  @override
-  void initState() {
-    super.initState();
-    final cartProvider = Provider.of<CartProvider>(context, listen: false);
-    productOwnerCheckStates =
-        List.generate(cartProvider.cartItems.length, (index) => false);
+  double totalAmount = 0.0;
+  int totalSelectedProducts = 0;
+  List<CartItemModel> cartItems = [];
+
+  void placeOrder() async {
+    final accountID = AuthProvider.userModel!.accountID;
+    final wallet = await AuthenticationService.getWalletByAccountID(accountID);
+
+    if (wallet != null && wallet.balance >= totalAmount) {
+      Navigator.of(context)
+          .push(CupertinoPageRoute(builder: ((context) => CheckoutForBuy())));
+    } else {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text(
+              'Số dư của ví không đủ',
+              style: TextStyles.h4.bold,
+            ),
+            content: Container(
+              height: 50,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Số dư hiện tại của ví: ${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(wallet!.balance)}',
+                    style: TextStyles.h5,
+                  ),
+                  Text(
+                    'Bạn cần nạp thêm: ${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(totalAmount - wallet.balance)}',
+                    style: TextStyles.h5,
+                  ),
+                ],
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text(
+                  'Hủy',
+                  style: TextStyles.defaultStyle.bold
+                      .setColor(Colors.red)
+                      .setTextSize(18),
+                ),
+              ),
+              ButtonWidget(
+                title: "Nạp tiền vào ví",
+                size: 18,
+                height: 40,
+                width: 160,
+                onTap: () {
+                  //            final cartItemsToDisplay = cartItems.where((cartItem) => cartItem
+                  // .productDetailModel
+                  // .any((product) => product.isChecked == true));
+                  Navigator.of(context).push(CupertinoPageRoute(
+                      builder: ((context) => WalletScreen())));
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final cartProvider = Provider.of<CartProvider>(context);
-    final cartItems = cartProvider.cartItems;
+    cartItems = cartProvider.cartItems;
+
+    totalSelectedProducts = 0;
+    totalAmount = 0.0;
+    for (var cartItem in cartItems) {
+      for (var product in cartItem.productDetailModel) {
+        if (product.isChecked == true) {
+          totalSelectedProducts++;
+          totalAmount += product.price;
+        }
+      }
+    }
 
     return cartItems.isEmpty
         ? Column(
@@ -49,56 +125,296 @@ class _BuyCartScreenState extends State<BuyCartScreen> {
               ),
             ],
           )
+        // : Column(
+        //     children: [
+        //       SizedBox(height: 20),
+        //       // tất cả sản phẩm
+        //       Expanded(
+        //         child: ListView(
+        //           children: [
+        //             Container(
+        //               padding: EdgeInsets.all(5),
+        //               decoration: BoxDecoration(
+        //                 color: Colors.white,
+        //                 borderRadius: BorderRadius.circular(kDefaultCircle14),
+        //               ),
+        //               child: Row(
+        //                 children: [
+        //                   Checkbox(
+
+        //                     value: _isSelectAllProducts,
+        //                     onChanged: (value) {
+        //                       cartProvider.toggleSelectAllProducts(value!);
+        //                       final allCartItemsSelected = cartItems
+        //                           .every((cartItem) => cartItem.isSelected);
+        //                       setState(() {
+        //                         _isSelectAllProducts = allCartItemsSelected;
+        //                       });
+
+        //                     },
+        //                   ),
+        //                   SizedBox(width: 10),
+        //                   Text(
+        //                     'Tất cả sản phẩm',
+        //                     style: TextStyles.h5.bold,
+        //                   ),
+        //                 ],
+        //               ),
+        //             ),
+        //             SizedBox(height: 20),
+
+        //             ListView.builder(
+        //               shrinkWrap: true,
+        //               physics: NeverScrollableScrollPhysics(),
+        //               itemCount: cartItems.length,
+        //               itemBuilder: (context, index) {
+        //                 final cartItem = cartItems[index];
+
+        //                 return Container(
+        //                   padding: EdgeInsets.all(5),
+        //                   margin: EdgeInsets.only(bottom: 20),
+        //                   decoration: BoxDecoration(
+        //                     color: Colors.white,
+        //                     borderRadius: BorderRadius.circular(kDefaultCircle14),
+        //                   ),
+        //                   child: Column(
+        //                     crossAxisAlignment: CrossAxisAlignment.start,
+        //                     children: [
+        //                       // ProductOwner
+
+        //                       Row(
+        //                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //                         children: [
+        //                           Row(
+        //                             children: [
+        //                               Checkbox(
+        //                                 value: cartItem.isSelected,
+        //                                 // value: productOwnerCheckStates[index],
+        //                                 onChanged: (value) {
+        //                                   cartProvider
+        //                                       .toggleProductOwnerSelection(
+        //                                           cartItem.productOwnerID);
+        //                                   final allCartItemsSelected =
+        //                                       cartItems.every((cartItem) =>
+        //                                           cartItem.isSelected);
+        //                                   setState(() {
+        //                                     _isSelectAllProducts =
+        //                                         allCartItemsSelected;
+        //                                   });
+        //                                 },
+        //                               ),
+        //                               SizedBox(width: 10),
+        //                               Text(
+        //                                 '${cartItem.productOwnerName}',
+        //                                 style: TextStyles.h5.bold,
+        //                               ),
+        //                             ],
+        //                           ),
+        //                           Icon(FontAwesomeIcons.angleRight)
+        //                         ],
+        //                       ),
+        //                       Divider(
+        //                         thickness: 0.5,
+        //                         color: ColorPalette.textHide,
+        //                       ),
+
+        //                       ListView.builder(
+        //                         shrinkWrap: true,
+        //                         physics: NeverScrollableScrollPhysics(),
+        //                         itemCount: cartItem.productDetailModel.length,
+        //                         itemBuilder: (context, subIndex) {
+        //                           final productDetail =
+        //                               cartItem.productDetailModel[subIndex];
+
+        //                           // Hiển thị thông tin sản phẩm ở đây
+        //                           return Container(
+        //                             margin: EdgeInsets.only(top: 10),
+        //                             height: 110,
+        //                             decoration: BoxDecoration(
+        //                               border: Border.all(
+        //                                   color: ColorPalette.textHide),
+        //                               borderRadius:
+        //                                   BorderRadius.circular(kDefaultCircle14),
+        //                             ),
+        //                             child: Row(
+        //                               mainAxisAlignment:
+        //                                   MainAxisAlignment.spaceBetween,
+        //                               children: [
+        //                                 Row(
+        //                                   children: [
+        //                                     Checkbox(
+        //                                       // materialTapTargetSize:
+        //                                       //     MaterialTapTargetSize.shrinkWrap,
+        //                                       activeColor:
+        //                                           ColorPalette.primaryColor,
+
+        //                                       value: productDetail.isSelected,
+        //                                       onChanged: (value) {
+        //                                         cartProvider
+        //                                             .toggleProductSelection(
+        //                                                 cartItem.productOwnerID,
+        //                                                 productDetail.productID);
+        //                                         final allProductsSelected =
+        //                                             cartItem.productDetailModel
+        //                                                 .every((productDetail) =>
+        //                                                     productDetail
+        //                                                         .isSelected);
+        //                                         setState(() {
+        //                                           cartItem.isSelected =
+        //                                               allProductsSelected;
+        //                                         });
+        //                                       },
+        //                                     ),
+        //                                     SizedBox(width: 10),
+        //                                     // productAvt
+        //                                     Container(
+        //                                       decoration: BoxDecoration(
+        //                                         borderRadius:
+        //                                             BorderRadius.circular(
+        //                                                 kDefaultCircle14),
+        //                                       ),
+        //                                       child: Image.network(
+        //                                         cacheHeight: 80,
+        //                                         cacheWidth: 80,
+        //                                         productDetail.productAvt!,
+        //                                       ),
+        //                                     ),
+        //                                     SizedBox(width: 10),
+        //                                     // productName, price
+        //                                     Padding(
+        //                                       padding: EdgeInsets.symmetric(
+        //                                           vertical: 20),
+        //                                       child: Column(
+        //                                         crossAxisAlignment:
+        //                                             CrossAxisAlignment.start,
+        //                                         mainAxisAlignment:
+        //                                             MainAxisAlignment
+        //                                                 .spaceBetween,
+        //                                         children: [
+        //                                           Text(
+        //                                             productDetail.productName,
+        //                                             style: TextStyles.h5.bold,
+        //                                           ),
+        //                                           Text(
+        //                                             '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(productDetail.price)}',
+        //                                             style: TextStyles
+        //                                                 .defaultStyle.bold,
+        //                                           ),
+        //                                         ],
+        //                                       ),
+        //                                     ),
+
+        //                                     SizedBox(width: 10),
+        //                                   ],
+        //                                 ),
+        //                                 // iconDelete
+        //                                 // Row(
+        //                                 //   children: [
+        //                                 //     Icon(FontAwesomeIcons.trashCan),
+        //                                 //     SizedBox(width: 10)
+        //                                 //   ],
+        //                                 // ),
+        //                                 Padding(
+        //                                   padding: const EdgeInsets.all(5.0),
+        //                                   child: Column(
+        //                                     // mainAxisAlignment: MainAxisAlignment.center,
+        //                                     children: [
+        //                                       Icon(FontAwesomeIcons.trashCan),
+        //                                     ],
+        //                                   ),
+        //                                 ),
+        //                               ],
+        //                             ),
+        //                           );
+        //                         },
+        //                       ),
+        //                     ],
+        //                   ),
+        //                 );
+        //               },
+        //             ),
+        //           ],
+        //         ),
+        //       ),
+
+        //       SizedBox(height: 20),
+        //       Container(
+        //         padding: EdgeInsets.all(10),
+        //         decoration: BoxDecoration(
+        //             borderRadius: BorderRadius.circular(kDefaultCircle14),
+        //             color: Colors.white),
+        //         child: Column(
+        //           children: [
+        //             Column(
+        //               children: [
+        //                 Row(
+        //                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //                   children: [
+        //                     Text('Tổng thanh toán'),
+        //                     Text('0  sản phẩm'),
+        //                   ],
+        //                 ),
+        //                 SizedBox(height: 15),
+        //                 Divider(
+        //                   color: ColorPalette.primaryColor,
+        //                 ),
+        //                 Row(
+        //                   children: [
+        //                     Text('aa'
+        //                         // '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(totalSelectedPrice)}',
+        //                         ),
+        //                   ],
+        //                 ),
+        //               ],
+        //             ),
+        //             SizedBox(height: 10),
+        //             ButtonWidget(
+        //               title: 'Đặt hàng',
+        //               size: 22,
+        //               height: 70,
+        //             ),
+        //           ],
+        //         ),
+        //       ),
+        //     ],
+        //   );
+
         : Column(
             children: [
               SizedBox(height: 20),
-              // tất cả sản phẩm
               Expanded(
                   child: ListView(
                 children: [
+                  // allProduct
                   Container(
                     padding: EdgeInsets.all(5),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(kDefaultCircle14),
                     ),
-                    child: Row(
-                      children: [
-                        Checkbox(
-                          value: isAllChecked,
-                          onChanged: (value) {
-                            setState(() {
-                              isAllChecked = value!;
-                            });
-                            for (int i = 0; i < cartItems.length; i++) {
-                              if (i < productOwnerCheckStates.length) {
-                                productOwnerCheckStates[i] = value!;
-                                // Thay đổi trạng thái của tất cả sản phẩm thuộc chủ sở hữu đó
-                                for (var productDetail
-                                    in cartItems[i].productDetailModel) {
-                                  productDetail.isChecked = value!;
-                                }
-                              }
-                            }
-                            // for (int i = 0; i < cartItems.length; i++) {
-                            //   if (i < productOwnerCheckStates.length) {
-                            //     productOwnerCheckStates[i] = value!;
-                            //   }
-                            // }
-                          },
-                        ),
-                        SizedBox(width: 10),
-                        Text(
-                          'Tất cả sản phẩm',
-                          style: TextStyles.h5.bold,
-                        ),
-                      ],
+                    child: CheckboxListTile(
+                      controlAffinity: ListTileControlAffinity.leading,
+                      title: Text(
+                        'Tất cả sản phẩm',
+                        style: TextStyles.h5.bold,
+                      ),
+                      value: cartItems.every((cartItem) =>
+                          cartItem.productDetailModel.every((product) =>
+                              product.isChecked != null && product.isChecked)),
+                      onChanged: (value) {
+                        cartItems.forEach((cartItem) {
+                          cartItem.productDetailModel.forEach((product) {
+                            product.isChecked = value!;
+                          });
+                        });
+                        cartProvider.notifyListeners();
+                      },
                     ),
                   ),
                   SizedBox(height: 20),
                   ListView.builder(
-                    shrinkWrap: true,
                     physics: NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
                     itemCount: cartItems.length,
                     itemBuilder: (context, index) {
                       final cartItem = cartItems[index];
@@ -110,59 +426,49 @@ class _BuyCartScreenState extends State<BuyCartScreen> {
                           borderRadius: BorderRadius.circular(kDefaultCircle14),
                         ),
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // ProductOwner
+                            //productOwner
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Row(
                                   children: [
                                     Checkbox(
-                                      value: productOwnerCheckStates[index],
+                                      value: cartItem.productDetailModel.every(
+                                          (product) =>
+                                              product.isChecked != null &&
+                                              product.isChecked),
                                       onChanged: (value) {
-                                        setState(() {
-                                          if (index <
-                                              productOwnerCheckStates.length) {
-                                            productOwnerCheckStates[index] =
-                                                value!;
-                                          }
+                                        cartItem.productDetailModel
+                                            .forEach((product) {
+                                          product.isChecked = value!;
                                         });
-                                        // Thay đổi trạng thái của tất cả sản phẩm thuộc chủ sở hữu đó
-                                        for (var productDetail
-                                            in cartItem.productDetailModel) {
-                                          productDetail.isChecked = value!;
-                                        }
+                                        cartProvider.notifyListeners();
                                       },
                                     ),
                                     SizedBox(width: 10),
                                     Text(
-                                      '${cartItem.productOwnerName}',
+                                      cartItem.productOwnerName,
                                       style: TextStyles.h5.bold,
                                     ),
                                   ],
                                 ),
-                                Icon(FontAwesomeIcons.angleRight)
+                                InkWell(
+                                  onTap: () {},
+                                  child: Icon(FontAwesomeIcons.angleRight),
+                                ),
                               ],
                             ),
                             Divider(
                               thickness: 0.5,
                               color: ColorPalette.textHide,
                             ),
-                            ListView.builder(
-                              shrinkWrap: true,
-                              physics: NeverScrollableScrollPhysics(),
-                              itemCount: cartItem.productDetailModel.length,
-                              itemBuilder: (context, subIndex) {
-                                final productDetail =
-                                    cartItem.productDetailModel[subIndex];
-                                // Hiển thị thông tin sản phẩm ở đây
+                            Column(
+                              children:
+                                  cartItem.productDetailModel.map((product) {
                                 return Container(
                                   margin: EdgeInsets.only(top: 10),
-                                  // padding: EdgeInsets.all(5),
                                   height: 110,
-                                  // margin: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                                  // padding: EdgeInsets.all(10),
                                   decoration: BoxDecoration(
                                     border: Border.all(
                                         color: ColorPalette.textHide),
@@ -173,43 +479,24 @@ class _BuyCartScreenState extends State<BuyCartScreen> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
+                                      //checkbox, info product
                                       Row(
                                         children: [
                                           Checkbox(
-                                            // materialTapTargetSize:
-                                            //     MaterialTapTargetSize.shrinkWrap,
-                                            activeColor:
-                                                ColorPalette.primaryColor,
-                                            value: productDetail.isChecked,
+                                            value: product.isChecked ?? false,
                                             onChanged: (value) {
-                                              setState(() {
-                                                productDetail.isChecked =
-                                                    value!;
-                                              });
-                                              // Kiểm tra xem tất cả các sản phẩm của chủ sở hữu đã được chọn hay chưa
-                                              if (cartItem.productDetailModel
-                                                  .every((detail) =>
-                                                      detail.isChecked)) {
-                                                productOwnerCheckStates[index] =
-                                                    true;
-                                              } else {
-                                                productOwnerCheckStates[index] =
-                                                    false;
-                                              }
+                                              product.isChecked = value!;
+                                              cartProvider.notifyListeners();
                                             },
                                           ),
-                                          SizedBox(width: 10),
-                                          // productAvt
-                                          Container(
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(
-                                                      kDefaultCircle14),
-                                            ),
+                                          ClipRRect(
+                                            borderRadius: BorderRadius.circular(
+                                                kDefaultCircle14),
                                             child: Image.network(
                                               cacheHeight: 80,
                                               cacheWidth: 80,
-                                              productDetail.productAvt!,
+                                              product.productAvt!,
+                                              fit: BoxFit.cover,
                                             ),
                                           ),
                                           SizedBox(width: 10),
@@ -224,42 +511,36 @@ class _BuyCartScreenState extends State<BuyCartScreen> {
                                                   MainAxisAlignment
                                                       .spaceBetween,
                                               children: [
-                                                Text(
-                                                  productDetail.productName,
-                                                  style: TextStyles.h5.bold,
+                                                Container(
+                                                  width: 180,
+                                                  child: AutoSizeText(
+                                                    product.productName,
+                                                    style: TextStyles.h5.bold,
+                                                    maxLines: 2,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
                                                 ),
                                                 Text(
-                                                  '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(productDetail.price)}',
+                                                  '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(product.price)}',
                                                   style: TextStyles
                                                       .defaultStyle.bold,
                                                 ),
                                               ],
                                             ),
                                           ),
-
-                                          SizedBox(width: 10),
+                                          // SizedBox(width: 10),
                                         ],
                                       ),
-                                      // iconDelete
-                                      // Row(
-                                      //   children: [
-                                      //     Icon(FontAwesomeIcons.trashCan),
-                                      //     SizedBox(width: 10)
-                                      //   ],
-                                      // ),
                                       Padding(
-                                        padding: const EdgeInsets.all(5.0),
-                                        child: Column(
-                                          // mainAxisAlignment: MainAxisAlignment.center,
-                                          children: [
-                                            Icon(FontAwesomeIcons.trashCan),
-                                          ],
-                                        ),
+                                        padding:
+                                            const EdgeInsets.only(right: 10),
+                                        child: Icon(FontAwesomeIcons.trashCan),
                                       ),
                                     ],
                                   ),
                                 );
-                              },
+                              }).toList(),
                             ),
                           ],
                         ),
@@ -268,7 +549,6 @@ class _BuyCartScreenState extends State<BuyCartScreen> {
                   ),
                 ],
               )),
-
               SizedBox(height: 20),
               Container(
                 padding: EdgeInsets.all(10),
@@ -282,8 +562,14 @@ class _BuyCartScreenState extends State<BuyCartScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text('Tổng thanh toán'),
-                            Text('0 sản phẩm'),
+                            Text(
+                              'Tổng thanh toán',
+                              style: TextStyles.h5.bold,
+                            ),
+                            Text(
+                              '$totalSelectedProducts sản phẩm',
+                              style: TextStyles.h5.bold,
+                            ),
                           ],
                         ),
                         SizedBox(height: 15),
@@ -292,7 +578,11 @@ class _BuyCartScreenState extends State<BuyCartScreen> {
                         ),
                         Row(
                           children: [
-                            Text('\$50.00'),
+                            // tổng số tiền của các product mà Customer chọn
+                            Text(
+                              '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(totalAmount)}',
+                              style: TextStyles.h5.bold.setColor(Colors.red),
+                            ),
                           ],
                         ),
                       ],
@@ -302,11 +592,110 @@ class _BuyCartScreenState extends State<BuyCartScreen> {
                       title: 'Đặt hàng',
                       size: 22,
                       height: 70,
+                      onTap: () {
+                        if (totalSelectedProducts > 0) {
+                          placeOrder();
+                        } else {
+                          showCustomDialog(
+                              context, "Lỗi", "Làm ơn hãy chọn sản phẩm!");
+                        }
+                      },
                     ),
                   ],
                 ),
               ),
             ],
           );
+    // : Column(
+    //     children: [
+    //       SizedBox(height: 20),
+    //       Container(
+    //         padding: EdgeInsets.all(5),
+    //         decoration: BoxDecoration(
+    //           color: Colors.white,
+    //           borderRadius: BorderRadius.circular(kDefaultCircle14),
+    //         ),
+    //         child: CheckboxListTile(
+    //           controlAffinity: ListTileControlAffinity.leading,
+    //           title: Text(
+    //             'Tất cả sản phẩm',
+    //             style: TextStyles.h5.bold,
+    //           ),
+    //           value: cartItems.every((cartItem) =>
+    //               cartItem.productDetailModel.every((product) =>
+    //                   product.isChecked != null && product.isChecked!)),
+    //           onChanged: (value) {
+    //             cartItems.forEach((cartItem) {
+    //               cartItem.productDetailModel.forEach((product) {
+    //                 product.isChecked = value;
+    //               });
+    //             });
+    //             cartProvider.notifyListeners();
+    //           },
+    //         ),
+    //       ),
+    //       SizedBox(height: 20),
+    //       Expanded(
+    //         child: ListView.builder(
+    //             shrinkWrap: true,
+    //             itemCount: cartItems.length,
+    //             itemBuilder: (context, index) {
+    //               final cartItem = cartItems[index];
+    //               return Container(
+    //                 padding: EdgeInsets.all(5),
+    //                 margin: EdgeInsets.only(bottom: 20),
+    //                 decoration: BoxDecoration(
+    //                   color: Colors.white,
+    //                   borderRadius: BorderRadius.circular(kDefaultCircle14),
+    //                 ),
+    //                 child: Column(
+    //                   children: [
+    //                     CheckboxListTile(
+    //                       controlAffinity: ListTileControlAffinity.leading,
+    //                       title: Text(
+    //                         cartItem.productOwnerName,
+    //                         style: TextStyles.h5.bold,
+    //                       ),
+    //                       value: cartItem.productDetailModel.every(
+    //                           (product) =>
+    //                               product.isChecked != null &&
+    //                               product.isChecked!),
+    //                       onChanged: (value) {
+    //                         cartItem.productDetailModel.forEach((product) {
+    //                           product.isChecked = value;
+    //                         });
+    //                         cartProvider.notifyListeners();
+    //                       },
+    //                     ),
+    //                     Column(
+    //                       children:
+    //                           cartItem.productDetailModel.map((product) {
+    //                         return ListTile(
+    //                           title: Row(
+    //                             children: [
+    //                               Checkbox(
+    //                                 value: product.isChecked ?? false,
+    //                                 onChanged: (value) {
+    //                                   product.isChecked = value;
+    //                                   cartProvider.notifyListeners();
+    //                                 },
+    //                               ),
+    //                               Text(
+    //                                 product.productName,
+    //                                 style: TextStyles.h5.bold,
+    //                               ),
+    //                               // Hiển thị thông tin sản phẩm ở đây
+    //                             ],
+    //                           ),
+    //                         );
+    //                       }).toList(),
+    //                     ),
+    //                   ],
+    //                 ),
+    //               );
+    //             }),
+    //       )
+    //     ],
+    //   );
   }
 }

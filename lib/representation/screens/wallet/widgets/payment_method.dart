@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:frs_mobile/core/constants/textstyle_constants.dart';
 import 'package:frs_mobile/representation/widgets/button_widget.dart';
 import 'package:frs_mobile/utils/asset_helper.dart';
@@ -69,17 +68,19 @@ class PaymentMethod {
                 ],
               ),
               actions: <Widget>[
-                ButtonWidget(
-                  title: "Hủy",
-                  size: 18,
-                  height: 40,
-                  width: 120,
-                  onTap: () {
+                TextButton(
+                  onPressed: () {
                     setState(() {
                       selectedPaymentMethod = "Chọn phương thức thanh toán";
                     });
                     Navigator.of(context).pop();
                   },
+                  child: Text(
+                    'Hủy',
+                    style: TextStyles.defaultStyle.bold
+                        .setColor(Colors.red)
+                        .setTextSize(18),
+                  ),
                 ),
                 ButtonWidget(
                   title: "Xác nhận",
@@ -96,18 +97,6 @@ class PaymentMethod {
                     }
                   },
                 ),
-                // TextButton(
-                //   onPressed: () {
-                //     if (selectedPaymentMethod !=
-                //             "Chọn phương thức thanh toán" &&
-                //         isPaymentConfirmed) {
-                //       Navigator.of(context).push(CupertinoPageRoute(
-                //         builder: (context) => ConfirmMethodPayment(),
-                //       ));
-                //     }
-                //   },
-                //   child: Text("Xác nhận"),
-                // ),
               ],
               shape: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(kDefaultCircle14),

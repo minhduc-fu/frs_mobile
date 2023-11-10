@@ -1,4 +1,5 @@
 import 'dart:convert'; // để encode và decode JSON
+import 'package:frs_mobile/models/address_model.dart';
 import 'package:frs_mobile/models/product_image_model.dart';
 import 'package:frs_mobile/models/wallet_model.dart';
 import 'package:http/http.dart' as http;
@@ -296,6 +297,106 @@ class AuthenticationService {
       print('Response: ${response.body}');
     } else {
       print('Failed to call GET API');
+    }
+  }
+
+  static Future<Map<String, dynamic>?> createNewAddress(
+    String addressDescription,
+    int customerID,
+  ) async {
+    final url = Uri.parse('http://fashionrental.online:8080/address');
+    final Map<String, dynamic> requestData = {
+      'addressDescription': addressDescription,
+      'customerID': customerID,
+    };
+    final response = await http.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode(requestData),
+    );
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      return null;
+    }
+  }
+
+  static Future<List<AddressModel>?> getAllAddressByCustomerID(
+      int customerID) async {
+    final url =
+        Uri.parse('http://fashionrental.online:8080/address/$customerID');
+    try {
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        final List<dynamic> data = json.decode(response.body);
+        final List<AddressModel> addresses = data
+            .map((json) => AddressModel.fromJson(json as Map<String, dynamic>))
+            .toList();
+        return addresses;
+      } else if (response.statusCode == 204) {
+        // Return an empty list when there are no addresses.
+        return [];
+      } else {
+        throw Exception('Tải địa chỉ lên thất bại.');
+      }
+    } catch (e) {
+      throw Exception('Lỗi: $e');
+    }
+  }
+
+  static Future<Map<String, dynamic>?> deleteAddress(int addressID) async {
+    final url = Uri.parse(
+        'http://fashionrental.online:8080/address?addressID=$addressID');
+    final response = await http.delete(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      return null;
+    }
+  }
+
+  static Future<List<dynamic>?> createOrderBuyAndOrderBuyDetail(
+      List<Map<String, dynamic>> orderData) async {
+    final url = Uri.parse('http://fashionrental.online:8080/orderbuy');
+
+    final response = await http.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode(orderData),
+    );
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      return null;
+    }
+  }
+
+  static Future<List<dynamic>?> getAllTransactionByAccountID(
+      int accountID) async {
+    final url = Uri.parse('http://fashionrental.online:8080/trans/$accountID');
+
+    try {
+      final response = await http.get(url);
+
+      if (response.statusCode == 200) {
+        return json.decode(response.body);
+      } else {
+        throw Exception('Lấy danh sách giao dịch thất bại.');
+      }
+    } catch (e) {
+      throw Exception('Lỗi: $e');
     }
   }
 }

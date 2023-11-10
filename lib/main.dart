@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:frs_mobile/services/address_provider.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'core/constants/color_constants.dart';
@@ -40,6 +41,9 @@ void main() async {
         ), // tạo một phiên bản mới của AuthProvider
         ChangeNotifierProvider<CartProvider>(
           create: (context) => CartProvider(),
+        ),
+        ChangeNotifierProvider<AddressProvider>(
+          create: (context) => AddressProvider(),
         ),
       ],
       child:

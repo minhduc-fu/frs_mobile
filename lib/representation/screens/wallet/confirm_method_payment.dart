@@ -19,19 +19,6 @@ class ConfirmMethodPayment extends StatefulWidget {
 class _ConfirmMethodPaymentState extends State<ConfirmMethodPayment> {
   TextEditingController _moneyToDeposit = TextEditingController();
   late AuthProvider authProvider;
-  // TextEditingController _transferInformation = TextEditingController();
-
-  // Future<String?> submit(int amount) async {
-  //   final orderInfo = 'Nap $amount vnd';
-  //   try {
-  //     final response =
-  //         await AuthenticationService.submitOrder(amount, orderInfo);
-  //     return response;
-  //   } catch (e) {
-  //     print('Error: $e');
-  //     return null;
-  //   }
-  // }
 
   void confirmPayment() async {
     final accountID = AuthProvider.userModel!.accountID;
@@ -43,12 +30,6 @@ class _ConfirmMethodPaymentState extends State<ConfirmMethodPayment> {
       if (response != null) {
         Navigator.of(context).push(CupertinoPageRoute(
             builder: ((context) => WebView(response: response))));
-        // try {
-
-        //   final uri = Uri.parse(response);
-        //   await launchUrl(uri, mode: LaunchMode.inAppWebView);
-        //   // await AuthenticationService.callGetMapping();
-        // } catch (e) {}
       }
     }
   }
@@ -84,15 +65,6 @@ class _ConfirmMethodPaymentState extends State<ConfirmMethodPayment> {
                       hintText: 'Số tiền cần nạp',
                       obscureText: false),
                   SizedBox(height: 20),
-                  // Text(
-                  //   'Thông tin chuyển khoản',
-                  //   style: TextStyles.h5.bold,
-                  // ),
-                  // SizedBox(height: 10),
-                  // MyTextField(
-                  //     controller: _transferInformation,
-                  //     hintText: 'Thông tin chuyển khoản',
-                  //     obscureText: false),
                 ],
               ),
             ),

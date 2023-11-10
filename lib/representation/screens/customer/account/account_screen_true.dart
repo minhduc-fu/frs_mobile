@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:frs_mobile/core/constants/dismension_constants.dart';
+import 'package:frs_mobile/representation/screens/customer/account/address/address_screen.dart';
 import 'package:frs_mobile/representation/screens/wallet/wallet_screen.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
@@ -30,7 +31,8 @@ class _AccountScreenTrueState extends State<AccountScreenTrue> {
     'Quản lý đơn hàng',
     'Thông tin cá nhân',
     'Ví của bạn',
-    'Thay đổi mật khẩu',
+    'Địa chỉ',
+    'Đổi mật khẩu',
     'Đăng xuất',
   ];
   final List _tienIch = [
@@ -42,6 +44,7 @@ class _AccountScreenTrueState extends State<AccountScreenTrue> {
     FontAwesomeIcons.solidFileLines,
     FontAwesomeIcons.solidUser,
     FontAwesomeIcons.wallet,
+    FontAwesomeIcons.locationDot,
     FontAwesomeIcons.key,
     FontAwesomeIcons.rightToBracket,
   ];
@@ -173,20 +176,23 @@ class _AccountScreenTrueState extends State<AccountScreenTrue> {
                           if (index == 0) {
                             Navigator.of(context)
                                 .pushNamed(MainOrderHistoryScreen.routeName);
-                          } else if (index == 2) {
-                            Navigator.of(context)
-                                .pushNamed(WalletScreen.routeName);
-                          } else if (index == 4) {
-                            _handleLogout(context);
                           } else if (index == 1) {
                             Navigator.of(context)
                                 .pushNamed(CustomerProfileScreen.routeName);
+                          } else if (index == 2) {
+                            Navigator.of(context)
+                                .pushNamed(WalletScreen.routeName);
+                          } else if (index == 3) {
+                            Navigator.of(context)
+                                .pushNamed(AddressScreen.routeName);
+                          } else if (index == 5) {
+                            _handleLogout(context);
                           }
                         },
                         icons: _iconData[index],
                         title: _title[index],
                         trailing:
-                            index == 4 ? null : FontAwesomeIcons.angleRight,
+                            index == 5 ? null : FontAwesomeIcons.angleRight,
                       );
                     },
                   ),

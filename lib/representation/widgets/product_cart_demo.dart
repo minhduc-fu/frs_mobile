@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
@@ -81,8 +82,14 @@ class ProductCardDemo extends StatelessWidget {
 
                   //Price
                   if (isForSale || isForSaleAndRent)
-                    Text(
-                      'Mua: ${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(product.price)}',
+                    AutoSizeText.rich(
+                      TextSpan(children: [
+                        TextSpan(
+                            text: 'Mua: ', style: TextStyles.defaultStyle.bold),
+                        TextSpan(
+                            text:
+                                '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(product.price)}'),
+                      ]),
                     )
                   // Row(
                   //   children: [

@@ -28,4 +28,5 @@ class AssetHelper {
   static const String imageVector = 'assets/images/profile.png';
   // static const String imageVnpay = 'assets/images/vnpay.png';
   static const String imageVnpay = 'assets/images/logo_vnpay.png';
+  static const String imageCoupon = 'assets/images/coupon.png';
 }
