@@ -6,7 +6,7 @@ class CartItemModel {
   List<ProductDetailModel> productDetailModel;
   bool isChecked;
   int productOwnerProvinceID;
-  int serviceFee = 0;
+  int serviceFee;
 
   CartItemModel({
     required this.productOwnerID,
@@ -14,7 +14,11 @@ class CartItemModel {
     required this.productDetailModel,
     this.isChecked = false,
     this.productOwnerProvinceID = 0,
+    this.serviceFee = 0,
   });
+  void removeCheckedProducts() {
+    productDetailModel.removeWhere((product) => product.isChecked == true);
+  }
 
   int get selectedProductCount {
     return productDetailModel.where((product) => product.isChecked).length;
