@@ -640,7 +640,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                   if (dateSelected != null) {
                                   } else {
                                     showCustomDialog(context, 'Error',
-                                        'Làm ơn chọn ngày thuê!');
+                                        'Làm ơn chọn ngày thuê!', true);
                                   }
                                 },
                                 height: 70,

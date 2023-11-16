@@ -108,9 +108,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void signInClicked() async {
     if (emailController.text.isEmpty) {
-      showCustomDialog(context, 'Lỗi', 'Bạn chưa nhập "Email".');
+      showCustomDialog(context, 'Lỗi', 'Bạn chưa nhập "Email".', true);
     } else if (passwordController.text.isEmpty) {
-      showCustomDialog(context, 'Lỗi', 'Bạn chưa nhập "Password".');
+      showCustomDialog(context, 'Lỗi', 'Bạn chưa nhập "Password".', true);
     } else {
       showDialog(
         context: context,
@@ -139,10 +139,11 @@ class _LoginScreenState extends State<LoginScreen> {
             Navigator.of(context).pushNamed(ProductOwnerMainScreen.routeName);
           }
         } else {
-          showCustomDialog(context, 'Lỗi', 'Xin lỗi! Đăng nhập thất bại.');
+          showCustomDialog(
+              context, 'Lỗi', 'Xin lỗi! Đăng nhập thất bại.', true);
         }
       } catch (e) {
-        showCustomDialog(context, 'Lỗi', e.toString());
+        showCustomDialog(context, 'Lỗi', e.toString(), true);
       }
     }
   }

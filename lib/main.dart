@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:frs_mobile/services/address_provider.dart';
+import 'package:frs_mobile/services/rental_cart_provider.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'core/constants/color_constants.dart';
@@ -44,6 +45,9 @@ void main() async {
         ),
         ChangeNotifierProvider<AddressProvider>(
           create: (context) => AddressProvider(),
+        ),
+        ChangeNotifierProvider<RentalCartProvider>(
+          create: (context) => RentalCartProvider(),
         ),
       ],
       child:

@@ -1,6 +1,8 @@
 import 'dart:convert'; // để encode và decode JSON
 import 'package:frs_mobile/models/address_model.dart';
+import 'package:frs_mobile/models/category.dart';
 import 'package:frs_mobile/models/product_image_model.dart';
+import 'package:frs_mobile/models/voucher_model.dart';
 import 'package:frs_mobile/models/wallet_model.dart';
 import 'package:http/http.dart' as http;
 
@@ -140,6 +142,99 @@ class AuthenticationService {
     }
   }
 
+  static Future<List<ProductModel>?> getAllProductByCategoryName(
+      String categoryName) async {
+    final url = Uri.parse(
+        'http://fashionrental.online:8080/product/getallbycategory/$categoryName');
+    try {
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        List<dynamic> data = json.decode(response.body);
+        List<ProductModel> products =
+            data.map((json) => ProductModel.fromJson(json)).toList();
+
+        return products;
+      } else {
+        throw Exception('Failed to load product by categoryName');
+      }
+    } catch (e) {
+      throw Exception('Error: $e');
+    }
+  }
+
+  static Future<List<ProductModel>?> getAllProductOnAvailable() async {
+    final url =
+        Uri.parse('http://fashionrental.online:8080/product/onavailable');
+    try {
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        List<dynamic> data = json.decode(response.body);
+        List<ProductModel> products =
+            data.map((json) => ProductModel.fromJson(json)).toList();
+
+        return products;
+      } else {
+        throw Exception('Failed to load product Available');
+      }
+    } catch (e) {
+      throw Exception('Error: $e');
+    }
+  }
+
+  static Future<List<ProductModel>?> getAllProductOnRent() async {
+    final url = Uri.parse('http://fashionrental.online:8080/product/onrent');
+    try {
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        List<dynamic> data = json.decode(response.body);
+        List<ProductModel> products =
+            data.map((json) => ProductModel.fromJson(json)).toList();
+
+        return products;
+      } else {
+        throw Exception('Failed to load product Rent');
+      }
+    } catch (e) {
+      throw Exception('Error: $e');
+    }
+  }
+
+  static Future<List<ProductModel>?> getAllProductOnSale() async {
+    final url = Uri.parse('http://fashionrental.online:8080/product/onsale');
+    try {
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        List<dynamic> data = json.decode(response.body);
+        List<ProductModel> products =
+            data.map((json) => ProductModel.fromJson(json)).toList();
+
+        return products;
+      } else {
+        throw Exception('Failed to load product Rent');
+      }
+    } catch (e) {
+      throw Exception('Error: $e');
+    }
+  }
+
+  static Future<List<ProductModel>?> getAllProductOnSoldOut() async {
+    final url = Uri.parse('http://fashionrental.online:8080/product/onsoldout');
+    try {
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        List<dynamic> data = json.decode(response.body);
+        List<ProductModel> products =
+            data.map((json) => ProductModel.fromJson(json)).toList();
+
+        return products;
+      } else {
+        throw Exception('Failed to load product Rent');
+      }
+    } catch (e) {
+      throw Exception('Error: $e');
+    }
+  }
+
   static Future<List<ProductModel>?> getAllProduct() async {
     final url = Uri.parse('http://fashionrental.online:8080/product/getall');
     try {
@@ -151,6 +246,23 @@ class AuthenticationService {
         return products;
       } else {
         throw Exception('Failed to load products');
+      }
+    } catch (e) {
+      throw Exception('Error: $e');
+    }
+  }
+
+  static Future<List<CategoryModel>?> getAllCategory() async {
+    final url = Uri.parse('http://fashionrental.online:8080/category/getall');
+    try {
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        List<dynamic> data = json.decode(response.body);
+        List<CategoryModel> categories =
+            data.map((json) => CategoryModel.fromJson(json)).toList();
+        return categories;
+      } else {
+        throw Exception('Failed to load category');
       }
     } catch (e) {
       throw Exception('Error: $e');
@@ -383,6 +495,25 @@ class AuthenticationService {
     }
   }
 
+  static Future<List<dynamic>?> createOrderRentAndOrderRentDetail(
+      List<Map<String, dynamic>> orderData) async {
+    final url = Uri.parse('http://fashionrental.online:8080/orderrent');
+
+    final response = await http.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode(orderData),
+    );
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      return null;
+    }
+  }
+
   static Future<List<dynamic>?> getAllTransactionByAccountID(
       int accountID) async {
     final url = Uri.parse('http://fashionrental.online:8080/trans/$accountID');
@@ -397,6 +528,24 @@ class AuthenticationService {
       }
     } catch (e) {
       throw Exception('Lỗi: $e');
+    }
+  }
+
+  static Future<List<VoucherModel>> getVoucherByProductOwnerID(
+      int productOwnerID) async {
+    final response = await http.get(
+      Uri.parse('http://fashionrental.online:8080/voucher/$productOwnerID'),
+    );
+
+    if (response.statusCode == 200) {
+      final List<dynamic> data = json.decode(response.body);
+      if (data.isEmpty) {
+        return [];
+      } else {
+        return data.map((json) => VoucherModel.fromJson(json)).toList();
+      }
+    } else {
+      throw Exception('Failed to load vouchers');
     }
   }
 }

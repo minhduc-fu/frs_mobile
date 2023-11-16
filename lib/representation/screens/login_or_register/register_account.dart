@@ -29,18 +29,23 @@ class _RegisterAccountState extends State<RegisterAccount> {
   int? accountID;
   Future<void> createAccount() async {
     if (emailController.text.isEmpty) {
-      showCustomDialog(context, 'Lỗi', 'Bạn chưa điền "Email".');
+      showCustomDialog(context, 'Lỗi', 'Bạn chưa điền "Email".', true);
     } else if (!emailController.text.endsWith('@gmail.com')) {
-      showCustomDialog(context, 'Lỗi',
-          'Emal không hợp lệ. Vui lòng sử dụng email có định dạng "@gmail.com"');
+      showCustomDialog(
+          context,
+          'Lỗi',
+          'Emal không hợp lệ. Vui lòng sử dụng email có định dạng "@gmail.com"',
+          true);
     } else if (passwordController.text.isEmpty) {
-      showCustomDialog(context, 'Lỗi', 'Bạn chưa điền "Mật khẩu".');
+      showCustomDialog(context, 'Lỗi', 'Bạn chưa điền "Mật khẩu".', true);
     } else if (confirmPasswordController.text.isEmpty) {
-      showCustomDialog(context, 'Lỗi', 'Bạn chưa điền "Xác nhận mật khẩu".');
+      showCustomDialog(
+          context, 'Lỗi', 'Bạn chưa điền "Xác nhận mật khẩu".', true);
     } else if (selectedRole == 'Chọn vai trò') {
-      showCustomDialog(context, 'Lỗi', 'Bạn chưa chọn "Vai trò".');
+      showCustomDialog(context, 'Lỗi', 'Bạn chưa chọn "Vai trò".', true);
     } else if (passwordController.text != confirmPasswordController.text) {
-      showCustomDialog(context, 'Lỗi', 'Xác nhận mật khẩu không trùng khớp.');
+      showCustomDialog(
+          context, 'Lỗi', 'Xác nhận mật khẩu không trùng khớp.', true);
     } else {
       showDialog(
         context: context,
@@ -64,10 +69,10 @@ class _RegisterAccountState extends State<RegisterAccount> {
           if (response['status'] == 'Lỗi' &&
               response['message'] == 'Created Fail By Email Already Existed') {
             showCustomDialog(context, 'Lỗi',
-                'Email này đã tồn tại. Vui lòng sử dụng một email khác.');
+                'Email này đã tồn tại. Vui lòng sử dụng một email khác.', true);
           } else {
-            showCustomDialog(
-                context, 'Thành công', 'Bạn đã đăng ký tài khoản thành công.');
+            showCustomDialog(context, 'Thành công',
+                'Bạn đã đăng ký tài khoản thành công.', true);
             print(accountID);
             final walletResponse =
                 await AuthenticationService.createWallet(accountID!, 0);
@@ -78,11 +83,11 @@ class _RegisterAccountState extends State<RegisterAccount> {
             }
           }
         } else {
-          showCustomDialog(
-              context, 'Lỗi', 'Xin lỗi! Đăng ký tài khoản không thành công');
+          showCustomDialog(context, 'Lỗi',
+              'Xin lỗi! Đăng ký tài khoản không thành công', true);
         }
       } catch (e) {
-        showCustomDialog(context, 'Error', e.toString());
+        showCustomDialog(context, 'Error', e.toString(), true);
       }
     }
   }

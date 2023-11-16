@@ -263,15 +263,32 @@ class _BuyCartScreenState extends State<BuyCartScreen> {
                                                   child: AutoSizeText(
                                                     product.productName,
                                                     style: TextStyles.h5.bold,
-                                                    maxLines: 2,
+                                                    minFontSize: 16,
+                                                    maxLines: 1,
                                                     overflow:
                                                         TextOverflow.ellipsis,
                                                   ),
                                                 ),
-                                                Text(
-                                                  '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(product.price)}',
-                                                  style: TextStyles
-                                                      .defaultStyle.bold,
+                                                AutoSizeText.rich(
+                                                  minFontSize: 14,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  maxLines: 1,
+                                                  TextSpan(
+                                                    children: [
+                                                      TextSpan(
+                                                        text: 'Mua: ',
+                                                      ),
+                                                      TextSpan(
+                                                        text:
+                                                            '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(product.price)}',
+                                                        style: TextStyles
+                                                            .defaultStyle.bold
+                                                            .setColor(
+                                                                Colors.red),
+                                                      )
+                                                    ],
+                                                  ),
                                                 ),
                                               ],
                                             ),
@@ -343,8 +360,8 @@ class _BuyCartScreenState extends State<BuyCartScreen> {
                         if (totalSelectedProducts > 0) {
                           placeOrder();
                         } else {
-                          showCustomDialog(
-                              context, "Lỗi", "Làm ơn hãy chọn sản phẩm!");
+                          showCustomDialog(context, "Lỗi",
+                              "Làm ơn hãy chọn sản phẩm!", true);
                         }
                       },
                     ),

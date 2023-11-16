@@ -10,13 +10,6 @@ class CartProvider with ChangeNotifier {
     super.notifyListeners();
   }
 
-  int calculateTotalServiceFee() {
-    return _cartItems
-        .where((cartItem) =>
-            cartItem.productDetailModel.any((product) => product.isChecked))
-        .fold<int>(0, (total, cartItem) => cartItem.serviceFee);
-  }
-
   void removeFromCartAndCheckOut() {
     // Lọc và xóa sản phẩm có isChecked == true
     _cartItems.forEach((cartItem) {

@@ -10,8 +10,8 @@ import 'package:frs_mobile/representation/widgets/button_widget.dart';
 import 'package:frs_mobile/services/address_provider.dart';
 import 'package:frs_mobile/services/authentication_service.dart';
 import 'package:frs_mobile/services/authprovider.dart';
-import 'package:frs_mobile/services/cart_provider.dart';
 import 'package:frs_mobile/services/ghn_api_service.dart';
+import 'package:frs_mobile/services/rental_cart_provider.dart';
 import 'package:frs_mobile/utils/asset_helper.dart';
 import 'package:frs_mobile/utils/dialog_helper.dart';
 import 'package:frs_mobile/utils/image_helper.dart';
@@ -20,14 +20,14 @@ import 'package:provider/provider.dart';
 import '../../../core/constants/textstyle_constants.dart';
 import 'selectAdress.dart';
 
-class CheckoutForBuy extends StatefulWidget {
-  const CheckoutForBuy({super.key});
+class CheckoutForRent extends StatefulWidget {
+  const CheckoutForRent({super.key});
 
   @override
-  State<CheckoutForBuy> createState() => _CheckoutForBuyState();
+  State<CheckoutForRent> createState() => _CheckoutForRentState();
 }
 
-class _CheckoutForBuyState extends State<CheckoutForBuy> {
+class _CheckoutForRentState extends State<CheckoutForRent> {
   late AddressProvider _addressProvider;
   int customerID = AuthProvider.userModel!.customer!.customerID;
   VoucherModel? selectedVoucher;
@@ -140,110 +140,91 @@ class _CheckoutForBuyState extends State<CheckoutForBuy> {
   void _openSelectVoucherScreen(int productOwnerID) async {
     final vouchers =
         await AuthenticationService.getVoucherByProductOwnerID(productOwnerID);
-    bool isVoucherAvailable(VoucherModel voucher) {
-      DateTime currentDate = DateTime.now();
-      DateTime startDate = voucher.startDate;
-
-      // Nếu ngày hiện tại lớn hơn hoặc bằng ngày bắt đầu, voucher có thể sử dụng
-      return currentDate.isAfter(startDate) ||
-          currentDate.isAtSameMomentAs(startDate);
-    }
-
     final buyVouchers =
-        vouchers.where((voucher) => voucher.voucherTypeID == 1).toList();
+        vouchers.where((voucher) => voucher.voucherTypeID == 2).toList();
     if (buyVouchers.isNotEmpty) {
       showModalBottomSheet(
-        isScrollControlled: true, // Đặt thành true để bottom sheet có thể cuộn
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(kDefaultCircle14)),
         backgroundColor: ColorPalette.backgroundScaffoldColor,
         context: context,
         builder: (BuildContext context) {
-          return Container(
-            height: 350,
-            child: StatefulBuilder(
-              builder: (context, setState) {
-                return Column(
-                  children: [
+          return StatefulBuilder(
+            builder: (context, setState) {
+              return Column(
+                children: [
+                  for (var voucher in buyVouchers)
                     Expanded(
-                      child: ListView.builder(
-                          itemCount: buyVouchers.length,
-                          shrinkWrap: true,
-                          itemBuilder: (BuildContext context, int index) {
-                            var voucher = buyVouchers[index];
-                            return Padding(
-                              padding: const EdgeInsets.all(20.0),
-                              child: Container(
-                                padding: EdgeInsets.all(5),
-                                decoration: BoxDecoration(
-                                  color: isVoucherAvailable(voucher) == true
-                                      ? Colors.white
-                                      : ColorPalette.backgroundScaffoldColor,
-                                  borderRadius:
-                                      BorderRadius.circular(kDefaultCircle14),
-                                ),
-                                child: Row(
-                                  children: [
-                                    Radio<VoucherModel>(
-                                      materialTapTargetSize:
-                                          MaterialTapTargetSize.shrinkWrap,
-                                      toggleable: true,
-                                      value: voucher,
-                                      groupValue: selectedVoucher,
-                                      onChanged: (value) {
-                                        if (isVoucherAvailable(voucher))
-                                          setState(() {
-                                            selectedVoucher = value;
-                                          });
-                                      },
-                                    ),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'Giảm ${voucher.discountAmount}%',
-                                          style: TextStyles.h5.bold,
-                                        ),
-                                        Text(
-                                          'Giảm tối đa ${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(voucher.maxDiscount)}',
-                                        ),
-                                        Text(
-                                          'HSD: ${DateFormat('dd/MM/yyyy').format(voucher.startDate)} - ${DateFormat('dd/MM/yyyy').format(voucher.endDate)}',
-                                        )
-                                      ],
-                                    )
-                                  ],
-                                ),
+                      child: ListView(
+                        shrinkWrap: true,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: Container(
+                              padding: EdgeInsets.all(5),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius:
+                                    BorderRadius.circular(kDefaultCircle14),
                               ),
-                            );
-                          }),
-                    ),
-                    // SizedBox(height: 20),
-                    GestureDetector(
-                      onTap: () {
-                        if (selectedVoucher != null) {
-                          Navigator.pop(context);
-                        } else {
-                          Navigator.pop(context);
-                        }
-                      },
-                      child: Container(
-                        color: ColorPalette.primaryColor,
-                        height: 70,
-                        child: Center(
-                          child: Text(
-                            'Đồng ý',
-                            style: TextStyles.defaultStyle.bold.whiteTextColor
-                                .setTextSize(18),
+                              child: Row(
+                                children: [
+                                  Radio<VoucherModel>(
+                                    value: voucher,
+                                    groupValue: selectedVoucher,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        selectedVoucher = value;
+                                      });
+                                    },
+                                  ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Giảm ${voucher.discountAmount}%',
+                                        style: TextStyles.h5.bold,
+                                      ),
+                                      Text(
+                                        'Giảm tối đa ${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(voucher.maxDiscount)}',
+                                      ),
+                                      Text(
+                                        'HSD: ${DateFormat('dd/MM/yyyy').format(voucher.startDate)} - ${DateFormat('dd/MM/yyyy').format(voucher.endDate)}',
+                                      )
+                                    ],
+                                  )
+                                ],
+                              ),
+                            ),
                           ),
+                        ],
+                      ),
+                    ),
+                  SizedBox(height: 20),
+                  GestureDetector(
+                    onTap: () {
+                      if (selectedVoucher != null) {
+                        Navigator.pop(context);
+                      } else {
+                        Navigator.pop(context);
+                      }
+                    },
+                    child: Container(
+                      color: ColorPalette.primaryColor,
+                      height: 70,
+                      child: Center(
+                        child: Text(
+                          'Đồng ý',
+                          style: TextStyles.defaultStyle.bold.whiteTextColor
+                              .setTextSize(18),
                         ),
                       ),
                     ),
-                  ],
-                );
-              },
-            ),
+                  ),
+                ],
+              );
+            },
           );
         },
       );
@@ -286,37 +267,43 @@ class _CheckoutForBuyState extends State<CheckoutForBuy> {
   // }
   @override
   Widget build(BuildContext context) {
-    final cartProvider = Provider.of<CartProvider>(context);
-    final selectedCartItems = cartProvider.cartItems;
-    final cartItemsToDisplay = selectedCartItems.where((cartItem) => cartItem
-        .productDetailModel
-        .any((product) => product.isChecked == true));
+    final rentalCartProvider = Provider.of<RentalCartProvider>(context);
+    final selectedCartItems = rentalCartProvider.rentalCartItems;
+    final rentalCartItemsToDisplay = selectedCartItems.where((rentalCartItem) =>
+        rentalCartItem.productDetailModel
+            .any((product) => product.isChecked == true));
 
     double calculateTotalCartPrice() {
-      return cartItemsToDisplay.fold<double>(
+      return rentalCartItemsToDisplay.fold<double>(
           0, (total, cartItem) => total + cartItem.calculateTotalPrice());
     }
 
+    double calculateTotalCartRentPrice() {
+      return rentalCartItemsToDisplay.fold<double>(
+          0, (total, cartItem) => total + cartItem.calculateTotalRentPrice());
+    }
+
     int calculateTotalServiceFee() {
-      return cartItemsToDisplay.fold<int>(
+      return rentalCartItemsToDisplay.fold<int>(
           0, (total, cartItem) => total + cartItem.serviceFee);
     }
 
     double calculateTotalPayment() {
-      return cartItemsToDisplay.fold<double>(
+      return rentalCartItemsToDisplay.fold<double>(
         0,
         (total, cartItem) =>
             total +
-            cartItem.calculateTotalPrice() + // Tổng tiền của từng sản phẩm
-            cartItem.serviceFee + // Phí vận chuyển
-            10000, // Phí hệ thống
+            cartItem.calculateTotalRentPrice() +
+            cartItem.calculateTotalPrice() +
+            cartItem.serviceFee +
+            10000,
       );
     }
 
     Future<void> fetchServiceFee() async {
       try {
         if (customerAddress != '') {
-          for (final cartItem in cartItemsToDisplay) {
+          for (final cartItem in rentalCartItemsToDisplay) {
             final productOwnerID = cartItem.productOwnerID;
             final productOwner =
                 await AuthenticationService.getProductOwnerByID(productOwnerID);
@@ -344,7 +331,7 @@ class _CheckoutForBuyState extends State<CheckoutForBuy> {
           }
           // setState(() {});
         } else {
-          for (final cartItem in cartItemsToDisplay) {
+          for (final cartItem in rentalCartItemsToDisplay) {
             cartItem.serviceFee = 0;
           }
 
@@ -459,10 +446,10 @@ class _CheckoutForBuyState extends State<CheckoutForBuy> {
                           ListView.builder(
                             shrinkWrap: true,
                             physics: NeverScrollableScrollPhysics(),
-                            itemCount: cartItemsToDisplay.length,
+                            itemCount: rentalCartItemsToDisplay.length,
                             itemBuilder: (context, index) {
                               final cartItem =
-                                  cartItemsToDisplay.elementAt(index);
+                                  rentalCartItemsToDisplay.elementAt(index);
                               return Container(
                                 padding: EdgeInsets.all(5),
                                 margin: EdgeInsets.only(bottom: 20),
@@ -495,7 +482,7 @@ class _CheckoutForBuyState extends State<CheckoutForBuy> {
                                           .map((product) {
                                         return Container(
                                           margin: EdgeInsets.only(top: 10),
-                                          height: 110,
+                                          height: 140,
                                           decoration: BoxDecoration(
                                             border: Border.all(
                                                 color: ColorPalette.textHide),
@@ -526,16 +513,71 @@ class _CheckoutForBuyState extends State<CheckoutForBuy> {
                                                       CrossAxisAlignment.start,
                                                   mainAxisAlignment:
                                                       MainAxisAlignment
-                                                          .spaceBetween,
+                                                          .spaceAround,
                                                   children: [
-                                                    Text(
-                                                      product.productName,
-                                                      style: TextStyles.h5.bold,
+                                                    Container(
+                                                      width: 230,
+                                                      child: AutoSizeText(
+                                                        product.productName,
+                                                        minFontSize: 16,
+                                                        style:
+                                                            TextStyles.h5.bold,
+                                                        maxLines: 1,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                      ),
                                                     ),
                                                     Text(
-                                                      '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(product.price)}',
-                                                      style: TextStyles
-                                                          .defaultStyle.bold,
+                                                      (product.startDate !=
+                                                                  null &&
+                                                              product.endDate !=
+                                                                  null)
+                                                          ? '${DateFormat('dd/MM/yyyy').format(product.startDate!)} - ${DateFormat('dd/MM/yyyy').format(product.endDate!)}'
+                                                          : 'N/A',
+                                                    ),
+                                                    AutoSizeText.rich(
+                                                      minFontSize: 14,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      maxLines: 1,
+                                                      TextSpan(
+                                                        children: [
+                                                          TextSpan(
+                                                            text: 'Cọc: ',
+                                                          ),
+                                                          TextSpan(
+                                                            text:
+                                                                '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(product.price)}',
+                                                            style: TextStyles
+                                                                .defaultStyle
+                                                                .bold
+                                                                .setColor(
+                                                                    Colors.red),
+                                                          )
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    AutoSizeText.rich(
+                                                      minFontSize: 14,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      maxLines: 1,
+                                                      TextSpan(
+                                                        children: [
+                                                          TextSpan(
+                                                            text: 'Thuê: ',
+                                                          ),
+                                                          TextSpan(
+                                                            text:
+                                                                '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(product.selectedRentPrice)}',
+                                                            style: TextStyles
+                                                                .defaultStyle
+                                                                .bold
+                                                                .setColor(
+                                                                    Colors.red),
+                                                          ),
+                                                        ],
+                                                      ),
                                                     ),
                                                   ],
                                                 ),
@@ -622,6 +664,26 @@ class _CheckoutForBuyState extends State<CheckoutForBuy> {
                                       color: ColorPalette.textHide,
                                     ),
                                     Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            'Tổng tiền cọc',
+                                          ),
+                                          Text(
+                                            '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(cartItem.calculateTotalPrice())}',
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Divider(
+                                      thickness: 0.5,
+                                      color: ColorPalette.textHide,
+                                    ),
+                                    Padding(
                                       padding:
                                           EdgeInsets.symmetric(horizontal: 10),
                                       child: Row(
@@ -636,7 +698,7 @@ class _CheckoutForBuyState extends State<CheckoutForBuy> {
                                             ],
                                           ),
                                           Text(
-                                            '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(cartItem.calculateTotalPrice() + cartItem.serviceFee + 10000)}',
+                                            '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(cartItem.calculateTotalPrice() + cartItem.serviceFee + 10000 + cartItem.calculateTotalRentPrice())}',
                                           ),
                                         ],
                                       ),
@@ -665,11 +727,24 @@ class _CheckoutForBuyState extends State<CheckoutForBuy> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  'Tổng tiền hàng',
+                                  'Tổng tiền cọc',
                                   style: TextStyles.h5.bold,
                                 ),
                                 Text(
                                   '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(calculateTotalCartPrice())}',
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 10),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  'Tổng tiền thuê',
+                                  style: TextStyles.h5.bold,
+                                ),
+                                Text(
+                                  '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(calculateTotalCartRentPrice())}',
                                 ),
                               ],
                             ),
@@ -699,6 +774,8 @@ class _CheckoutForBuyState extends State<CheckoutForBuy> {
                                 ),
                                 Text(
                                   '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(calculateTotalPayment())}',
+                                  style:
+                                      TextStyles.h5.bold.setColor(Colors.red),
                                 )
                               ],
                             ),
@@ -712,52 +789,70 @@ class _CheckoutForBuyState extends State<CheckoutForBuy> {
                           onTap: () async {
                             if (customerAddress != '') {
                               final orderData = <Map<String, dynamic>>[];
-                              for (final cartItem in cartItemsToDisplay) {
+                              for (final cartItem in rentalCartItemsToDisplay) {
                                 final productOwnerID = cartItem.productOwnerID;
                                 final customerID = AuthProvider
                                     .userModel!.customer!.customerID;
                                 final shippingFee = cartItem.serviceFee;
-                                final orderDetail = <Map<String, dynamic>>[];
+                                final orderRentDetail =
+                                    <Map<String, dynamic>>[];
 
                                 // Duyệt qua các sản phẩm trong cartItem
                                 for (final product
                                     in cartItem.productDetailModel) {
                                   if (product.isChecked == true) {
-                                    orderDetail.add({
-                                      'price': product.price,
+                                    final endDate = DateFormat('yyyy-MM-dd')
+                                        .format(product.endDate!);
+                                    final startDate = DateFormat('yyyy-MM-dd')
+                                        .format(product.startDate!);
+                                    orderRentDetail.add({
+                                      'cocMoney': product.price,
+                                      'endDate': endDate,
                                       'productID': product.productID,
+                                      'rentPrice': product.selectedRentPrice,
+                                      'startDate': startDate,
                                     });
                                   }
                                 }
 
-                                if (orderDetail.isNotEmpty) {
-                                  final totalBuyPriceProduct =
-                                      orderDetail.fold<double>(
+                                if (orderRentDetail.isNotEmpty) {
+                                  final cocMoneyTotal =
+                                      orderRentDetail.fold<double>(
                                           0,
                                           (previous, element) =>
-                                              previous + element['price'] ?? 0);
-                                  final total =
-                                      totalBuyPriceProduct + shippingFee;
+                                              previous + element['cocMoney'] ??
+                                              0);
+                                  final totalRentPriceProduct =
+                                      orderRentDetail.fold<double>(
+                                          0,
+                                          (previous, element) =>
+                                              previous + element['rentPrice'] ??
+                                              0);
+                                  final total = totalRentPriceProduct +
+                                      cocMoneyTotal +
+                                      shippingFee;
                                   final order = {
+                                    'cocMoneyTotal': cocMoneyTotal,
                                     'customerAddress': customerAddress,
                                     'customerID': customerID,
-                                    'orderDetail': orderDetail,
+                                    'orderRentDetail': orderRentDetail,
                                     'productownerID': productOwnerID,
                                     'shippingFee': shippingFee,
                                     'total': total,
-                                    'totalBuyPriceProduct': totalBuyPriceProduct
+                                    'totalRentPriceProduct':
+                                        totalRentPriceProduct
                                   };
                                   orderData.add(order);
                                 }
                               }
 
                               final response = await AuthenticationService
-                                  .createOrderBuyAndOrderBuyDetail(orderData);
+                                  .createOrderRentAndOrderRentDetail(orderData);
                               if (response != null) {
                                 showCustomDialog(context, 'Thành công',
                                     "Bạn đã thanh toán thành công!", false);
                                 await Future.delayed(Duration(seconds: 5));
-                                Provider.of<CartProvider>(context,
+                                Provider.of<RentalCartProvider>(context,
                                         listen: false)
                                     .removeFromCartAndCheckOut();
                                 Navigator.popUntil(

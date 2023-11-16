@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:frs_mobile/models/category.dart';
 import 'package:frs_mobile/models/product_detail_model.dart';
 import 'package:frs_mobile/models/product_image_model.dart';
 import 'package:frs_mobile/representation/screens/product_detail/product_detail_demo.dart';
@@ -30,12 +31,48 @@ class HomeScreenDemo extends StatefulWidget {
 }
 
 class _HomeScreenDemoState extends State<HomeScreenDemo> {
+  List<CategoryModel> categories = [];
+  CategoryModel? selectedCategory;
+  int selectedAllProduct = 0;
+//   0 All
+// 1 categoryName
+// 2 onAvailable
+// 3 onSoldOut
+// 4 onRent
+// 5 onSale
   Future<List<ProductModel>?> fetchProducts() async {
-    return AuthenticationService.getAllProduct();
+    switch (selectedAllProduct) {
+      case 0:
+        return await AuthenticationService.getAllProduct();
+      case 1:
+        if (selectedCategory != null)
+          return await AuthenticationService.getAllProductByCategoryName(
+              selectedCategory!.categoryName);
+      case 2:
+        return await AuthenticationService.getAllProductOnAvailable();
+      case 3:
+        return await AuthenticationService.getAllProductOnSoldOut();
+      case 4:
+        return await AuthenticationService.getAllProductOnRent();
+      case 5:
+        return await AuthenticationService.getAllProductOnSale();
+    }
   }
 
-  int _currentIndexCategory = 0;
-  int _currentIndexBrand = 0;
+  Future<void> _loadCategories() async {
+    try {
+      List<CategoryModel>? fetchedCategories =
+          await AuthenticationService.getAllCategory();
+      setState(() {
+        if (fetchedCategories != null) {
+          categories = fetchedCategories;
+        }
+      });
+    } catch (e) {
+      print('Error loading categories: $e');
+    }
+  }
+
   String searchTerm = '';
   final CarouselController _controller = CarouselController();
   int _currentIndexBanner = 0;
@@ -44,30 +81,15 @@ class _HomeScreenDemoState extends State<HomeScreenDemo> {
     ImageHelper.loadFromAsset(AssetHelper.imageBanner2, fit: BoxFit.cover),
     ImageHelper.loadFromAsset(AssetHelper.imageBanner3, fit: BoxFit.cover),
   ];
-  List<String> brandList = [
-    "DIOR",
-    "CHANEL",
-    "GUCCI",
-    "LOUIS VUITTON",
-    'PRADA',
-    'VERSACE',
-  ];
-  List<String> categoryList = [
-    'QUẦN',
-    'ÁO',
-    'TÚI',
-    'KÍNH',
-    'GIÀY',
-    'ÁO KHOÁC',
-  ];
 
   String selectedBrand = ""; // Không có thương hiệu nào được chọn ban đầu
-  String selectedCategory = ""; // Không có thương hiệu nào được chọn ban đầu
   FocusNode _focusNode = FocusNode();
   @override
   void initState() {
     super.initState();
     _focusNode = FocusNode();
+    _loadCategories();
+    selectedAllProduct = 0;
   }
 
   @override
@@ -104,12 +126,208 @@ class _HomeScreenDemoState extends State<HomeScreenDemo> {
   final GlobalKey<ScaffoldState> _scaffoldKey =
       GlobalKey<ScaffoldState>(); // để gọi Drawer
 
+  void _openshowModalBottomSheet() {
+    showModalBottomSheet(
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(kDefaultCircle14)),
+        backgroundColor: ColorPalette.backgroundScaffoldColor,
+        context: context,
+        builder: (BuildContext context) {
+          return Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              children: [
+                Expanded(
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Text(
+                            'Loại sản phẩm',
+                            style: TextStyles.h5.bold,
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 10),
+                      Container(
+                        height: 40,
+                        child: ListView.builder(
+                          itemCount: categories.length,
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (context, index) {
+                            final category = categories[index];
+                            return Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                    setState(() {
+                                      selectedCategory = category;
+                                      selectedAllProduct = 1;
+                                    });
+                                  },
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 10, vertical: 5),
+                                    margin: EdgeInsets.only(right: 10),
+                                    decoration: BoxDecoration(
+                                      color: ColorPalette.primaryColor,
+                                      borderRadius: BorderRadius.circular(
+                                          kDefaultCircle14),
+                                    ),
+                                    child: Text(
+                                      category.categoryName,
+                                      style: TextStyles
+                                          .defaultStyle.whiteTextColor,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Text(
+                            'Khác',
+                            style: TextStyles.h5.bold,
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 10),
+                      Row(
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                selectedAllProduct = 0;
+                              });
+                              Navigator.pop(context);
+                            },
+                            child: Container(
+                              margin: EdgeInsets.only(right: 10),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 5),
+                              decoration: BoxDecoration(
+                                  color: ColorPalette.primaryColor,
+                                  borderRadius:
+                                      BorderRadius.circular(kDefaultCircle14)),
+                              child: Text(
+                                'Tất cả sản phẩm',
+                                style: TextStyles.defaultStyle.whiteTextColor,
+                              ),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                selectedAllProduct = 2;
+                              });
+                              Navigator.pop(context);
+                            },
+                            child: Container(
+                              margin: EdgeInsets.only(right: 10),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 5),
+                              decoration: BoxDecoration(
+                                  color: ColorPalette.primaryColor,
+                                  borderRadius:
+                                      BorderRadius.circular(kDefaultCircle14)),
+                              child: Text(
+                                'Có sẵn',
+                                style: TextStyles.defaultStyle.whiteTextColor,
+                              ),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                selectedAllProduct = 3;
+                              });
+                              Navigator.pop(context);
+                            },
+                            child: Container(
+                              margin: EdgeInsets.only(right: 10),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 5),
+                              decoration: BoxDecoration(
+                                  color: ColorPalette.primaryColor,
+                                  borderRadius:
+                                      BorderRadius.circular(kDefaultCircle14)),
+                              child: Text(
+                                'Hết hàng',
+                                style: TextStyles.defaultStyle.whiteTextColor,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 10),
+                      Row(
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                selectedAllProduct = 4;
+                              });
+                              Navigator.pop(context);
+                            },
+                            child: Container(
+                              margin: EdgeInsets.only(right: 10),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 5),
+                              decoration: BoxDecoration(
+                                  color: ColorPalette.primaryColor,
+                                  borderRadius:
+                                      BorderRadius.circular(kDefaultCircle14)),
+                              child: Text(
+                                'Thuê',
+                                style: TextStyles.defaultStyle.whiteTextColor,
+                              ),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                selectedAllProduct = 5;
+                              });
+                              Navigator.pop(context);
+                            },
+                            child: Container(
+                              margin: EdgeInsets.only(right: 10),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 5),
+                              decoration: BoxDecoration(
+                                  color: ColorPalette.primaryColor,
+                                  borderRadius:
+                                      BorderRadius.circular(kDefaultCircle14)),
+                              child: Text(
+                                'Mua',
+                                style: TextStyles.defaultStyle.whiteTextColor,
+                              ),
+                            ),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          );
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
-    // double getMainAxisExtent(int index) {
-    //   return index.isEven ? 200.0 : 150.0;
-    // }
-
     Size size = MediaQuery.of(context).size;
     return AppBarMain(
       leading: Builder(builder: (context) {
@@ -269,15 +487,14 @@ class _HomeScreenDemoState extends State<HomeScreenDemo> {
 
                       // filter category
                       GestureDetector(
+                        onTap: _openshowModalBottomSheet,
                         child: Icon(
                           FontAwesomeIcons.sliders,
-                          size: kDefaultIconSize18,
                         ),
                       ),
                     ],
                   ),
                   SizedBox(height: 10),
-
                   CarouselSlider.builder(
                     carouselController: _controller,
                     itemCount: _bannerImages.length,
@@ -353,126 +570,12 @@ class _HomeScreenDemoState extends State<HomeScreenDemo> {
                       },
                     ),
                   ),
-                  // Text Thương hiệu
-                  Row(
-                    children: [
-                      Text(
-                        'Thương hiệu',
-                        style: TextStyles.defaultStyle.bold,
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 10),
-                  Container(
-                    height: 40,
-                    child: ListView.builder(
-                      itemCount: brandList.length,
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (context, index) {
-                        String brand = brandList[index];
-                        bool isSelected = index == _currentIndexBrand;
-                        return GestureDetector(
-                          onTap: () {},
-                          // cục hiển thị cho các brand
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Container(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 10, vertical: 5),
-                                margin: EdgeInsets.only(right: 10),
-                                decoration: BoxDecoration(
-                                  color: isSelected
-                                      ? ColorPalette.primaryColor
-                                      : ColorPalette.hideColor,
-                                  borderRadius:
-                                      BorderRadius.circular(kDefaultCircle14),
-                                ),
-
-                                // Text của brand
-                                child: Text(
-                                  brand,
-                                  style: TextStyle(
-                                      color: isSelected
-                                          ? Colors.white
-                                          : ColorPalette.textHide,
-                                      fontWeight: isSelected
-                                          ? FontWeight.bold
-                                          : FontWeight.normal,
-                                      fontFamily: FontFamilyRoboto.roboto),
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
-                  ),
                   SizedBox(height: 10),
                   Row(
                     children: [
                       Text(
-                        'Loại sản phẩm',
-                        style: TextStyles.defaultStyle.bold,
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 10),
-
-                  //category
-                  Container(
-                    height: 40,
-                    child: ListView.builder(
-                      itemCount: categoryList.length,
-                      scrollDirection: Axis.horizontal,
-                      itemBuilder: (context, index) {
-                        String category = categoryList[index];
-                        bool isSelectedCategory =
-                            index == _currentIndexCategory;
-                        return GestureDetector(
-                          onTap: () {},
-
-                          // cục hiển thị cho các brand
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Container(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 10, vertical: 5),
-                                margin: EdgeInsets.only(right: 10),
-                                decoration: BoxDecoration(
-                                  color: isSelectedCategory
-                                      ? ColorPalette.primaryColor
-                                      : ColorPalette.hideColor,
-                                  borderRadius:
-                                      BorderRadius.circular(kDefaultCircle14),
-                                ),
-
-                                // Text của brand
-                                child: Text(
-                                  category,
-                                  style: TextStyle(
-                                      color: isSelectedCategory
-                                          ? Colors.white
-                                          : ColorPalette.textHide,
-                                      fontWeight: isSelectedCategory
-                                          ? FontWeight.bold
-                                          : FontWeight.normal,
-                                      fontFamily: FontFamilyRoboto.roboto),
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  Row(
-                    children: [
-                      Text(
-                        'Tất cả sản phẩm',
-                        style: TextStyles.defaultStyle.bold,
+                        'Sản phẩm',
+                        style: TextStyles.h5.bold,
                       ),
                     ],
                   ),

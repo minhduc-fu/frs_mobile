@@ -69,25 +69,7 @@ class _SelectDateScreenState extends State<SelectDateScreen> {
                   controller.selectedRange = PickerDateRange(rangeStartDate!,
                       rangeEndDate!); // dùng controller này để cập nhật lại UI
                 }
-                // setState(() {
-                //   rangeEndDate = args.value.endDate;
-                // });
-
-                // final selectedRentalPeriod = widget.selectedRentalPeriod!;
-                // rangeEndDate =
-                //     rangeStartDate!.add(Duration(days: selectedRentalPeriod));
-                // // args.value.endDate = rangeStartDate!
-                // //     .add(Duration(days: widget.selectedRentalPeriod!));
-                // rangeEndDate = args.value.endDate;
-                // setState(() {
-                //   rangeStartDate = args.value.startDate;
-                //   rangeEndDate = args.value.endDate;
-                // });
               }
-              // if (args.value is PickerDateRange) {
-              //   rangeStartDate = args.value.startDate;
-              //   rangeEndDate = args.value.endDate;
-              // }
             },
           ),
           SizedBox(height: kBottomBarIconSize20),

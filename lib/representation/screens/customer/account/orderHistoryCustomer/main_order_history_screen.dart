@@ -69,10 +69,10 @@ class _MainOrderHistoryScreen extends State<MainOrderHistoryScreen>
                       controller: _tabController,
                       tabs: [
                         Tab(
-                          text: 'Quản lý đơn hàng thuê',
+                          text: 'Quản lý đơn hàng Thuê',
                         ),
                         Tab(
-                          text: 'Quản lý đơn hàng mua',
+                          text: 'Quản lý đơn hàng Mua',
                         )
                       ],
                     ),

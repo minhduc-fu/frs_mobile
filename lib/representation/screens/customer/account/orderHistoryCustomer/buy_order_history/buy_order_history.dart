@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
-
+import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/buy_order_history/screens/completed_order_buy_screen.dart';
+import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/buy_order_history/screens/pending_order_buy_screen.dart';
+import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/buy_order_history/screens/prepare_order_buy_screen.dart';
+import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/buy_order_history/screens/ready_pickup_order_buy_screen.dart';
+import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/buy_order_history/screens/rejecting_order_buy_screen.dart';
 import '../../../../../../core/constants/color_constants.dart';
 import '../../../../../../core/constants/dismension_constants.dart';
-import 'confirm_buy_order.dart';
+import 'screens/canceled_order_buy_screen.dart';
+import 'screens/confirming_order_buy_history.dart';
 
 class BuyOrderHistory extends StatefulWidget {
   const BuyOrderHistory({super.key});
@@ -17,7 +22,7 @@ class _BuyOrderHistoryState extends State<BuyOrderHistory>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 5, vsync: this);
+    _tabController = TabController(length: 7, vsync: this);
     _tabController.index = 0;
   }
 
@@ -57,16 +62,22 @@ class _BuyOrderHistoryState extends State<BuyOrderHistory>
                     controller: _tabController,
                     tabs: [
                       Tab(
-                        text: 'Chờ xác nhận',
+                        text: 'Chờ phê duyệt',
+                      ),
+                      Tab(
+                        text: 'Chuẩn bị hàng',
                       ),
                       Tab(
                         text: 'Đang giao',
                       ),
                       Tab(
-                        text: 'Đã nhận',
+                        text: 'Chờ xác nhận',
                       ),
                       Tab(
-                        text: 'Hoàn tất',
+                        text: 'Hoàn thành',
+                      ),
+                      Tab(
+                        text: 'Từ chối',
                       ),
                       Tab(
                         text: 'Đã hủy',
@@ -84,11 +95,13 @@ class _BuyOrderHistoryState extends State<BuyOrderHistory>
               // physics: BouncingScrollPhysics(),
               controller: _tabController,
               children: [
-                ConfirmBuyOrder(),
-                ConfirmBuyOrder(),
-                ConfirmBuyOrder(),
-                ConfirmBuyOrder(),
-                ConfirmBuyOrder(),
+                PendingOrderBuyScreen(),
+                PrepareOrderBuyScreen(),
+                ReadyPickupOrderBuyScreen(),
+                ConfirmingOrderBuyScreen(),
+                CompletedOrderBuyScreen(),
+                RejectingOrderBuyScreen(),
+                CanceledOrderBuyScreen(),
               ],
             ),
           ),

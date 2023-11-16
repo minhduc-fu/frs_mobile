@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/buy_order_history/screens/pending_order_buy_screen.dart';
 
 import '../../../../../../core/constants/color_constants.dart';
 import '../../../../../../core/constants/dismension_constants.dart';
-import '../buy_order_history/confirm_buy_order.dart';
 
 class RentalOrderHistory extends StatefulWidget {
   const RentalOrderHistory({super.key});
@@ -84,11 +84,11 @@ class _RentalOrderHistoryState extends State<RentalOrderHistory>
               // physics: BouncingScrollPhysics(),
               controller: _tabController,
               children: [
-                ConfirmBuyOrder(),
-                ConfirmBuyOrder(),
-                ConfirmBuyOrder(),
-                ConfirmBuyOrder(),
-                ConfirmBuyOrder(),
+                PendingOrderBuyScreen(),
+                PendingOrderBuyScreen(),
+                PendingOrderBuyScreen(),
+                PendingOrderBuyScreen(),
+                PendingOrderBuyScreen(),
               ],
             ),
           ),

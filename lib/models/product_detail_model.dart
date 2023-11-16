@@ -13,11 +13,14 @@ class ProductDetailModel {
   double price;
   String status;
   String checkType;
-  CategoryModel category;
+  CategoryModel? category;
   int productOwnerID;
   Map<String, dynamic>? productSpecificationData;
   List<RentalPriceModel?>? rentalPrices;
   bool isChecked;
+  DateTime? startDate;
+  DateTime? endDate;
+  double? selectedRentPrice;
 
   ProductDetailModel({
     required this.productID,
@@ -29,12 +32,90 @@ class ProductDetailModel {
     required this.price,
     required this.status,
     required this.checkType,
-    required this.category,
+    this.category,
     required this.productOwnerID,
     this.productSpecificationData,
     required this.rentalPrices,
     this.isChecked = false,
+    this.endDate,
+    this.startDate,
+    this.selectedRentPrice,
   });
+  String getBrandName() {
+    switch (category!.categoryID) {
+      case 1: // Watch
+        return productSpecificationData?['brandNameWatch'] ?? "N/A";
+      case 2: // Hat
+        return productSpecificationData?['brandNameHat'] ?? "N/A";
+      case 3: // Jewelry
+        return productSpecificationData?['brandNameJewelry'] ?? "N/A";
+      case 4: // Bag
+        return productSpecificationData?['brandNameBag'] ?? "N/A";
+      case 5: // Sunglasses
+        return productSpecificationData?['brandNameGlasses'] ?? "N/A";
+      case 6: // Shoe
+        return productSpecificationData?['brandNameShoe'] ?? "N/A";
+      default:
+        return "N/A";
+    }
+  }
+
+  String getMadeOf() {
+    switch (category!.categoryID) {
+      case 1: // Watch
+        return productSpecificationData?['strapMaterialWatch'] ?? "N/A";
+      case 2: // Hat
+        return productSpecificationData?['materialHat'] ?? "N/A";
+      case 3: // Jewelry
+        return productSpecificationData?['occasion'] ?? "N/A";
+      case 4: // Bag
+        return productSpecificationData?['typeSkinBag'] ?? "N/A";
+      case 5: // Sunglasses
+        return productSpecificationData?['glassMaterial'] ?? "N/A";
+      case 6: // Shoe
+        return productSpecificationData?['typeSkinShoe'] ?? "N/A";
+      default:
+        return "N/A";
+    }
+  }
+
+  String getOrigin() {
+    switch (category!.categoryID) {
+      case 1: // Watch
+        return productSpecificationData?['originWatch'] ?? "N/A";
+      case 2: // Hat
+        return productSpecificationData?['originHat'] ?? "N/A";
+      case 3: // Jewelry
+        return productSpecificationData?['originJewelry'] ?? "N/A";
+      case 4: // Bag
+        return productSpecificationData?['originBag'] ?? "N/A";
+      case 5: // Sunglasses
+        return productSpecificationData?['glassShape'] ?? "N/A";
+      case 6: // Shoe
+        return productSpecificationData?['originShoe'] ?? "N/A";
+      default:
+        return "N/A";
+    }
+  }
+
+  String getType() {
+    switch (category!.categoryID) {
+      case 1: // Watch
+        return productSpecificationData?['clockFaceWatch'] ?? "N/A";
+      case 2: // Hat
+        return productSpecificationData?['typeHat'] ?? "N/A";
+      case 3: // Jewelry
+        return productSpecificationData?['typeJewelrys'] ?? "N/A";
+      case 4: // Bag
+        return productSpecificationData?['skinTexture'] ?? "N/A";
+      case 5: // Sunglasses
+        return productSpecificationData?['typeLensGlasses'] ?? "N/A";
+      case 6: // Shoe
+        return productSpecificationData?['outsideSkin'] ?? "N/A";
+      default:
+        return "N/A";
+    }
+  }
 
   factory ProductDetailModel.fromJson(Map<String, dynamic> json) {
     final List<dynamic>? rentPricesJson = json['rentprices'];
@@ -64,6 +145,8 @@ class ProductDetailModel {
           ? jsonDecode(json['productSpecificationData'])
           : null,
       rentalPrices: rentalPrices,
+      startDate: null,
+      endDate: null,
     );
   }
 }

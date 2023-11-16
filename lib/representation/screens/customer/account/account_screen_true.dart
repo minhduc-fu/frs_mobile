@@ -120,14 +120,35 @@ class _AccountScreenTrueState extends State<AccountScreenTrue> {
                   Column(
                     children: [
                       Center(
-                        child: ClipOval(
-                          //avt
-                          child: Image.network(
-                              AuthProvider.userModel?.customer?.avatarUrl ?? '',
-                              fit: BoxFit.cover,
-                              height: 100,
-                              width: 100),
+                        child: Stack(
+                          children: [
+                            CircleAvatar(
+                              radius: 50,
+                              backgroundColor: ColorPalette.primaryColor,
+                            ),
+                            Positioned(
+                              top: 5,
+                              left: 5,
+                              bottom: 5,
+                              right: 5,
+                              child: CircleAvatar(
+                                radius: 45,
+                                backgroundImage: NetworkImage(
+                                  AuthProvider.userModel?.customer?.avatarUrl ??
+                                      '',
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
+                        // child: ClipOval(
+                        //   //avt
+                        //   child: Image.network(
+                        //       AuthProvider.userModel?.customer?.avatarUrl ?? '',
+                        //       fit: BoxFit.cover,
+                        //       height: 100,
+                        //       width: 100),
+                        // ),
                       ),
                       SizedBox(height: 10),
                       // tên, gmail

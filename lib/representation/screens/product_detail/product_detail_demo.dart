@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/cupertino.dart';
@@ -6,10 +7,13 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:frs_mobile/models/cart_item_model.dart';
 import 'package:frs_mobile/models/product_detail_model.dart';
 import 'package:frs_mobile/models/product_image_model.dart';
+import 'package:frs_mobile/models/rental_cart_item_model.dart';
 import 'package:frs_mobile/representation/screens/product_detail/full_screen_receipt.dart';
 import 'package:frs_mobile/representation/screens/product_detail/widgets/image_slider.dart';
+import 'package:frs_mobile/representation/screens/productowner_screen/productOwner_shop_screen.dart';
 import 'package:frs_mobile/representation/widgets/app_bar_main.dart';
 import 'package:frs_mobile/services/cart_provider.dart';
+import 'package:frs_mobile/services/rental_cart_provider.dart';
 import 'package:intl/intl.dart';
 import 'package:frs_mobile/core/extensions/date_ext.dart';
 import 'package:provider/provider.dart';
@@ -43,7 +47,11 @@ class _ProductDetailDemoState extends State<ProductDetailDemo> {
   bool isBuy = true;
   bool isRentalPeriodSelected = false;
   int selectedRentalPeriod = 0;
+  int selectedMockday = 0;
   String? dateSelected;
+  DateTime? startDate;
+  DateTime? endDate;
+  double selectedRenPrice = 0;
 
   bool? isRenting = null;
   void toggleRenting(bool? value) {
@@ -57,10 +65,11 @@ class _ProductDetailDemoState extends State<ProductDetailDemo> {
   @override
   Widget build(BuildContext context) {
     final cartProvider = Provider.of<CartProvider>(context, listen: false);
+    final rentalCartProvider =
+        Provider.of<RentalCartProvider>(context, listen: false);
     final productDetailModel = widget.productDetailModel;
     final productOwnerModel = widget.productOwnerModel;
     final List<ProductImageModel> productImages = widget.productImageModel;
-    // double rentalPrice1 = productDetailModel!.rentalPrice?.rentPrice1 ?? 0.0;
     final String checkType = productDetailModel!.checkType;
     Size size = MediaQuery.of(context).size; // get screen size
     return AppBarMain(
@@ -122,9 +131,12 @@ class _ProductDetailDemoState extends State<ProductDetailDemo> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             // name product
-                            Text(
-                              productDetailModel.productName,
+                            AutoSizeText(
+                              maxLines: 1,
+                              '${productDetailModel.productName}',
                               style: TextStyles.h4.bold,
+                              minFontSize: 25,
+                              overflow: TextOverflow.ellipsis,
                             ),
                             SizedBox(height: 10),
                             // description
@@ -153,7 +165,7 @@ class _ProductDetailDemoState extends State<ProductDetailDemo> {
                                     ),
                                     SizedBox(height: 10),
                                     Text(
-                                      '${productDetailModel.productSpecificationData != null ? (productDetailModel.productSpecificationData?['brandName'] ?? "N/A") : "N/A"}',
+                                      '${productDetailModel.getBrandName()}',
                                     )
                                   ],
                                 ),
@@ -166,7 +178,39 @@ class _ProductDetailDemoState extends State<ProductDetailDemo> {
                                     ),
                                     SizedBox(height: 10),
                                     Text(
-                                      '${productDetailModel.productSpecificationData != null ? (productDetailModel.productSpecificationData?['madeOf'] ?? "N/A") : "N/A"}',
+                                      '${productDetailModel.getMadeOf()}',
+                                    )
+                                  ],
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 10),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Xuất xứ',
+                                      style: TextStyles.h5.bold,
+                                    ),
+                                    SizedBox(height: 10),
+                                    Text(
+                                      '${productDetailModel.getOrigin()}',
+                                    )
+                                  ],
+                                ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    Text(
+                                      'Kiểu',
+                                      style: TextStyles.h5.bold,
+                                    ),
+                                    SizedBox(height: 10),
+                                    Text(
+                                      '${productDetailModel.getType()}',
                                     )
                                   ],
                                 ),
@@ -185,7 +229,8 @@ class _ProductDetailDemoState extends State<ProductDetailDemo> {
                                       style: TextStyles.h5.bold,
                                     ),
                                     SizedBox(height: 10),
-                                    Text(productDetailModel.productCondition),
+                                    Text(
+                                        '${productDetailModel.productCondition}%'),
                                   ],
                                 ),
                                 Column(
@@ -211,6 +256,22 @@ class _ProductDetailDemoState extends State<ProductDetailDemo> {
                                 ),
                               ],
                             ),
+                            SizedBox(height: 10),
+                            if (checkType == "RENT" || checkType == "SALE_RENT")
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Tiền cọc',
+                                    style: TextStyles.h5.bold,
+                                  ),
+                                  SizedBox(height: 10),
+                                  Text(
+                                    '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(productDetailModel.price)}',
+                                  ),
+                                ],
+                              ),
+
                             SizedBox(height: 10),
                             //productReceiptUrl
                             Text(
@@ -259,19 +320,47 @@ class _ProductDetailDemoState extends State<ProductDetailDemo> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Row(
-                                  children: [
-                                    CircleAvatar(
-                                      radius: 25,
-                                      backgroundImage: NetworkImage(
-                                          productOwnerModel!.avatarUrl),
-                                    ),
-                                    SizedBox(width: 10),
-                                    Text(
-                                      productOwnerModel.fullName,
-                                      style: TextStyles.h5.bold,
-                                    ),
-                                  ],
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      CupertinoPageRoute(
+                                        builder: (context) =>
+                                            ProductOwnerShopScreen(
+                                          productOwnerModel: productOwnerModel,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  child: Row(
+                                    children: [
+                                      Stack(
+                                        children: [
+                                          CircleAvatar(
+                                            radius: 35,
+                                            backgroundColor:
+                                                ColorPalette.primaryColor,
+                                          ),
+                                          Positioned(
+                                            top: 5,
+                                            left: 5,
+                                            bottom: 5,
+                                            right: 5,
+                                            child: CircleAvatar(
+                                              radius: 30,
+                                              backgroundImage: NetworkImage(
+                                                  productOwnerModel!.avatarUrl),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      SizedBox(width: 10),
+                                      Text(
+                                        productOwnerModel.fullName,
+                                        style: TextStyles.h5.bold,
+                                      ),
+                                    ],
+                                  ),
                                 ),
                                 GestureDetector(
                                   onTap: () {},
@@ -491,8 +580,7 @@ class _ProductDetailDemoState extends State<ProductDetailDemo> {
                               Padding(
                                 padding: const EdgeInsets.only(right: 12),
                                 child: Text(
-                                  '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(0.0)}',
-                                  // '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(rentalPrice1)}',
+                                  '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(productDetailModel.rentalPrices![0]!.rentPrice)}/${productDetailModel.rentalPrices![0]!.mockDay} ngày',
                                 ),
                               ),
                             ],
@@ -522,6 +610,10 @@ class _ProductDetailDemoState extends State<ProductDetailDemo> {
                                           setState(() {
                                             selectedRentalPeriod = index;
                                             isRentalPeriodSelected = true;
+                                            selectedMockday =
+                                                rentalPrice.mockDay;
+                                            selectedRenPrice =
+                                                rentalPrice.rentPrice;
                                           });
                                         },
                                         child: Row(
@@ -542,6 +634,10 @@ class _ProductDetailDemoState extends State<ProductDetailDemo> {
                                                           value as int;
                                                       isRentalPeriodSelected =
                                                           true;
+                                                      selectedMockday =
+                                                          rentalPrice!.mockDay;
+                                                      selectedRenPrice =
+                                                          rentalPrice.rentPrice;
                                                     });
                                                   },
                                                 ),
@@ -578,7 +674,7 @@ class _ProductDetailDemoState extends State<ProductDetailDemo> {
                                                     builder: (context) =>
                                                         SelectDateScreen(
                                                       selectedRentalPeriod:
-                                                          selectedRentalPeriod,
+                                                          selectedMockday,
                                                     ),
                                                   ),
                                                 );
@@ -591,6 +687,8 @@ class _ProductDetailDemoState extends State<ProductDetailDemo> {
                                                             element == null)) {
                                                   dateSelected =
                                                       '${selectDate[0]?.getStartDate} - ${selectDate[1]?.getEndDate}';
+                                                  startDate = selectDate[0];
+                                                  endDate = selectDate[1];
                                                   setState(() {});
                                                 } else {
                                                   dateSelected = null;
@@ -640,9 +738,100 @@ class _ProductDetailDemoState extends State<ProductDetailDemo> {
                                     title: 'Thêm vào giỏ hàng Thuê',
                                     onTap: () {
                                       if (dateSelected != null) {
+                                        final productAlreadyInRentalCart =
+                                            rentalCartProvider
+                                                .isProductInRentalCart(
+                                                    productDetailModel
+                                                        .productID);
+                                        if (productDetailModel.status ==
+                                            "AVAILABLE") {
+                                          if (productAlreadyInRentalCart) {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              SnackBar(
+                                                backgroundColor: Colors.red,
+                                                content: Text(
+                                                    'Sản phẩm đã có trong giỏ hàng Thuê'),
+                                              ),
+                                            );
+                                          } else {
+                                            final selectedProduct = ProductDetailModel(
+                                                productID: widget
+                                                    .productDetailModel!
+                                                    .productID,
+                                                productName: widget
+                                                    .productDetailModel!
+                                                    .productName,
+                                                productReceiptUrl: widget
+                                                    .productDetailModel!
+                                                    .productReceiptUrl,
+                                                productCondition: widget
+                                                    .productDetailModel!
+                                                    .productCondition,
+                                                description: widget
+                                                    .productDetailModel!
+                                                    .description,
+                                                price: widget
+                                                    .productDetailModel!.price,
+                                                status: widget
+                                                    .productDetailModel!.status,
+                                                checkType: widget
+                                                    .productDetailModel!
+                                                    .checkType,
+                                                productOwnerID: widget
+                                                    .productDetailModel!
+                                                    .productOwnerID,
+                                                rentalPrices: widget
+                                                    .productDetailModel!
+                                                    .rentalPrices,
+                                                productAvt: widget
+                                                    .productDetailModel!
+                                                    .productAvt,
+                                                startDate: startDate,
+                                                endDate: endDate,
+                                                selectedRentPrice: selectedRenPrice);
+                                            final rentalCartItem =
+                                                RentalCartItemModel(
+                                                    productOwnerID:
+                                                        productOwnerModel
+                                                            .productOwnerID,
+                                                    productOwnerName:
+                                                        productOwnerModel
+                                                            .fullName,
+                                                    productDetailModel: [
+                                                  selectedProduct
+                                                ]);
+                                            rentalCartProvider.addToRentalCart(
+                                                rentalCartItem);
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(SnackBar(
+                                              backgroundColor: Colors.green,
+                                              content: Text(
+                                                  'Sản phẩm đã được thêm vào giỏ hàng.'),
+                                            ));
+                                          }
+                                        } else if (productDetailModel.status ==
+                                            "SOLD_OUT") {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(SnackBar(
+                                            backgroundColor: Colors.red,
+                                            content: Text(
+                                              'Sản phẩm đã hết hàng.',
+                                            ),
+                                          ));
+                                        } else if (productDetailModel.status ==
+                                            "RENTING") {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(SnackBar(
+                                            backgroundColor: Colors.blue,
+                                            content: Text(
+                                              'Sản phẩm đang thuê.',
+                                            ),
+                                          ));
+                                        }
                                       } else {
-                                        showCustomDialog(context, 'Error',
-                                            'Làm ơn chọn ngày thuê!');
+                                        showCustomDialog(context, 'Lỗi',
+                                            'Làm ơn chọn ngày thuê!', true);
                                       }
                                     },
                                     height: 70,
@@ -709,57 +898,53 @@ class _ProductDetailDemoState extends State<ProductDetailDemo> {
                                       final productAlreadyInCart =
                                           cartProvider.isProductInCart(
                                               productDetailModel.productID);
-                                      if (productAlreadyInCart) {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          SnackBar(
-                                            backgroundColor: Colors.red,
-                                            content: Text(
-                                                'Sản phẩm đã có trong giỏ hàng Mua.'),
-                                          ),
-                                        );
-                                      } else {
-                                        final cartItem = CartItemModel(
-                                          productOwnerID:
-                                              productOwnerModel.productOwnerID,
-                                          productOwnerName:
-                                              productOwnerModel.fullName,
-                                          productDetailModel: [
-                                            ProductDetailModel(
-                                              productAvt: productDetailModel
-                                                  .productAvt!,
-                                              productID:
-                                                  productDetailModel.productID,
-                                              productName: productDetailModel
-                                                  .productName,
-                                              productReceiptUrl:
-                                                  productDetailModel
-                                                      .productReceiptUrl,
-                                              productCondition:
-                                                  productDetailModel
-                                                      .productCondition,
-                                              description: productDetailModel
-                                                  .description,
-                                              price: productDetailModel.price,
-                                              status: productDetailModel.status,
-                                              checkType:
-                                                  productDetailModel.checkType,
-                                              category:
-                                                  productDetailModel.category,
-                                              productOwnerID: productDetailModel
-                                                  .productOwnerID,
-                                              rentalPrices: productDetailModel
-                                                      .rentalPrices ??
-                                                  null,
-                                            )
-                                          ],
-                                        );
+                                      if (productDetailModel.status ==
+                                          "AVAILABLE") {
+                                        if (productAlreadyInCart) {
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            SnackBar(
+                                              backgroundColor: Colors.red,
+                                              content: Text(
+                                                  'Sản phẩm đã có trong giỏ hàng Mua'),
+                                            ),
+                                          );
+                                        } else {
+                                          final cartItem = CartItemModel(
+                                            productOwnerID: productOwnerModel
+                                                .productOwnerID,
+                                            productOwnerName:
+                                                productOwnerModel.fullName,
+                                            productDetailModel: [
+                                              widget.productDetailModel!,
+                                            ],
+                                          );
 
-                                        cartProvider.addToCart(cartItem);
+                                          cartProvider.addToCart(cartItem);
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(SnackBar(
+                                            backgroundColor: Colors.green,
+                                            content: Text(
+                                                'Sản phẩm đã được thêm vào giỏ hàng.'),
+                                          ));
+                                        }
+                                      } else if (productDetailModel.status ==
+                                          "SOLD_OUT") {
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(SnackBar(
+                                          backgroundColor: Colors.red,
                                           content: Text(
-                                              'Sản phẩm đã được thêm vào giỏ hàng.'),
+                                            'Sản phẩm đã hết hàng.',
+                                          ),
+                                        ));
+                                      } else if (productDetailModel.status ==
+                                          "RENTING") {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(SnackBar(
+                                          backgroundColor: Colors.blue,
+                                          content: Text(
+                                            'Sản phẩm đang thuê.',
+                                          ),
                                         ));
                                       }
                                     },

@@ -40,7 +40,7 @@ class ProductCardDemo extends StatelessWidget {
               child: product.productAvt == null
                   ? ImageHelper.loadFromAsset(AssetHelper.imageKinhGucci,
                       fit: BoxFit.contain)
-                  : Image.network(product.productAvt!, fit: BoxFit.contain),
+                  : Image.network(product.productAvt!, fit: BoxFit.cover),
             ),
             SizedBox(height: 5),
             Padding(
@@ -48,81 +48,107 @@ class ProductCardDemo extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    product.productName,
-                    style: TextStyles.h5.bold,
+                  Container(
+                    width: 160,
+                    child: AutoSizeText(
+                      overflow: TextOverflow.ellipsis,
+                      minFontSize: 16,
+                      maxLines: 1,
+                      product.productName,
+                      style: TextStyles.h5.bold,
+                    ),
                   ),
-                  // SizedBox(height: 2),
-                  // ProductName
-                  Text(
-                    product.productOwnerName,
-                    style: TextStyles.defaultStyle.bold,
-                  ),
-                  // SizedBox(height: 2),
+                  SizedBox(height: 2),
                   Row(
                     children: [
-                      Text(
-                        'Thương hiệu: ${product.productSpecifications != null ? (product.productSpecifications?['brandName'] ?? "N/A") : "N/A"}',
+                      Container(
+                        width: 160,
+                        child: AutoSizeText.rich(
+                          minFontSize: 14,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                          TextSpan(
+                            children: [
+                              TextSpan(
+                                  text: 'Thương hiệu: ',
+                                  style: TextStyles.defaultStyle.bold),
+                              TextSpan(
+                                text:
+                                    '${product.productSpecifications != null ? (product.getBrandName()) : "N/A"}',
+                              )
+                            ],
+                          ),
+                        ),
                       ),
                     ],
                   ),
-                  // SizedBox(height: 2),
+                  SizedBox(height: 2),
                   Row(
                     children: [
-                      Text(
-                        'Tình trạng: ',
-                        style: TextStyles.defaultStyle.bold,
-                      ),
-                      Text(
-                        product.productCondition.isEmpty
-                            ? 'N/A'
-                            : '${product.productCondition}',
+                      Container(
+                        width: 160,
+                        child: AutoSizeText.rich(
+                          maxLines: 1,
+                          TextSpan(
+                            children: [
+                              TextSpan(
+                                  text: 'Tình trạng: ',
+                                  style: TextStyles.defaultStyle.bold),
+                              TextSpan(
+                                text:
+                                    '${product.productCondition != null ? (product.productCondition) : "N/A"}%',
+                              )
+                            ],
+                          ),
+                        ),
                       ),
                     ],
                   ),
-                  // SizedBox(height: 2),
+                  SizedBox(height: 2),
 
                   //Price
                   if (isForSale || isForSaleAndRent)
-                    AutoSizeText.rich(
-                      TextSpan(children: [
+                    Container(
+                      width: 160,
+                      child: AutoSizeText.rich(
+                        maxLines: 1,
                         TextSpan(
-                            text: 'Mua: ', style: TextStyles.defaultStyle.bold),
-                        TextSpan(
-                            text:
-                                '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(product.price)}'),
-                      ]),
+                          children: [
+                            TextSpan(
+                                text: 'Mua: ',
+                                style: TextStyles.defaultStyle.bold),
+                            TextSpan(
+                              text:
+                                  '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(product.price)}',
+                            ),
+                          ],
+                        ),
+                      ),
                     )
-                  // Row(
-                  //   children: [
-                  //     // Text(
-                  //     //   'Mua: ',
-                  //     //   style: TextStyles.defaultStyle.bold,
-                  //     // ),
-                  //     Text(
-                  //       'Mua: ${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(product.price)}',
-                  //     ),
-                  //   ],
-                  // )
                   else
                     SizedBox.shrink(),
                   // SizedBox(height: 5),
                   if (isForRent || isForSaleAndRent)
-                    Row(
-                      children: [
-                        Text(
-                          'Thuê: ',
-                          style: TextStyles.defaultStyle.bold,
+                    Container(
+                      width: 160,
+                      child: AutoSizeText.rich(
+                        maxLines: 1,
+                        TextSpan(
+                          children: [
+                            TextSpan(
+                                text: 'Thuê: ',
+                                style: TextStyles.defaultStyle.bold),
+                            TextSpan(
+                                text: product.rentalPrice!.isNotEmpty
+                                    ? '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(product.rentalPrice![0]!.rentPrice)}/${product.rentalPrice![0]!.mockDay} ngày'
+                                    : 'N/A'),
+                          ],
                         ),
-                        Text(
-                          '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(0.0)}',
-                          // '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(product.rentalPrice != null ? product.rentalPrice?.rentPrice1 : 0.0)}',
-                        ),
-                      ],
+                      ),
                     )
                   else
                     SizedBox.shrink(),
-                  // SizedBox(height: 5),
+                  SizedBox(height: 2),
                   Row(
                     children: [
                       Icon(
@@ -138,6 +164,32 @@ class ProductCardDemo extends StatelessWidget {
                       ),
                     ],
                   ),
+                  SizedBox(height: 2),
+                  if (product.status == "SOLD_OUT")
+                    Text(
+                      "HẾT HÀNG",
+                      style: TextStyles.h5.bold.setColor(Colors.red),
+                    ),
+                  if (product.status == "BLOCKED")
+                    Text(
+                      "BỊ KHÓA",
+                      style: TextStyles.h5.bold.setColor(Colors.red),
+                    ),
+                  if (product.status == "WAITING")
+                    Text(
+                      "ĐANG CHỜ",
+                      style: TextStyles.h5.bold.setColor(Colors.red),
+                    ),
+                  if (product.status == "AVAILABLE")
+                    Text(
+                      "CÓ SẴN",
+                      style: TextStyles.h5.bold.setColor(Colors.green),
+                    ),
+                  if (product.status == "RENTING")
+                    Text(
+                      "ĐANG THUÊ",
+                      style: TextStyles.h5.bold.setColor(Colors.blue),
+                    ),
                 ],
               ),
             ),

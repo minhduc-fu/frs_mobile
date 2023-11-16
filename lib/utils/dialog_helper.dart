@@ -4,11 +4,12 @@ import 'package:flutter/material.dart';
 import '../core/constants/dismension_constants.dart';
 import '../core/constants/textstyle_constants.dart';
 
-void showCustomDialog(BuildContext context, String title, String content) {
+void showCustomDialog(BuildContext context, String title, String content,
+    bool barrierDismissible) {
   showGeneralDialog(
     context: context, // BuildContext để xác định vị trí hiển thị của hộp thoại
     barrierDismissible:
-        true, // cho phép người dùng đóng hộp thoại bằng cách chạm vào màn hình ngoài hộp thoại
+        barrierDismissible, // cho phép người dùng đóng hộp thoại bằng cách chạm vào màn hình ngoài hộp thoại
     barrierLabel: '', // label thêm chú thích
     transitionDuration: const Duration(
         milliseconds:

@@ -102,27 +102,27 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
             });
           }
           showCustomDialog(
-              context, "Thành công", "Bạn đã cập nhật thành công.");
+              context, "Thành công", "Bạn đã cập nhật thành công.", true);
         } else {
           print('faild');
           showCustomDialog(
-              context, "Lỗi", "Xin lỗi. Bạn cập nhật không thành công.");
+              context, "Lỗi", "Xin lỗi. Bạn cập nhật không thành công.", true);
         }
       } catch (e) {
-        showCustomDialog(context, "Lỗi", e.toString());
+        showCustomDialog(context, "Lỗi", e.toString(), true);
       }
     }
   }
 
   Future<void> createCustomer() async {
     if (_image == null) {
-      showCustomDialog(context, 'Lỗi', 'Bạn chưa chọn "Avatar".');
+      showCustomDialog(context, 'Lỗi', 'Bạn chưa chọn "Avatar".', true);
     } else if (fullNameController.text.isEmpty) {
-      showCustomDialog(context, 'Lỗi', 'Bạn chưa nhập "Họ và tên".');
+      showCustomDialog(context, 'Lỗi', 'Bạn chưa nhập "Họ và tên".', true);
     } else if (phoneController.text.isEmpty) {
-      showCustomDialog(context, 'Lỗi', 'Bạn chưa nhập "Số điện thoại".');
+      showCustomDialog(context, 'Lỗi', 'Bạn chưa nhập "Số điện thoại".', true);
     } else if (isMale == null) {
-      showCustomDialog(context, 'Lỗi', 'Bạn chưa chọn "Giới tính".');
+      showCustomDialog(context, 'Lỗi', 'Bạn chưa chọn "Giới tính".', true);
     } else {
       showDialog(
         context: context,
@@ -162,15 +162,15 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
           }
           print('ok');
           print(AuthProvider.userModel?.status);
-          showCustomDialog(
-              context, 'Thành công', 'Chúc mừng bạn đã xác minh thành công!');
+          showCustomDialog(context, 'Thành công',
+              'Chúc mừng bạn đã xác minh thành công!', true);
         } else {
           print('faild');
           showCustomDialog(
-              context, 'Lỗi', 'Xin lỗi! Xác minh không thành công.');
+              context, 'Lỗi', 'Xin lỗi! Xác minh không thành công.', true);
         }
       } catch (e) {
-        showCustomDialog(context, "Lỗi", e.toString());
+        showCustomDialog(context, "Lỗi", e.toString(), true);
       }
     }
   }
