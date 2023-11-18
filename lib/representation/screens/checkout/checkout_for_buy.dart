@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:frs_mobile/core/constants/color_constants.dart';
 import 'package:frs_mobile/core/constants/dismension_constants.dart';
+import 'package:frs_mobile/models/cart_item_model.dart';
 import 'package:frs_mobile/models/voucher_model.dart';
 import 'package:frs_mobile/representation/screens/customer/customer_main_screen.dart';
 import 'package:frs_mobile/representation/widgets/button_widget.dart';
@@ -32,6 +33,7 @@ class _CheckoutForBuyState extends State<CheckoutForBuy> {
   int customerID = AuthProvider.userModel!.customer!.customerID;
   VoucherModel? selectedVoucher;
   String customerAddress = "";
+  bool isVoucher = false;
 
   @override
   void initState() {
@@ -48,7 +50,11 @@ class _CheckoutForBuyState extends State<CheckoutForBuy> {
       final addressProvider =
           Provider.of<AddressProvider>(context, listen: false);
       addressProvider.setAddresses(addresses);
-      customerAddress = addresses.first.addressDescription;
+      if (addressProvider.selectedAddress != null) {
+        customerAddress = addressProvider.selectedAddress!.addressDescription;
+      } else {
+        customerAddress = addresses.first.addressDescription;
+      }
       _addressProvider.notifyListeners();
       setState(() {});
     } else {
@@ -137,14 +143,13 @@ class _CheckoutForBuyState extends State<CheckoutForBuy> {
     }
   }
 
-  void _openSelectVoucherScreen(int productOwnerID) async {
+  void _openSelectVoucherScreen(
+      int productOwnerID, CartItemModel cartItemModel) async {
     final vouchers =
         await AuthenticationService.getVoucherByProductOwnerID(productOwnerID);
     bool isVoucherAvailable(VoucherModel voucher) {
       DateTime currentDate = DateTime.now();
       DateTime startDate = voucher.startDate;
-
-      // Nếu ngày hiện tại lớn hơn hoặc bằng ngày bắt đầu, voucher có thể sử dụng
       return currentDate.isAfter(startDate) ||
           currentDate.isAtSameMomentAs(startDate);
     }
@@ -167,66 +172,83 @@ class _CheckoutForBuyState extends State<CheckoutForBuy> {
                   children: [
                     Expanded(
                       child: ListView.builder(
-                          itemCount: buyVouchers.length,
-                          shrinkWrap: true,
-                          itemBuilder: (BuildContext context, int index) {
-                            var voucher = buyVouchers[index];
-                            return Padding(
-                              padding: const EdgeInsets.all(20.0),
-                              child: Container(
-                                padding: EdgeInsets.all(5),
-                                decoration: BoxDecoration(
-                                  color: isVoucherAvailable(voucher) == true
-                                      ? Colors.white
-                                      : ColorPalette.backgroundScaffoldColor,
-                                  borderRadius:
-                                      BorderRadius.circular(kDefaultCircle14),
-                                ),
-                                child: Row(
-                                  children: [
-                                    Radio<VoucherModel>(
-                                      materialTapTargetSize:
-                                          MaterialTapTargetSize.shrinkWrap,
-                                      toggleable: true,
-                                      value: voucher,
-                                      groupValue: selectedVoucher,
-                                      onChanged: (value) {
-                                        if (isVoucherAvailable(voucher))
-                                          setState(() {
-                                            selectedVoucher = value;
-                                          });
-                                      },
-                                    ),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'Giảm ${voucher.discountAmount}%',
-                                          style: TextStyles.h5.bold,
-                                        ),
-                                        Text(
-                                          'Giảm tối đa ${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(voucher.maxDiscount)}',
-                                        ),
-                                        Text(
-                                          'HSD: ${DateFormat('dd/MM/yyyy').format(voucher.startDate)} - ${DateFormat('dd/MM/yyyy').format(voucher.endDate)}',
-                                        )
-                                      ],
-                                    )
-                                  ],
-                                ),
+                        itemCount: buyVouchers.length,
+                        shrinkWrap: true,
+                        itemBuilder: (BuildContext context, int index) {
+                          var voucher = buyVouchers[index];
+                          return Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: Container(
+                              padding: EdgeInsets.all(5),
+                              decoration: BoxDecoration(
+                                color: isVoucherAvailable(voucher) == true
+                                    ? Colors.white
+                                    : ColorPalette.backgroundScaffoldColor,
+                                borderRadius:
+                                    BorderRadius.circular(kDefaultCircle14),
                               ),
-                            );
-                          }),
+                              child: Row(
+                                children: [
+                                  Radio<VoucherModel>(
+                                    materialTapTargetSize:
+                                        MaterialTapTargetSize.shrinkWrap,
+                                    toggleable: true,
+                                    value: voucher,
+                                    groupValue: selectedVoucher,
+                                    onChanged: (VoucherModel? value) {
+                                      if (isVoucherAvailable(voucher))
+                                        setState(() {
+                                          selectedVoucher = value;
+                                        });
+                                    },
+                                  ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Giảm ${voucher.discountAmount}% trên đơn',
+                                        style: TextStyles.h5.bold,
+                                      ),
+                                      Text(
+                                        'Giảm tối đa ${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(voucher.maxDiscount)} trên đơn',
+                                      ),
+                                      Text(
+                                        'HSD: ${DateFormat('dd/MM/yyyy').format(voucher.startDate)} - ${DateFormat('dd/MM/yyyy').format(voucher.endDate)}',
+                                      )
+                                    ],
+                                  )
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      ),
                     ),
-                    // SizedBox(height: 20),
                     GestureDetector(
                       onTap: () {
                         if (selectedVoucher != null) {
-                          Navigator.pop(context);
-                        } else {
-                          Navigator.pop(context);
+                          final discountAmount =
+                              selectedVoucher!.discountAmount / 100;
+                          double voucherDiscount =
+                              cartItemModel.calculateTotalPrice() *
+                                  discountAmount;
+                          final maxDiscount =
+                              selectedVoucher!.maxDiscount.toDouble();
+                          if (voucherDiscount > maxDiscount) {
+                            voucherDiscount = maxDiscount;
+                          }
+                          setState(() {
+                            cartItemModel.voucherDiscount = voucherDiscount;
+                            cartItemModel.slectedDiscountText =
+                                'Giảm ${selectedVoucher!.discountAmount}%';
+                          });
                         }
+                        Navigator.pop(context);
+                        Navigator.of(context)
+                            .pushReplacement(CupertinoPageRoute(
+                          builder: (context) => CheckoutForBuy(),
+                        ));
                       },
                       child: Container(
                         color: ColorPalette.primaryColor,
@@ -266,24 +288,6 @@ class _CheckoutForBuyState extends State<CheckoutForBuy> {
     }
   }
 
-  // void _applyVoucher(VoucherModel? selectedVoucher) {
-  //   if (selectedVoucher != null) {
-  //     // Áp dụng voucher vào calculateTotalCartPrice
-  //     final discountAmount = selectedVoucher.discountAmount / 100; // Chuyển phần trăm thành số thập phân
-  //     final voucherDiscount = calculateTotalCartPrice() * discountAmount;
-  //     final maxDiscount = selectedVoucher.maxDiscount.toDouble();
-
-  //     // Kiểm tra xem giảm giá có vượt quá maxDiscount không
-  //     if (voucherDiscount > maxDiscount) {
-  //       voucherDiscount = maxDiscount;
-  //     }
-
-  //     // Cập nhật giá trị của calculateTotalCartPrice
-  //     setState(() {
-  //       calculateTotalCartPrice -= voucherDiscount;
-  //     });
-  //   }
-  // }
   @override
   Widget build(BuildContext context) {
     final cartProvider = Provider.of<CartProvider>(context);
@@ -291,6 +295,14 @@ class _CheckoutForBuyState extends State<CheckoutForBuy> {
     final cartItemsToDisplay = selectedCartItems.where((cartItem) => cartItem
         .productDetailModel
         .any((product) => product.isChecked == true));
+
+    for (var cartItem in cartItemsToDisplay) {
+      if (cartItem.voucherDiscount != 0) {
+        setState(() {
+          isVoucher = true;
+        });
+      }
+    }
 
     double calculateTotalCartPrice() {
       return cartItemsToDisplay.fold<double>(
@@ -302,12 +314,18 @@ class _CheckoutForBuyState extends State<CheckoutForBuy> {
           0, (total, cartItem) => total + cartItem.serviceFee);
     }
 
+    double calculateTotalVoucher() {
+      return cartItemsToDisplay.fold<double>(
+          0, (total, cartItem) => total + cartItem.voucherDiscount);
+    }
+
     double calculateTotalPayment() {
       return cartItemsToDisplay.fold<double>(
         0,
         (total, cartItem) =>
             total +
-            cartItem.calculateTotalPrice() + // Tổng tiền của từng sản phẩm
+            (cartItem.calculateTotalPrice() -
+                cartItem.voucherDiscount) + // Tổng tiền của từng sản phẩm
             cartItem.serviceFee + // Phí vận chuyển
             10000, // Phí hệ thống
       );
@@ -361,6 +379,13 @@ class _CheckoutForBuyState extends State<CheckoutForBuy> {
           backgroundColor: ColorPalette.backgroundScaffoldColor,
           leading: GestureDetector(
             onTap: () {
+              setState(() {
+                for (final cartItem in cartItemsToDisplay) {
+                  cartItem.serviceFee = 0;
+                  cartItem.voucherDiscount = 0;
+                  cartItem.slectedDiscountText = 'Chọn voucher';
+                }
+              });
               Navigator.pop(context);
             },
             child: Icon(
@@ -388,17 +413,9 @@ class _CheckoutForBuyState extends State<CheckoutForBuy> {
                       child: ListView(
                         children: [
                           // //address
-                          Row(
-                            children: [
-                              Icon(FontAwesomeIcons.locationDot),
-                              SizedBox(width: 10),
-                              Text(
-                                'Địa chỉ nhận hàng',
-                                style: TextStyles.defaultStyle
-                                    .setTextSize(20)
-                                    .bold,
-                              ),
-                            ],
+                          Text(
+                            'Thông tin nhận hàng',
+                            style: TextStyles.defaultStyle.setTextSize(20).bold,
                           ),
                           SizedBox(height: 10),
                           Container(
@@ -413,8 +430,22 @@ class _CheckoutForBuyState extends State<CheckoutForBuy> {
                               children: [
                                 Row(
                                   children: [
+                                    Icon(
+                                      FontAwesomeIcons.solidUser,
+                                      size: 14,
+                                    ),
+                                    SizedBox(width: 10),
                                     Text(AuthProvider
                                         .userModel!.customer!.fullName),
+                                  ],
+                                ),
+                                SizedBox(height: 10),
+                                Row(
+                                  children: [
+                                    Icon(
+                                      FontAwesomeIcons.phone,
+                                      size: 14,
+                                    ),
                                     SizedBox(width: 10),
                                     Text(AuthProvider
                                         .userModel!.customer!.phone),
@@ -425,15 +456,25 @@ class _CheckoutForBuyState extends State<CheckoutForBuy> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Container(
-                                      width: 250,
-                                      child: customerAddress.isEmpty
-                                          ? Text('Bạn chưa có địa chỉ')
-                                          : AutoSizeText(
-                                              customerAddress,
-                                              maxLines: 2,
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
+                                    Row(
+                                      children: [
+                                        Icon(
+                                          FontAwesomeIcons.locationDot,
+                                          size: 14,
+                                        ),
+                                        SizedBox(width: 10),
+                                        Container(
+                                          width: 250,
+                                          child: customerAddress.isEmpty
+                                              ? Text('Bạn chưa có địa chỉ')
+                                              : AutoSizeText(
+                                                  customerAddress,
+                                                  maxLines: 2,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
+                                        ),
+                                      ],
                                     ),
                                     GestureDetector(
                                       onTap: _openSelectAddressScreen,
@@ -517,7 +558,6 @@ class _CheckoutForBuyState extends State<CheckoutForBuy> {
                                                 ),
                                               ),
                                               SizedBox(width: 10),
-                                              // productName, price
                                               Padding(
                                                 padding: EdgeInsets.symmetric(
                                                     vertical: 20),
@@ -528,14 +568,55 @@ class _CheckoutForBuyState extends State<CheckoutForBuy> {
                                                       MainAxisAlignment
                                                           .spaceBetween,
                                                   children: [
-                                                    Text(
-                                                      product.productName,
-                                                      style: TextStyles.h5.bold,
+                                                    Container(
+                                                      width: 230,
+                                                      child: AutoSizeText(
+                                                        product.productName,
+                                                        minFontSize: 16,
+                                                        style:
+                                                            TextStyles.h5.bold,
+                                                        maxLines: 1,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                      ),
                                                     ),
-                                                    Text(
-                                                      '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(product.price)}',
-                                                      style: TextStyles
-                                                          .defaultStyle.bold,
+                                                    Container(
+                                                      width: 230,
+                                                      child: AutoSizeText.rich(
+                                                        minFontSize: 14,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        maxLines: 2,
+                                                        TextSpan(
+                                                          children: [
+                                                            TextSpan(
+                                                              text: 'Mua: ',
+                                                            ),
+                                                            TextSpan(
+                                                                text:
+                                                                    '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(product.price)}',
+                                                                style: TextStyles
+                                                                    .defaultStyle
+                                                                    .bold
+                                                                    .setColor(
+                                                                        Colors
+                                                                            .red)),
+                                                            // if (cartItem
+                                                            //         .voucherDiscount !=
+                                                            //     0)
+                                                            //   TextSpan(
+                                                            //     text:
+                                                            //         '\n${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(product.price - cartItem.voucherDiscount)}',
+                                                            //     style: TextStyles
+                                                            //         .defaultStyle
+                                                            //         .bold
+                                                            //         .setColor(
+                                                            //             Colors
+                                                            //                 .red),
+                                                            //   ),
+                                                          ],
+                                                        ),
+                                                      ),
                                                     ),
                                                   ],
                                                 ),
@@ -568,14 +649,53 @@ class _CheckoutForBuyState extends State<CheckoutForBuy> {
                                           GestureDetector(
                                             onTap: () {
                                               _openSelectVoucherScreen(
-                                                  cartItem.productOwnerID);
+                                                  cartItem.productOwnerID,
+                                                  cartItem);
                                             },
                                             child: Text(
-                                              'Chọn Voucher',
+                                              cartItem.slectedDiscountText,
                                               style: TextStyles.defaultStyle
                                                   .setColor(Colors.blue)
                                                   .bold,
                                             ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Divider(
+                                      thickness: 0.5,
+                                      color: ColorPalette.textHide,
+                                    ),
+                                    Padding(
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 10),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text('Tiền mua'),
+                                          Column(
+                                            children: [
+                                              cartItem.voucherDiscount == 0
+                                                  ? Text(
+                                                      '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(cartItem.calculateTotalPrice())}',
+                                                    )
+                                                  : Column(
+                                                      children: [
+                                                        Text(
+                                                          '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(cartItem.calculateTotalPrice())}',
+                                                          style: TextStyle(
+                                                            decoration:
+                                                                TextDecoration
+                                                                    .lineThrough,
+                                                          ),
+                                                        ),
+                                                        Text(
+                                                          '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(cartItem.calculateTotalPrice() - cartItem.voucherDiscount)}',
+                                                        ),
+                                                      ],
+                                                    ),
+                                            ],
                                           ),
                                         ],
                                       ),
@@ -636,7 +756,7 @@ class _CheckoutForBuyState extends State<CheckoutForBuy> {
                                             ],
                                           ),
                                           Text(
-                                            '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(cartItem.calculateTotalPrice() + cartItem.serviceFee + 10000)}',
+                                            '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(cartItem.calculateTotalPrice() - cartItem.voucherDiscount + cartItem.serviceFee + 10000)}',
                                           ),
                                         ],
                                       ),
@@ -686,6 +806,25 @@ class _CheckoutForBuyState extends State<CheckoutForBuy> {
                                 ),
                               ],
                             ),
+                            if (isVoucher == true)
+                              Column(
+                                children: [
+                                  SizedBox(height: 10),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        'Tổng Voucher giảm giá',
+                                        style: TextStyles.h5.bold,
+                                      ),
+                                      Text(
+                                        '- ${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(calculateTotalVoucher())}',
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             Divider(
                               color: ColorPalette.primaryColor,
                             ),
@@ -699,6 +838,8 @@ class _CheckoutForBuyState extends State<CheckoutForBuy> {
                                 ),
                                 Text(
                                   '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(calculateTotalPayment())}',
+                                  style:
+                                      TextStyles.h5.bold.setColor(Colors.red),
                                 )
                               ],
                             ),
@@ -718,6 +859,8 @@ class _CheckoutForBuyState extends State<CheckoutForBuy> {
                                     .userModel!.customer!.customerID;
                                 final shippingFee = cartItem.serviceFee;
                                 final orderDetail = <Map<String, dynamic>>[];
+                                final voucherDiscount =
+                                    cartItem.voucherDiscount;
 
                                 // Duyệt qua các sản phẩm trong cartItem
                                 for (final product
@@ -733,9 +876,11 @@ class _CheckoutForBuyState extends State<CheckoutForBuy> {
                                 if (orderDetail.isNotEmpty) {
                                   final totalBuyPriceProduct =
                                       orderDetail.fold<double>(
-                                          0,
-                                          (previous, element) =>
-                                              previous + element['price'] ?? 0);
+                                              0,
+                                              (previous, element) =>
+                                                  previous + element['price'] ??
+                                                  0) -
+                                          voucherDiscount;
                                   final total =
                                       totalBuyPriceProduct + shippingFee;
                                   final order = {

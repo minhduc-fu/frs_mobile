@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:frs_mobile/core/constants/color_constants.dart';
 import 'package:frs_mobile/core/constants/dismension_constants.dart';
+import 'package:frs_mobile/models/rental_cart_item_model.dart';
 import 'package:frs_mobile/models/voucher_model.dart';
 import 'package:frs_mobile/representation/screens/customer/customer_main_screen.dart';
 import 'package:frs_mobile/representation/widgets/button_widget.dart';
@@ -32,6 +33,7 @@ class _CheckoutForRentState extends State<CheckoutForRent> {
   int customerID = AuthProvider.userModel!.customer!.customerID;
   VoucherModel? selectedVoucher;
   String customerAddress = "";
+  bool isVoucher = false;
 
   @override
   void initState() {
@@ -137,94 +139,130 @@ class _CheckoutForRentState extends State<CheckoutForRent> {
     }
   }
 
-  void _openSelectVoucherScreen(int productOwnerID) async {
+  void _openSelectVoucherScreen(
+      int productOwnerID, RentalCartItemModel cartItemModel) async {
     final vouchers =
         await AuthenticationService.getVoucherByProductOwnerID(productOwnerID);
+    bool isVoucherAvailable(VoucherModel voucher) {
+      DateTime currentDate = DateTime.now();
+      DateTime startDate = voucher.startDate;
+
+      // Nếu ngày hiện tại lớn hơn hoặc bằng ngày bắt đầu, voucher có thể sử dụng
+      return currentDate.isAfter(startDate) ||
+          currentDate.isAtSameMomentAs(startDate);
+    }
+
     final buyVouchers =
         vouchers.where((voucher) => voucher.voucherTypeID == 2).toList();
     if (buyVouchers.isNotEmpty) {
       showModalBottomSheet(
+        isScrollControlled: true,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(kDefaultCircle14)),
         backgroundColor: ColorPalette.backgroundScaffoldColor,
         context: context,
         builder: (BuildContext context) {
-          return StatefulBuilder(
-            builder: (context, setState) {
-              return Column(
-                children: [
-                  for (var voucher in buyVouchers)
+          return Container(
+            height: 350,
+            child: StatefulBuilder(
+              builder: (context, setState) {
+                return Column(
+                  children: [
                     Expanded(
-                      child: ListView(
-                        shrinkWrap: true,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(20.0),
-                            child: Container(
-                              padding: EdgeInsets.all(5),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius:
-                                    BorderRadius.circular(kDefaultCircle14),
+                      child: ListView.builder(
+                          itemCount: buyVouchers.length,
+                          shrinkWrap: true,
+                          itemBuilder: (BuildContext context, int index) {
+                            var voucher = buyVouchers[index];
+                            return Padding(
+                              padding: const EdgeInsets.all(20.0),
+                              child: Container(
+                                padding: EdgeInsets.all(5),
+                                decoration: BoxDecoration(
+                                  color: isVoucherAvailable(voucher) == true
+                                      ? Colors.white
+                                      : ColorPalette.backgroundScaffoldColor,
+                                  borderRadius:
+                                      BorderRadius.circular(kDefaultCircle14),
+                                ),
+                                child: Row(
+                                  children: [
+                                    Radio<VoucherModel>(
+                                      materialTapTargetSize:
+                                          MaterialTapTargetSize.shrinkWrap,
+                                      toggleable: true,
+                                      value: voucher,
+                                      groupValue: selectedVoucher,
+                                      onChanged: (VoucherModel? value) {
+                                        if (isVoucherAvailable(voucher))
+                                          setState(() {
+                                            selectedVoucher = value;
+                                          });
+                                      },
+                                    ),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'Giảm ${voucher.discountAmount}% trên đơn',
+                                          style: TextStyles.h5.bold,
+                                        ),
+                                        Text(
+                                          'Giảm tối đa ${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(voucher.maxDiscount)} trên đơn',
+                                        ),
+                                        Text(
+                                          'HSD: ${DateFormat('dd/MM/yyyy').format(voucher.startDate)} - ${DateFormat('dd/MM/yyyy').format(voucher.endDate)}',
+                                        )
+                                      ],
+                                    )
+                                  ],
+                                ),
                               ),
-                              child: Row(
-                                children: [
-                                  Radio<VoucherModel>(
-                                    value: voucher,
-                                    groupValue: selectedVoucher,
-                                    onChanged: (value) {
-                                      setState(() {
-                                        selectedVoucher = value;
-                                      });
-                                    },
-                                  ),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Giảm ${voucher.discountAmount}%',
-                                        style: TextStyles.h5.bold,
-                                      ),
-                                      Text(
-                                        'Giảm tối đa ${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(voucher.maxDiscount)}',
-                                      ),
-                                      Text(
-                                        'HSD: ${DateFormat('dd/MM/yyyy').format(voucher.startDate)} - ${DateFormat('dd/MM/yyyy').format(voucher.endDate)}',
-                                      )
-                                    ],
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                            );
+                          }),
                     ),
-                  SizedBox(height: 20),
-                  GestureDetector(
-                    onTap: () {
-                      if (selectedVoucher != null) {
+                    GestureDetector(
+                      onTap: () {
+                        if (selectedVoucher != null) {
+                          final discountAmount =
+                              selectedVoucher!.discountAmount / 100;
+                          double voucherDiscount =
+                              cartItemModel.calculateTotalRentPrice() *
+                                  discountAmount;
+                          final maxDiscount =
+                              selectedVoucher!.maxDiscount.toDouble();
+                          if (voucherDiscount > maxDiscount) {
+                            voucherDiscount = maxDiscount;
+                          }
+                          setState(() {
+                            cartItemModel.voucherDiscount = voucherDiscount;
+                            cartItemModel.slectedDiscountText =
+                                'Giảm ${selectedVoucher!.discountAmount}%';
+                          });
+                        }
                         Navigator.pop(context);
-                      } else {
-                        Navigator.pop(context);
-                      }
-                    },
-                    child: Container(
-                      color: ColorPalette.primaryColor,
-                      height: 70,
-                      child: Center(
-                        child: Text(
-                          'Đồng ý',
-                          style: TextStyles.defaultStyle.bold.whiteTextColor
-                              .setTextSize(18),
+                        Navigator.of(context)
+                            .pushReplacement(CupertinoPageRoute(
+                          builder: (context) => CheckoutForRent(),
+                        ));
+                      },
+                      child: Container(
+                        color: ColorPalette.primaryColor,
+                        height: 70,
+                        child: Center(
+                          child: Text(
+                            'Đồng ý',
+                            style: TextStyles.defaultStyle.bold.whiteTextColor
+                                .setTextSize(18),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
-              );
-            },
+                  ],
+                );
+              },
+            ),
           );
         },
       );
@@ -247,24 +285,6 @@ class _CheckoutForRentState extends State<CheckoutForRent> {
     }
   }
 
-  // void _applyVoucher(VoucherModel? selectedVoucher) {
-  //   if (selectedVoucher != null) {
-  //     // Áp dụng voucher vào calculateTotalCartPrice
-  //     final discountAmount = selectedVoucher.discountAmount / 100; // Chuyển phần trăm thành số thập phân
-  //     final voucherDiscount = calculateTotalCartPrice() * discountAmount;
-  //     final maxDiscount = selectedVoucher.maxDiscount.toDouble();
-
-  //     // Kiểm tra xem giảm giá có vượt quá maxDiscount không
-  //     if (voucherDiscount > maxDiscount) {
-  //       voucherDiscount = maxDiscount;
-  //     }
-
-  //     // Cập nhật giá trị của calculateTotalCartPrice
-  //     setState(() {
-  //       calculateTotalCartPrice -= voucherDiscount;
-  //     });
-  //   }
-  // }
   @override
   Widget build(BuildContext context) {
     final rentalCartProvider = Provider.of<RentalCartProvider>(context);
@@ -272,6 +292,14 @@ class _CheckoutForRentState extends State<CheckoutForRent> {
     final rentalCartItemsToDisplay = selectedCartItems.where((rentalCartItem) =>
         rentalCartItem.productDetailModel
             .any((product) => product.isChecked == true));
+
+    for (var cartItem in rentalCartItemsToDisplay) {
+      if (cartItem.voucherDiscount != 0) {
+        setState(() {
+          isVoucher = true;
+        });
+      }
+    }
 
     double calculateTotalCartPrice() {
       return rentalCartItemsToDisplay.fold<double>(
@@ -288,12 +316,17 @@ class _CheckoutForRentState extends State<CheckoutForRent> {
           0, (total, cartItem) => total + cartItem.serviceFee);
     }
 
+    double calculateTotalVoucher() {
+      return rentalCartItemsToDisplay.fold<double>(
+          0, (total, cartItem) => total + cartItem.voucherDiscount);
+    }
+
     double calculateTotalPayment() {
       return rentalCartItemsToDisplay.fold<double>(
         0,
         (total, cartItem) =>
             total +
-            cartItem.calculateTotalRentPrice() +
+            (cartItem.calculateTotalRentPrice() - cartItem.voucherDiscount) +
             cartItem.calculateTotalPrice() +
             cartItem.serviceFee +
             10000,
@@ -348,6 +381,13 @@ class _CheckoutForRentState extends State<CheckoutForRent> {
           backgroundColor: ColorPalette.backgroundScaffoldColor,
           leading: GestureDetector(
             onTap: () {
+              setState(() {
+                for (final cartItem in rentalCartItemsToDisplay) {
+                  cartItem.serviceFee = 0;
+                  cartItem.voucherDiscount = 0;
+                  cartItem.slectedDiscountText = 'Chọn voucher';
+                }
+              });
               Navigator.pop(context);
             },
             child: Icon(
@@ -375,17 +415,9 @@ class _CheckoutForRentState extends State<CheckoutForRent> {
                       child: ListView(
                         children: [
                           // //address
-                          Row(
-                            children: [
-                              Icon(FontAwesomeIcons.locationDot),
-                              SizedBox(width: 10),
-                              Text(
-                                'Địa chỉ nhận hàng',
-                                style: TextStyles.defaultStyle
-                                    .setTextSize(20)
-                                    .bold,
-                              ),
-                            ],
+                          Text(
+                            'Thông tin nhận hàng',
+                            style: TextStyles.defaultStyle.setTextSize(20).bold,
                           ),
                           SizedBox(height: 10),
                           Container(
@@ -400,8 +432,22 @@ class _CheckoutForRentState extends State<CheckoutForRent> {
                               children: [
                                 Row(
                                   children: [
+                                    Icon(
+                                      FontAwesomeIcons.solidUser,
+                                      size: 14,
+                                    ),
+                                    SizedBox(width: 10),
                                     Text(AuthProvider
                                         .userModel!.customer!.fullName),
+                                  ],
+                                ),
+                                SizedBox(height: 10),
+                                Row(
+                                  children: [
+                                    Icon(
+                                      FontAwesomeIcons.phone,
+                                      size: 14,
+                                    ),
                                     SizedBox(width: 10),
                                     Text(AuthProvider
                                         .userModel!.customer!.phone),
@@ -412,15 +458,25 @@ class _CheckoutForRentState extends State<CheckoutForRent> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Container(
-                                      width: 250,
-                                      child: customerAddress.isEmpty
-                                          ? Text('Bạn chưa có địa chỉ')
-                                          : AutoSizeText(
-                                              customerAddress,
-                                              maxLines: 2,
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
+                                    Row(
+                                      children: [
+                                        Icon(
+                                          FontAwesomeIcons.locationDot,
+                                          size: 14,
+                                        ),
+                                        SizedBox(width: 10),
+                                        Container(
+                                          width: 250,
+                                          child: customerAddress.isEmpty
+                                              ? Text('Bạn chưa có địa chỉ')
+                                              : AutoSizeText(
+                                                  customerAddress,
+                                                  maxLines: 2,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
+                                        ),
+                                      ],
                                     ),
                                     GestureDetector(
                                       onTap: _openSelectAddressScreen,
@@ -610,15 +666,76 @@ class _CheckoutForRentState extends State<CheckoutForRent> {
                                           GestureDetector(
                                             onTap: () {
                                               _openSelectVoucherScreen(
-                                                  cartItem.productOwnerID);
+                                                  cartItem.productOwnerID,
+                                                  cartItem);
                                             },
                                             child: Text(
-                                              'Chọn Voucher',
+                                              cartItem.slectedDiscountText,
                                               style: TextStyles.defaultStyle
                                                   .setColor(Colors.blue)
                                                   .bold,
                                             ),
                                           ),
+                                        ],
+                                      ),
+                                    ),
+                                    Divider(
+                                      thickness: 0.5,
+                                      color: ColorPalette.textHide,
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            'Tiền cọc',
+                                          ),
+                                          Text(
+                                            '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(cartItem.calculateTotalPrice())}',
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Divider(
+                                      thickness: 0.5,
+                                      color: ColorPalette.textHide,
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            'Tiền thuê',
+                                          ),
+                                          Column(
+                                            children: [
+                                              cartItem.voucherDiscount == 0
+                                                  ? Text(
+                                                      '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(cartItem.calculateTotalRentPrice())}',
+                                                    )
+                                                  : Column(
+                                                      children: [
+                                                        Text(
+                                                          '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(cartItem.calculateTotalRentPrice())}',
+                                                          style: TextStyle(
+                                                            decoration:
+                                                                TextDecoration
+                                                                    .lineThrough,
+                                                          ),
+                                                        ),
+                                                        Text(
+                                                          '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(cartItem.calculateTotalRentPrice() - cartItem.voucherDiscount)}',
+                                                        ),
+                                                      ],
+                                                    ),
+                                            ],
+                                          )
                                         ],
                                       ),
                                     ),
@@ -659,26 +776,7 @@ class _CheckoutForRentState extends State<CheckoutForRent> {
                                         ],
                                       ),
                                     ),
-                                    Divider(
-                                      thickness: 0.5,
-                                      color: ColorPalette.textHide,
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 10),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            'Tổng tiền cọc',
-                                          ),
-                                          Text(
-                                            '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(cartItem.calculateTotalPrice())}',
-                                          ),
-                                        ],
-                                      ),
-                                    ),
+
                                     Divider(
                                       thickness: 0.5,
                                       color: ColorPalette.textHide,
@@ -698,7 +796,7 @@ class _CheckoutForRentState extends State<CheckoutForRent> {
                                             ],
                                           ),
                                           Text(
-                                            '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(cartItem.calculateTotalPrice() + cartItem.serviceFee + 10000 + cartItem.calculateTotalRentPrice())}',
+                                            '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(cartItem.calculateTotalPrice() + cartItem.serviceFee + 10000 + cartItem.calculateTotalRentPrice() - cartItem.voucherDiscount)}',
                                           ),
                                         ],
                                       ),
@@ -761,6 +859,25 @@ class _CheckoutForRentState extends State<CheckoutForRent> {
                                 ),
                               ],
                             ),
+                            if (isVoucher == true)
+                              Column(
+                                children: [
+                                  SizedBox(height: 10),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        'Tổng Voucher giảm giá',
+                                        style: TextStyles.h5.bold,
+                                      ),
+                                      Text(
+                                        '- ${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(calculateTotalVoucher())}',
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             Divider(
                               color: ColorPalette.primaryColor,
                             ),
@@ -796,6 +913,8 @@ class _CheckoutForRentState extends State<CheckoutForRent> {
                                 final shippingFee = cartItem.serviceFee;
                                 final orderRentDetail =
                                     <Map<String, dynamic>>[];
+                                final voucherDiscount =
+                                    cartItem.voucherDiscount;
 
                                 // Duyệt qua các sản phẩm trong cartItem
                                 for (final product
@@ -824,10 +943,12 @@ class _CheckoutForRentState extends State<CheckoutForRent> {
                                               0);
                                   final totalRentPriceProduct =
                                       orderRentDetail.fold<double>(
-                                          0,
-                                          (previous, element) =>
-                                              previous + element['rentPrice'] ??
-                                              0);
+                                              0,
+                                              (previous, element) =>
+                                                  previous +
+                                                      element['rentPrice'] ??
+                                                  0) -
+                                          voucherDiscount;
                                   final total = totalRentPriceProduct +
                                       cocMoneyTotal +
                                       shippingFee;

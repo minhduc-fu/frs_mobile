@@ -12,6 +12,7 @@ class AssetHelper {
   static const String imageBanner2 = 'assets/images/banner_2.png';
   static const String imageBanner3 = 'assets/images/banner_3.png';
   static const String imageLogoFRS = 'assets/images/logofrs.png';
+  static const String imageLogo = 'assets/images/logo.png';
   static const String imageSplash = 'assets/images/splash.png';
   static const String imageSushi = 'assets/images/sushi.png';
   static const String imageSushi2 = 'assets/images/sushi2.png';

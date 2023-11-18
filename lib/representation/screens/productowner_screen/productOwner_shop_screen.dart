@@ -45,10 +45,12 @@ class _ProductOwnerShopScreenState extends State<ProductOwnerShopScreen> {
       //   return await AuthenticationService.getAllProductOnAvailable();
       // case 3:
       //   return await AuthenticationService.getAllProductOnSoldOut();
-      // case 4:
-      //   return await AuthenticationService.getAllProductOnRent();
-      // case 5:
-      //   return await AuthenticationService.getAllProductOnSale();
+      case 4:
+        return await APIProductOwner.getProductOnRentByProductOwnerIDForCus(
+            widget.productOwnerModel!.productOwnerID);
+      case 5:
+        return await APIProductOwner.getProductOnSaleByProductOwnerIDForCus(
+            widget.productOwnerModel!.productOwnerID);
     }
   }
 

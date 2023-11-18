@@ -6,24 +6,24 @@ import 'package:frs_mobile/core/constants/color_constants.dart';
 import 'package:frs_mobile/core/constants/dismension_constants.dart';
 import 'package:frs_mobile/core/constants/textstyle_constants.dart';
 import 'package:frs_mobile/models/productOwner_model.dart';
-import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/buy_order_history/model/order_buy_detail_model.dart';
+import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/rental_order_history/models/order_rent_detail_model.dart';
+import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/rental_order_history/models/order_rent_model.dart';
+import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/rental_order_history/services/api_order_rent_history.dart';
 import 'package:frs_mobile/representation/screens/productowner_screen/productOwner_shop_screen.dart';
 import 'package:frs_mobile/services/authentication_service.dart';
 import 'package:intl/intl.dart';
 
-import '../model/order_buy_model.dart';
-import '../services/api_buy_order_history.dart';
-
-class InforMationOrderBuyScreen extends StatefulWidget {
-  final OrderBuyModel order;
-  const InforMationOrderBuyScreen({super.key, required this.order});
+class InforMationOrderRentScreen extends StatefulWidget {
+  final OrderRentModel order;
+  const InforMationOrderRentScreen({super.key, required this.order});
 
   @override
-  State<InforMationOrderBuyScreen> createState() =>
-      _InforMationOrderBuyScreenState();
+  State<InforMationOrderRentScreen> createState() =>
+      _InforMationOrderRentScreenState();
 }
 
-class _InforMationOrderBuyScreenState extends State<InforMationOrderBuyScreen> {
+class _InforMationOrderRentScreenState
+    extends State<InforMationOrderRentScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -161,9 +161,9 @@ class _InforMationOrderBuyScreenState extends State<InforMationOrderBuyScreen> {
                           ),
                           Container(
                             child: FutureBuilder(
-                              future: ApiBuyOderHistory
-                                  .getAllOrderBuyDetailByOrderBuyID(
-                                      widget.order.orderBuyID),
+                              future: ApiOderRentHistory
+                                  .getAllOrderRentDetailByOrderRentID(
+                                      widget.order.orderRentID),
                               builder: ((context, snapshot) {
                                 if (snapshot.connectionState ==
                                     ConnectionState.waiting) {
@@ -171,7 +171,7 @@ class _InforMationOrderBuyScreenState extends State<InforMationOrderBuyScreen> {
                                 } else if (snapshot.hasError) {
                                   return Text('Error: ${snapshot.error}');
                                 } else {
-                                  List<OrderBuyDetailModel>? orderDetails =
+                                  List<OrderRentDetailModel>? orderDetails =
                                       snapshot.data;
                                   return Column(
                                     crossAxisAlignment:
@@ -179,7 +179,7 @@ class _InforMationOrderBuyScreenState extends State<InforMationOrderBuyScreen> {
                                     children: orderDetails!.map((detail) {
                                       return Container(
                                         margin: EdgeInsets.only(top: 10),
-                                        height: 110,
+                                        height: 140,
                                         decoration: BoxDecoration(
                                           border: Border.all(
                                               color: ColorPalette.textHide),
@@ -213,18 +213,62 @@ class _InforMationOrderBuyScreenState extends State<InforMationOrderBuyScreen> {
                                                     MainAxisAlignment
                                                         .spaceBetween,
                                                 children: [
-                                                  Text(
-                                                    detail.productDTOModel
-                                                        .productName,
-                                                    style: TextStyles.h5.bold,
+                                                  Container(
+                                                    width: 230,
+                                                    child: AutoSizeText(
+                                                      detail.productDTOModel
+                                                          .productName,
+                                                      minFontSize: 16,
+                                                      style: TextStyles.h5.bold,
+                                                      maxLines: 1,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    ),
                                                   ),
                                                   Text(
-                                                    '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(
-                                                      detail.productDTOModel
-                                                          .price,
-                                                    )}',
-                                                    style: TextStyles
-                                                        .defaultStyle.bold,
+                                                    '${DateFormat('dd/MM/yyyy').format(detail.startDate)} - ${DateFormat('dd/MM/yyyy').format(detail.endDate)}',
+                                                  ),
+                                                  AutoSizeText.rich(
+                                                    minFontSize: 14,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    maxLines: 1,
+                                                    TextSpan(
+                                                      children: [
+                                                        TextSpan(
+                                                          text: 'Cọc: ',
+                                                        ),
+                                                        TextSpan(
+                                                          text:
+                                                              '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(detail.cocMoney)}',
+                                                          style: TextStyles
+                                                              .defaultStyle.bold
+                                                              .setColor(
+                                                                  Colors.red),
+                                                        )
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  AutoSizeText.rich(
+                                                    minFontSize: 14,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    maxLines: 1,
+                                                    TextSpan(
+                                                      children: [
+                                                        TextSpan(
+                                                          text: 'Thuê: ',
+                                                        ),
+                                                        TextSpan(
+                                                          text:
+                                                              '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(detail.rentPrice)}',
+                                                          style: TextStyles
+                                                              .defaultStyle.bold
+                                                              .setColor(
+                                                                  Colors.red),
+                                                        ),
+                                                      ],
+                                                    ),
                                                   ),
                                                 ],
                                               ),
@@ -248,9 +292,25 @@ class _InforMationOrderBuyScreenState extends State<InforMationOrderBuyScreen> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text('Tổng tiền hàng'),
+                                Text('Tổng tiền cọc'),
                                 Text(
-                                  '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(widget.order.totalBuyPriceProduct)}',
+                                  '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(widget.order.cocMoneyTotal)}',
+                                ),
+                              ],
+                            ),
+                          ),
+                          Divider(
+                            thickness: 0.5,
+                            color: ColorPalette.textHide,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 10),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text('Tổng tiền thuê'),
+                                Text(
+                                  '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(widget.order.totalRentPriceProduct)}',
                                 ),
                               ],
                             ),
@@ -297,11 +357,6 @@ class _InforMationOrderBuyScreenState extends State<InforMationOrderBuyScreen> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text('Thành tiền'),
-                                // AutoSizeText(
-                                //   'aaaaa',
-                                //   style: TextStyle(
-                                //       decoration: TextDecoration.lineThrough),
-                                // ),
                                 Text(
                                   '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(widget.order.total + 10000)}',
                                 ),

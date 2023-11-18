@@ -1,5 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/buy_order_history/screens/pending_order_buy_screen.dart';
+import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/rental_order_history/screens/canceled_order_rent_screen.dart';
+import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/rental_order_history/screens/completed_order_rent_screen.dart';
+import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/rental_order_history/screens/confirm_order_rent_screen.dart';
+import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/rental_order_history/screens/delivery_order_rent_screen.dart';
+import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/rental_order_history/screens/pending_order_rent_screen.dart';
+import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/rental_order_history/screens/prepare_order_rent_screen.dart';
+import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/rental_order_history/screens/reject_order_rent_screen.dart';
+import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/rental_order_history/screens/renting_order_rent_screen.dart';
+import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/rental_order_history/screens/return_order_rent_screen.dart';
 
 import '../../../../../../core/constants/color_constants.dart';
 import '../../../../../../core/constants/dismension_constants.dart';
@@ -17,7 +26,7 @@ class _RentalOrderHistoryState extends State<RentalOrderHistory>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 5, vsync: this);
+    _tabController = TabController(length: 9, vsync: this);
     _tabController.index = 0;
   }
 
@@ -57,16 +66,28 @@ class _RentalOrderHistoryState extends State<RentalOrderHistory>
                     controller: _tabController,
                     tabs: [
                       Tab(
-                        text: 'Chờ xác nhận',
+                        text: 'Chờ phê duyệt',
+                      ),
+                      Tab(
+                        text: 'Chuẩn bị hàng',
                       ),
                       Tab(
                         text: 'Đang giao',
                       ),
                       Tab(
+                        text: 'Chờ xác nhận',
+                      ),
+                      Tab(
                         text: 'Đang thuê',
                       ),
                       Tab(
-                        text: 'Hoàn tất',
+                        text: 'Chờ trả',
+                      ),
+                      Tab(
+                        text: 'Hoàn thành',
+                      ),
+                      Tab(
+                        text: 'Từ chối',
                       ),
                       Tab(
                         text: 'Đã hủy',
@@ -84,11 +105,15 @@ class _RentalOrderHistoryState extends State<RentalOrderHistory>
               // physics: BouncingScrollPhysics(),
               controller: _tabController,
               children: [
-                PendingOrderBuyScreen(),
-                PendingOrderBuyScreen(),
-                PendingOrderBuyScreen(),
-                PendingOrderBuyScreen(),
-                PendingOrderBuyScreen(),
+                PendingOrderRentScreen(),
+                PrepareOrderRentScreen(),
+                DeliveryOrderRentScreen(),
+                ConfirmOrderRentScreen(),
+                RentingOrderRentScreen(),
+                ReturnOrderRentScreen(),
+                CompletedOrderRentScreen(),
+                RejectOrderRentScreen(),
+                CanceledOrderRentScreen(),
               ],
             ),
           ),

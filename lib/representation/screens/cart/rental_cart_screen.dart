@@ -5,8 +5,10 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:frs_mobile/core/constants/color_constants.dart';
 import 'package:frs_mobile/core/constants/dismension_constants.dart';
 import 'package:frs_mobile/core/constants/textstyle_constants.dart';
+import 'package:frs_mobile/models/productOwner_model.dart';
 import 'package:frs_mobile/models/rental_cart_item_model.dart';
 import 'package:frs_mobile/representation/screens/checkout/checkout_for_rent.dart';
+import 'package:frs_mobile/representation/screens/productowner_screen/productOwner_shop_screen.dart';
 import 'package:frs_mobile/representation/screens/wallet/wallet_screen.dart';
 import 'package:frs_mobile/representation/widgets/button_widget.dart';
 import 'package:frs_mobile/services/authentication_service.dart';
@@ -200,7 +202,21 @@ class _RentalCartScreenState extends State<RentalCartScreen> {
                                   ],
                                 ),
                                 InkWell(
-                                  onTap: () {},
+                                  onTap: () async {
+                                    ProductOwnerModel? productOwnerModel =
+                                        await AuthenticationService
+                                            .getProductOwnerByID(
+                                                rentalCartItem.productOwnerID);
+                                    Navigator.push(
+                                      context,
+                                      CupertinoPageRoute(
+                                        builder: (context) =>
+                                            ProductOwnerShopScreen(
+                                          productOwnerModel: productOwnerModel,
+                                        ),
+                                      ),
+                                    );
+                                  },
                                   child: Icon(FontAwesomeIcons.angleRight),
                                 ),
                               ],

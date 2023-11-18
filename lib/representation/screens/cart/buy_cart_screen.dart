@@ -2,7 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:frs_mobile/models/cart_item_model.dart';
+import 'package:frs_mobile/models/productOwner_model.dart';
 import 'package:frs_mobile/representation/screens/checkout/checkout_for_buy.dart';
+import 'package:frs_mobile/representation/screens/productowner_screen/productOwner_shop_screen.dart';
 import 'package:frs_mobile/representation/screens/wallet/wallet_screen.dart';
 import 'package:frs_mobile/utils/dialog_helper.dart';
 import 'package:intl/intl.dart';
@@ -201,7 +203,21 @@ class _BuyCartScreenState extends State<BuyCartScreen> {
                                   ],
                                 ),
                                 InkWell(
-                                  onTap: () {},
+                                  onTap: () async {
+                                    ProductOwnerModel? productOwnerModel =
+                                        await AuthenticationService
+                                            .getProductOwnerByID(
+                                                cartItem.productOwnerID);
+                                    Navigator.push(
+                                      context,
+                                      CupertinoPageRoute(
+                                        builder: (context) =>
+                                            ProductOwnerShopScreen(
+                                          productOwnerModel: productOwnerModel,
+                                        ),
+                                      ),
+                                    );
+                                  },
                                   child: Icon(FontAwesomeIcons.angleRight),
                                 ),
                               ],

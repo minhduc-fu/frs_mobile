@@ -7,9 +7,8 @@ class RentalCartItemModel {
   bool isChecked;
   int productOwnerProvinceID;
   int serviceFee;
-  //  int selectedRentalPeriod;
-  // int selectedMockday;
-  // String dateSelected;
+  double voucherDiscount;
+  String slectedDiscountText;
 
   RentalCartItemModel({
     required this.productOwnerID,
@@ -18,9 +17,8 @@ class RentalCartItemModel {
     this.isChecked = false,
     this.productOwnerProvinceID = 0,
     this.serviceFee = 0,
-    // this.selectedRentalPeriod = 0,
-    // this.selectedMockday = 0,
-    // this.dateSelected = '',
+    this.voucherDiscount = 0,
+    this.slectedDiscountText = 'Chọn voucher',
   });
   void removeCheckedProducts() {
     productDetailModel.removeWhere((product) => product.isChecked == true);
@@ -42,10 +40,4 @@ class RentalCartItemModel {
         .fold<double>(
             0, (total, product) => total + product.selectedRentPrice!);
   }
-
-  // double calculateTotalRentalPrice() {
-  //   final selectedRentalPrice =
-  //       productDetailModel[selectedRentalPeriod - 1].rentalPrices![0].rentPrice;
-  //   return selectedRentalPrice.toDouble();
-  // }
 }

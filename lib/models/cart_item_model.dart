@@ -7,6 +7,8 @@ class CartItemModel {
   bool isChecked;
   int productOwnerProvinceID;
   int serviceFee;
+  double voucherDiscount;
+  String slectedDiscountText;
 
   CartItemModel({
     required this.productOwnerID,
@@ -15,6 +17,8 @@ class CartItemModel {
     this.isChecked = false,
     this.productOwnerProvinceID = 0,
     this.serviceFee = 0,
+    this.voucherDiscount = 0,
+    this.slectedDiscountText = 'Chọn voucher',
   });
   void removeCheckedProducts() {
     productDetailModel.removeWhere((product) => product.isChecked == true);

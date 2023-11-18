@@ -1,6 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:frs_mobile/core/constants/color_constants.dart';
 import 'package:frs_mobile/services/address_provider.dart';
+import 'package:frs_mobile/utils/dialog_helper.dart';
 import 'package:provider/provider.dart';
 
 class SelectAddressScreen extends StatelessWidget {
@@ -11,7 +14,18 @@ class SelectAddressScreen extends StatelessWidget {
     final addressProvider = Provider.of<AddressProvider>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Chọn địa chỉ'),
+        leading: GestureDetector(
+          onTap: () {
+            if (addressProvider.selectedAddress == null) {
+              showCustomDialog(context, "Lỗi", "Làm ơn chọn địa chỉ", true);
+            } else {
+              Navigator.pop(context);
+            }
+          },
+          child: Icon(FontAwesomeIcons.angleLeft),
+        ),
+        backgroundColor: ColorPalette.backgroundScaffoldColor,
+        title: Center(child: Text('Chọn địa chỉ')),
       ),
       body: ListView.builder(
         itemCount: addressProvider.addresses.length,
