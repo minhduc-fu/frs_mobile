@@ -9,6 +9,7 @@ import 'package:frs_mobile/representation/screens/customer/account/orderHistoryC
 import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/buy_order_history/services/api_buy_order_history.dart';
 import 'package:frs_mobile/representation/widgets/button_widget.dart';
 import 'package:frs_mobile/services/authprovider.dart';
+import 'package:frs_mobile/utils/dialog_helper.dart';
 import 'package:intl/intl.dart';
 
 class PendingOrderBuyScreen extends StatefulWidget {
@@ -36,7 +37,8 @@ class _PendingOrderBuyScreenState extends State<PendingOrderBuyScreen> {
       // Sau khi cập nhật thành công, rebuild màn hình
       setState(() {});
     } catch (e) {
-      print('Lỗi khi hủy đặt hàng: $e');
+      showCustomDialog(context, "Lỗi", "Hủy đơn hàng không thành công", true);
+      print('$e');
     }
   }
 

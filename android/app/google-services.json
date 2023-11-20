@@ -14,7 +14,15 @@
       },
       "oauth_client": [
         {
-          "client_id": "204374474957-mdu4h5l2vnqj09kd9q43b55amcjk5t47.apps.googleusercontent.com",
+          "client_id": "204374474957-a0t615frllc7ev554u8i6mndus1cgk0l.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.demo_frs_app",
+            "certificate_hash": "75deaa9e5b40b8a3967ce42f6c428dc40d3d072c"
+          }
+        },
+        {
+          "client_id": "204374474957-28hoojcrbh5os6ucohe7b54vuqsiiol2.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -27,8 +35,15 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "204374474957-mdu4h5l2vnqj09kd9q43b55amcjk5t47.apps.googleusercontent.com",
+              "client_id": "204374474957-28hoojcrbh5os6ucohe7b54vuqsiiol2.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "204374474957-8trjsnaffg33pkjid4d0lb8v4di8anj8.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.demoFrsApp.RunnerTests"
+              }
             }
           ]
         }

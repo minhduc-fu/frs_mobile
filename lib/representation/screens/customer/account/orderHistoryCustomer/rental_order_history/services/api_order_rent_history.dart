@@ -262,4 +262,29 @@ class ApiOderRentHistory {
       throw Exception('Lỗi: $e');
     }
   }
+
+  static Future<void> createNewPic(
+      int accountID, List<String> img, int orderRentDetailID) async {
+    final url = Uri.parse('http://fashionrental.online:8080/pic');
+
+    try {
+      final response = await http.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'accountID': accountID,
+          'img': img,
+          'orderRentDetailID': orderRentDetailID,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        print('API createNewPic thành công.');
+      } else {
+        throw Exception('API createNewPic thất bại: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Lỗi khi gọi API createNewPic: $e');
+    }
+  }
 }

@@ -66,7 +66,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '204374474957',
     projectId: 'authtutorial-2b252',
     storageBucket: 'authtutorial-2b252.appspot.com',
-    iosClientId: '204374474957-tttlcmprah4059sgukemcmgnk32fe880.apps.googleusercontent.com',
+    iosClientId:
+        '204374474957-tttlcmprah4059sgukemcmgnk32fe880.apps.googleusercontent.com',
     iosBundleId: 'com.example.demoFrsApp',
   );
 
@@ -76,7 +77,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '204374474957',
     projectId: 'authtutorial-2b252',
     storageBucket: 'authtutorial-2b252.appspot.com',
-    iosClientId: '204374474957-8trjsnaffg33pkjid4d0lb8v4di8anj8.apps.googleusercontent.com',
+    iosClientId:
+        '204374474957-8trjsnaffg33pkjid4d0lb8v4di8anj8.apps.googleusercontent.com',
     iosBundleId: 'com.example.demoFrsApp.RunnerTests',
   );
 }

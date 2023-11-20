@@ -7,7 +7,9 @@ import 'package:frs_mobile/core/constants/textstyle_constants.dart';
 import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/rental_order_history/models/order_rent_detail_model.dart';
 import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/rental_order_history/models/order_rent_model.dart';
 import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/rental_order_history/screens/information_order_rent_screen.dart';
+import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/rental_order_history/screens/trahang_hoantien_screen.dart';
 import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/rental_order_history/services/api_order_rent_history.dart';
+import 'package:frs_mobile/representation/widgets/button_widget.dart';
 import 'package:frs_mobile/services/authprovider.dart';
 import 'package:intl/intl.dart';
 
@@ -28,6 +30,35 @@ class _ConfirmOrderRentScreenState extends State<ConfirmOrderRentScreen> {
         builder: (context) => InforMationOrderRentScreen(order: order),
       ),
     );
+  }
+
+  void _navigateToTraHangHoanTienScreen(OrderRentModel order) {
+    Navigator.push(
+      context,
+      CupertinoPageRoute(
+        builder: (context) => TraHangHoanTienOrderRentScreen(order: order),
+      ),
+    );
+  }
+
+  Future<void> _renting(int orderBuyID) async {
+    try {
+      await ApiOderRentHistory.updateStatusOrderRent(orderBuyID, "RENTING");
+      // Sau khi cập nhật thành công, rebuild màn hình
+      setState(() {});
+    } catch (e) {
+      print('Lỗi khi hủy đặt hàng: $e');
+    }
+  }
+
+  Future<void> _reject(int orderBuyID) async {
+    try {
+      await ApiOderRentHistory.updateStatusOrderRent(orderBuyID, "REJECTING");
+      // Sau khi cập nhật thành công, rebuild màn hình
+      setState(() {});
+    } catch (e) {
+      print('Lỗi khi hủy đặt hàng: $e');
+    }
   }
 
   @override
@@ -243,6 +274,36 @@ class _ConfirmOrderRentScreenState extends State<ConfirmOrderRentScreen> {
                                     ),
                                   ],
                                 ),
+                              ),
+                              Divider(
+                                thickness: 0.5,
+                                color: ColorPalette.textHide,
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  ButtonWidget(
+                                    onTap: () async {
+                                      await _renting(orders[index].orderRentID);
+                                    },
+                                    title: 'Đã nhận',
+                                    size: 18,
+                                    width: 150,
+                                  ),
+                                  ButtonWidget(
+                                    onTap: () {
+                                      _navigateToTraHangHoanTienScreen(
+                                          orders[index]);
+                                    },
+                                    // onTap: () async {
+                                    //   await _reject(orders[index].orderRentID);
+                                    // },
+                                    title: 'Từ chối',
+                                    size: 18,
+                                    width: 150,
+                                  ),
+                                ],
                               ),
                             ],
                           ),

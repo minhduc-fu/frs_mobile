@@ -139,7 +139,7 @@ class _CheckoutForRentState extends State<CheckoutForRent> {
     }
   }
 
-  void _openSelectVoucherScreen(
+  Future<void> _openSelectVoucherScreen(
       int productOwnerID, RentalCartItemModel cartItemModel) async {
     final vouchers =
         await AuthenticationService.getVoucherByProductOwnerID(productOwnerID);
@@ -155,7 +155,7 @@ class _CheckoutForRentState extends State<CheckoutForRent> {
     final buyVouchers =
         vouchers.where((voucher) => voucher.voucherTypeID == 2).toList();
     if (buyVouchers.isNotEmpty) {
-      showModalBottomSheet(
+      await showModalBottomSheet(
         isScrollControlled: true,
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(kDefaultCircle14)),
@@ -242,10 +242,6 @@ class _CheckoutForRentState extends State<CheckoutForRent> {
                           });
                         }
                         Navigator.pop(context);
-                        Navigator.of(context)
-                            .pushReplacement(CupertinoPageRoute(
-                          builder: (context) => CheckoutForRent(),
-                        ));
                       },
                       child: Container(
                         color: ColorPalette.primaryColor,
@@ -253,8 +249,7 @@ class _CheckoutForRentState extends State<CheckoutForRent> {
                         child: Center(
                           child: Text(
                             'Đồng ý',
-                            style: TextStyles.defaultStyle.bold.whiteTextColor
-                                .setTextSize(18),
+                            style: TextStyles.h5.bold.whiteTextColor,
                           ),
                         ),
                       ),
@@ -664,10 +659,11 @@ class _CheckoutForRentState extends State<CheckoutForRent> {
                                             ],
                                           ),
                                           GestureDetector(
-                                            onTap: () {
-                                              _openSelectVoucherScreen(
+                                            onTap: () async {
+                                              await _openSelectVoucherScreen(
                                                   cartItem.productOwnerID,
                                                   cartItem);
+                                              setState(() {});
                                             },
                                             child: Text(
                                               cartItem.slectedDiscountText,
