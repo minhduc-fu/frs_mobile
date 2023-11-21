@@ -53,10 +53,8 @@ class _WalletScreenState extends State<WalletScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // print("WalletScreen is being rebuilt");
     return Scaffold(
       appBar: AppBar(
-        // elevation: 0,
         backgroundColor: ColorPalette.backgroundScaffoldColor,
         title: Center(child: Text('Ví của bạn')),
         leading: GestureDetector(
@@ -91,7 +89,6 @@ class _WalletScreenState extends State<WalletScreen> {
                         ),
                         SizedBox(height: 10),
                         Text(
-                          // '0',
                           '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(wallet?.balance ?? 0)}',
                           style: TextStyles.h4.bold,
                         )

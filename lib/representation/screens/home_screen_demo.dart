@@ -34,12 +34,7 @@ class _HomeScreenDemoState extends State<HomeScreenDemo> {
   List<CategoryModel> categories = [];
   CategoryModel? selectedCategory;
   int selectedAllProduct = 0;
-//   0 All
-// 1 categoryName
-// 2 onAvailable
-// 3 onSoldOut
-// 4 onRent
-// 5 onSale
+
   Future<List<ProductModel>?> fetchProducts() async {
     switch (selectedAllProduct) {
       case 0:
@@ -77,12 +72,13 @@ class _HomeScreenDemoState extends State<HomeScreenDemo> {
   final CarouselController _controller = CarouselController();
   int _currentIndexBanner = 0;
   final List<Widget> _bannerImages = [
-    ImageHelper.loadFromAsset(AssetHelper.imageBanner1, fit: BoxFit.cover),
-    ImageHelper.loadFromAsset(AssetHelper.imageBanner2, fit: BoxFit.cover),
-    ImageHelper.loadFromAsset(AssetHelper.imageBanner3, fit: BoxFit.cover),
+    ImageHelper.loadFromAsset(AssetHelper.imageBannerCanvas2,
+        fit: BoxFit.cover),
+    ImageHelper.loadFromAsset(AssetHelper.imageBannerCanvas3,
+        fit: BoxFit.cover),
   ];
 
-  String selectedBrand = ""; // Không có thương hiệu nào được chọn ban đầu
+  String selectedBrand = "";
   FocusNode _focusNode = FocusNode();
   @override
   void initState() {
@@ -135,10 +131,11 @@ class _HomeScreenDemoState extends State<HomeScreenDemo> {
         builder: (BuildContext context) {
           return Padding(
             padding: const EdgeInsets.all(20),
-            child: Column(
-              children: [
-                Expanded(
-                  child: Column(
+            child: Container(
+              height: 250,
+              child: Column(
+                children: [
+                  Column(
                     children: [
                       Row(
                         children: [
@@ -169,7 +166,7 @@ class _HomeScreenDemoState extends State<HomeScreenDemo> {
                                   },
                                   child: Container(
                                     padding: EdgeInsets.symmetric(
-                                        horizontal: 10, vertical: 5),
+                                        horizontal: 15, vertical: 10),
                                     margin: EdgeInsets.only(right: 10),
                                     decoration: BoxDecoration(
                                       color: ColorPalette.primaryColor,
@@ -190,9 +187,8 @@ class _HomeScreenDemoState extends State<HomeScreenDemo> {
                       ),
                     ],
                   ),
-                ),
-                Expanded(
-                  child: Column(
+                  SizedBox(height: 10),
+                  Column(
                     children: [
                       Row(
                         children: [
@@ -215,7 +211,7 @@ class _HomeScreenDemoState extends State<HomeScreenDemo> {
                             child: Container(
                               margin: EdgeInsets.only(right: 10),
                               padding: EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 5),
+                                  horizontal: 15, vertical: 10),
                               decoration: BoxDecoration(
                                   color: ColorPalette.primaryColor,
                                   borderRadius:
@@ -236,7 +232,7 @@ class _HomeScreenDemoState extends State<HomeScreenDemo> {
                             child: Container(
                               margin: EdgeInsets.only(right: 10),
                               padding: EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 5),
+                                  horizontal: 15, vertical: 10),
                               decoration: BoxDecoration(
                                   color: ColorPalette.primaryColor,
                                   borderRadius:
@@ -257,7 +253,7 @@ class _HomeScreenDemoState extends State<HomeScreenDemo> {
                             child: Container(
                               margin: EdgeInsets.only(right: 10),
                               padding: EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 5),
+                                  horizontal: 15, vertical: 10),
                               decoration: BoxDecoration(
                                   color: ColorPalette.primaryColor,
                                   borderRadius:
@@ -283,7 +279,7 @@ class _HomeScreenDemoState extends State<HomeScreenDemo> {
                             child: Container(
                               margin: EdgeInsets.only(right: 10),
                               padding: EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 5),
+                                  horizontal: 15, vertical: 10),
                               decoration: BoxDecoration(
                                   color: ColorPalette.primaryColor,
                                   borderRadius:
@@ -304,7 +300,7 @@ class _HomeScreenDemoState extends State<HomeScreenDemo> {
                             child: Container(
                               margin: EdgeInsets.only(right: 10),
                               padding: EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 5),
+                                  horizontal: 15, vertical: 10),
                               decoration: BoxDecoration(
                                   color: ColorPalette.primaryColor,
                                   borderRadius:
@@ -319,8 +315,8 @@ class _HomeScreenDemoState extends State<HomeScreenDemo> {
                       )
                     ],
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           );
         });
@@ -364,20 +360,7 @@ class _HomeScreenDemoState extends State<HomeScreenDemo> {
                     DrawerHeader(
                         child: ImageHelper.loadFromAsset(
                             AssetHelper.imageLogoFRS)),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 25),
-                      child: ListTile(
-                        leading: Icon(
-                          FontAwesomeIcons.house,
-                          size: kDefaultIconSize18,
-                          color: ColorPalette.primaryColor,
-                        ),
-                        title: Text(
-                          'Trang chủ',
-                          style: TextStyles.defaultStyle.setTextSize(18),
-                        ),
-                      ),
-                    ),
+
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 25),
                       child: ListTile(
@@ -557,11 +540,8 @@ class _HomeScreenDemoState extends State<HomeScreenDemo> {
                   ),
                   Container(
                     height: 8,
-                    // margin: EdgeInsets.symmetric(vertical: 13, horizontal: 30), //
                     child: ListView.builder(
-                      // nằm giữa hay không là nó nằm ở shrinWrap này nè
-                      shrinkWrap:
-                          true, // Cho phép ListView.builder co lại theo nội dung
+                      shrinkWrap: true,
                       itemCount: _bannerImages.length,
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (context, index) {

@@ -165,6 +165,29 @@ class ApiBuyOderHistory {
     }
   }
 
+  static Future<List<OrderBuyModel>?>
+      getAllRejectingCompletedOrderBuyByCustomerID(int customerID) async {
+    final url = Uri.parse(
+        'http://fashionrental.online:8080/orderbuy/customer/rejectingcompleted/$customerID');
+
+    try {
+      final response = await http.get(url);
+
+      if (response.statusCode == 200) {
+        final List<dynamic> jsonList = json.decode(response.body);
+        if (jsonList.isEmpty) {
+          return null;
+        } else {
+          return jsonList.map((json) => OrderBuyModel.fromJson(json)).toList();
+        }
+      } else {
+        throw Exception('Lấy danh sách order rejectingcompleted thất bại.');
+      }
+    } catch (e) {
+      throw Exception('Lỗi: $e');
+    }
+  }
+
   static Future<List<OrderBuyDetailModel>?> getAllOrderBuyDetailByOrderBuyID(
       int orderBuyID) async {
     final url = Uri.parse(

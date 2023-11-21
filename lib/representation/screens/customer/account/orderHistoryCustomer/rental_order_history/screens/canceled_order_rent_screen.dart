@@ -20,7 +20,7 @@ class CanceledOrderRentScreen extends StatefulWidget {
 }
 
 class _CanceledOrderRentScreenState extends State<CanceledOrderRentScreen> {
-  int customerID = AuthProvider.userModel!.customer!.customerID;
+  // int customerID = AuthProvider.userModel!.customer!.customerID;
 
   void _navigateToInformationScreen(OrderRentModel order) {
     Navigator.push(
@@ -36,224 +36,239 @@ class _CanceledOrderRentScreenState extends State<CanceledOrderRentScreen> {
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(20),
-        child: FutureBuilder(
-          future: ApiOderRentHistory.getAllCanceledOrderRentByCustomerID(
-              customerID),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return CircularProgressIndicator();
-            } else if (snapshot.hasError) {
-              return Text('Error: ${snapshot.error}');
-            } else {
-              List<OrderRentModel>? orders = snapshot.data;
-              if (orders == null) {
-                return Center(
-                    child: Text('Không có đơn hàng nào.',
-                        style: TextStyles.h5.bold));
-              } else if (orders.isEmpty) {
-                return Center(
-                    child: Text('Không có đơn hàng nào.',
-                        style: TextStyles.h5.bold));
-              } else {
-                return ListView.builder(
-                    itemCount: orders.length,
-                    itemBuilder: (context, index) {
-                      return GestureDetector(
-                        onTap: () {
-                          _navigateToInformationScreen(orders[index]);
-                        },
-                        child: Container(
-                          padding: EdgeInsets.all(5),
-                          margin: EdgeInsets.only(bottom: 20),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius:
-                                BorderRadius.circular(kDefaultCircle14),
-                          ),
-                          child: Column(
-                            children: [
-                              //productOwnerName
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 10),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      orders[index].productOwnerName,
-                                      style: TextStyles.h5.bold,
-                                    ),
-                                    Text(
-                                      orders[index].status == 'CANCELED'
-                                          ? "Đã hủy"
-                                          : "",
-                                      style: TextStyles.h5.bold,
-                                    ),
-                                  ],
+        child: AuthProvider.userModel!.status == "NOT_VERIFIED"
+            ? Text('Làm ơn Cập nhật thông tin cá nhân')
+            : FutureBuilder(
+                future: ApiOderRentHistory.getAllCanceledOrderRentByCustomerID(
+                    AuthProvider.userModel!.customer!.customerID),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return CircularProgressIndicator();
+                  } else if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  } else {
+                    List<OrderRentModel>? orders = snapshot.data;
+                    if (orders == null) {
+                      return Center(
+                          child: Text('Không có đơn hàng nào.',
+                              style: TextStyles.h5.bold));
+                    } else if (orders.isEmpty) {
+                      return Center(
+                          child: Text('Không có đơn hàng nào.',
+                              style: TextStyles.h5.bold));
+                    } else {
+                      return ListView.builder(
+                          itemCount: orders.length,
+                          itemBuilder: (context, index) {
+                            return GestureDetector(
+                              onTap: () {
+                                _navigateToInformationScreen(orders[index]);
+                              },
+                              child: Container(
+                                padding: EdgeInsets.all(5),
+                                margin: EdgeInsets.only(bottom: 20),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius:
+                                      BorderRadius.circular(kDefaultCircle14),
                                 ),
-                              ),
-                              Divider(
-                                thickness: 0.5,
-                                color: ColorPalette.textHide,
-                              ),
-                              Container(
-                                child: FutureBuilder(
-                                  future: ApiOderRentHistory
-                                      .getAllOrderRentDetailByOrderRentID(
-                                          orders[index].orderRentID),
-                                  builder: ((context, snapshot) {
-                                    if (snapshot.connectionState ==
-                                        ConnectionState.waiting) {
-                                      return CircularProgressIndicator();
-                                    } else if (snapshot.hasError) {
-                                      return Text('Error: ${snapshot.error}');
-                                    } else {
-                                      List<OrderRentDetailModel>? orderDetails =
-                                          snapshot.data;
-                                      return Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: orderDetails!.map((detail) {
-                                          return Container(
-                                            margin: EdgeInsets.only(top: 10),
-                                            height: 140,
-                                            decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  color: ColorPalette.textHide),
-                                              borderRadius:
-                                                  BorderRadius.circular(
-                                                      kDefaultCircle14),
-                                            ),
-                                            child: Row(
-                                              children: [
-                                                SizedBox(width: 10),
-                                                ClipRRect(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          kDefaultCircle14),
-                                                  child: Image.network(
-                                                    cacheHeight: 80,
-                                                    cacheWidth: 80,
-                                                    detail.productDTOModel
-                                                        .productAvt,
-                                                    fit: BoxFit.cover,
+                                child: Column(
+                                  children: [
+                                    //productOwnerName
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(
+                                            orders[index].productOwnerName,
+                                            style: TextStyles.h5.bold,
+                                          ),
+                                          Text(
+                                            orders[index].status == 'CANCELED'
+                                                ? "Đã hủy"
+                                                : "",
+                                            style: TextStyles.h5.bold,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Divider(
+                                      thickness: 0.5,
+                                      color: ColorPalette.textHide,
+                                    ),
+                                    Container(
+                                      child: FutureBuilder(
+                                        future: ApiOderRentHistory
+                                            .getAllOrderRentDetailByOrderRentID(
+                                                orders[index].orderRentID),
+                                        builder: ((context, snapshot) {
+                                          if (snapshot.connectionState ==
+                                              ConnectionState.waiting) {
+                                            return CircularProgressIndicator();
+                                          } else if (snapshot.hasError) {
+                                            return Text(
+                                                'Error: ${snapshot.error}');
+                                          } else {
+                                            List<OrderRentDetailModel>?
+                                                orderDetails = snapshot.data;
+                                            return Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children:
+                                                  orderDetails!.map((detail) {
+                                                return Container(
+                                                  margin:
+                                                      EdgeInsets.only(top: 10),
+                                                  height: 140,
+                                                  decoration: BoxDecoration(
+                                                    border: Border.all(
+                                                        color: ColorPalette
+                                                            .textHide),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            kDefaultCircle14),
                                                   ),
-                                                ),
-                                                SizedBox(width: 10),
-                                                // productName, price
-                                                Padding(
-                                                  padding: EdgeInsets.symmetric(
-                                                      vertical: 20),
-                                                  child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
+                                                  child: Row(
                                                     children: [
-                                                      Container(
-                                                        width: 230,
-                                                        child: AutoSizeText(
+                                                      SizedBox(width: 10),
+                                                      ClipRRect(
+                                                        borderRadius:
+                                                            BorderRadius.circular(
+                                                                kDefaultCircle14),
+                                                        child: Image.network(
+                                                          cacheHeight: 80,
+                                                          cacheWidth: 80,
                                                           detail.productDTOModel
-                                                              .productName,
-                                                          minFontSize: 16,
-                                                          style: TextStyles
-                                                              .h5.bold,
-                                                          maxLines: 1,
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
+                                                              .productAvt,
+                                                          fit: BoxFit.cover,
                                                         ),
                                                       ),
-                                                      Text(
-                                                        '${DateFormat('dd/MM/yyyy').format(detail.startDate)} - ${DateFormat('dd/MM/yyyy').format(detail.endDate)}',
-                                                      ),
-                                                      AutoSizeText.rich(
-                                                        minFontSize: 14,
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                        maxLines: 1,
-                                                        TextSpan(
+                                                      SizedBox(width: 10),
+                                                      // productName, price
+                                                      Padding(
+                                                        padding: EdgeInsets
+                                                            .symmetric(
+                                                                vertical: 20),
+                                                        child: Column(
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween,
                                                           children: [
-                                                            TextSpan(
-                                                              text: 'Cọc: ',
+                                                            Container(
+                                                              width: 230,
+                                                              child:
+                                                                  AutoSizeText(
+                                                                detail
+                                                                    .productDTOModel
+                                                                    .productName,
+                                                                minFontSize: 16,
+                                                                style:
+                                                                    TextStyles
+                                                                        .h5
+                                                                        .bold,
+                                                                maxLines: 1,
+                                                                overflow:
+                                                                    TextOverflow
+                                                                        .ellipsis,
+                                                              ),
                                                             ),
-                                                            TextSpan(
-                                                              text:
-                                                                  '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(detail.cocMoney)}',
-                                                              style: TextStyles
-                                                                  .defaultStyle
-                                                                  .bold
-                                                                  .setColor(
-                                                                      Colors
-                                                                          .red),
-                                                            )
-                                                          ],
-                                                        ),
-                                                      ),
-                                                      AutoSizeText.rich(
-                                                        minFontSize: 14,
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                        maxLines: 1,
-                                                        TextSpan(
-                                                          children: [
-                                                            TextSpan(
-                                                              text: 'Thuê: ',
+                                                            Text(
+                                                              '${DateFormat('dd/MM/yyyy').format(detail.startDate)} - ${DateFormat('dd/MM/yyyy').format(detail.endDate)}',
                                                             ),
-                                                            TextSpan(
-                                                              text:
-                                                                  '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(detail.rentPrice)}',
-                                                              style: TextStyles
-                                                                  .defaultStyle
-                                                                  .bold
-                                                                  .setColor(
-                                                                      Colors
-                                                                          .red),
+                                                            AutoSizeText.rich(
+                                                              minFontSize: 14,
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
+                                                              maxLines: 1,
+                                                              TextSpan(
+                                                                children: [
+                                                                  TextSpan(
+                                                                    text:
+                                                                        'Cọc: ',
+                                                                  ),
+                                                                  TextSpan(
+                                                                    text:
+                                                                        '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(detail.cocMoney)}',
+                                                                    style: TextStyles
+                                                                        .defaultStyle
+                                                                        .bold
+                                                                        .setColor(
+                                                                            Colors.red),
+                                                                  )
+                                                                ],
+                                                              ),
+                                                            ),
+                                                            AutoSizeText.rich(
+                                                              minFontSize: 14,
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
+                                                              maxLines: 1,
+                                                              TextSpan(
+                                                                children: [
+                                                                  TextSpan(
+                                                                    text:
+                                                                        'Thuê: ',
+                                                                  ),
+                                                                  TextSpan(
+                                                                    text:
+                                                                        '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(detail.rentPrice)}',
+                                                                    style: TextStyles
+                                                                        .defaultStyle
+                                                                        .bold
+                                                                        .setColor(
+                                                                            Colors.red),
+                                                                  ),
+                                                                ],
+                                                              ),
                                                             ),
                                                           ],
                                                         ),
                                                       ),
                                                     ],
                                                   ),
-                                                ),
-                                              ],
-                                            ),
-                                          );
-                                        }).toList(),
-                                      );
-                                    }
-                                  }),
-                                ),
-                              ),
-                              SizedBox(height: 10),
-                              Divider(
-                                thickness: 0.5,
-                                color: ColorPalette.textHide,
-                              ),
-                              Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 10),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text('Thành tiền'),
-                                    Text(
-                                      '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(orders[index].total + 10000)}',
+                                                );
+                                              }).toList(),
+                                            );
+                                          }
+                                        }),
+                                      ),
+                                    ),
+                                    SizedBox(height: 10),
+                                    Divider(
+                                      thickness: 0.5,
+                                      color: ColorPalette.textHide,
+                                    ),
+                                    Padding(
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 10),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text('Thành tiền'),
+                                          Text(
+                                            '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(orders[index].total + 10000)}',
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ],
                                 ),
                               ),
-                            ],
-                          ),
-                        ),
-                      );
-                    });
-              }
-            }
-          },
-        ),
+                            );
+                          });
+                    }
+                  }
+                },
+              ),
       ),
     );
   }

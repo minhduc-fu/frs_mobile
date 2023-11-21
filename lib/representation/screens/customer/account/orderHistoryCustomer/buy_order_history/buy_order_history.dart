@@ -3,6 +3,7 @@ import 'package:frs_mobile/representation/screens/customer/account/orderHistoryC
 import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/buy_order_history/screens/pending_order_buy_screen.dart';
 import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/buy_order_history/screens/prepare_order_buy_screen.dart';
 import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/buy_order_history/screens/ready_pickup_order_buy_screen.dart';
+import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/buy_order_history/screens/reject_completed_order_buy_screen.dart';
 import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/buy_order_history/screens/rejecting_order_buy_screen.dart';
 import '../../../../../../core/constants/color_constants.dart';
 import '../../../../../../core/constants/dismension_constants.dart';
@@ -22,7 +23,7 @@ class _BuyOrderHistoryState extends State<BuyOrderHistory>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 7, vsync: this);
+    _tabController = TabController(length: 8, vsync: this);
     _tabController.index = 0;
   }
 
@@ -82,6 +83,9 @@ class _BuyOrderHistoryState extends State<BuyOrderHistory>
                       Tab(
                         text: 'Đã hủy',
                       ),
+                      Tab(
+                        text: 'Trả hàng/Hoàn tiền',
+                      ),
                     ],
                   ),
                 ),
@@ -102,6 +106,7 @@ class _BuyOrderHistoryState extends State<BuyOrderHistory>
                 CompletedOrderBuyScreen(),
                 RejectingOrderBuyScreen(),
                 CanceledOrderBuyScreen(),
+                RejectCompletedOrderBuyScreen(),
               ],
             ),
           ),

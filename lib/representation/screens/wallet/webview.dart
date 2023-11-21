@@ -29,8 +29,12 @@ class _WebViewState extends State<WebView> {
       final url = await controller.currentUrl();
       if (url != null && url.contains('vnp_ResponseCode=00')) {
         await Future.delayed(Duration(seconds: 5));
-        Navigator.popUntil(
-            context, ModalRoute.withName(WalletScreen.routeName));
+        if (Navigator.canPop(context)) {
+          Navigator.pop(context);
+          Navigator.popUntil(
+              context, ModalRoute.withName(WalletScreen.routeName));
+        }
+
         Navigator.of(context).pushReplacement(CupertinoPageRoute(
           builder: (context) => WalletScreen(),
         ));

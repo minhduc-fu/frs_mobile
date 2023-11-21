@@ -211,6 +211,29 @@ class ApiOderRentHistory {
     }
   }
 
+  static Future<List<OrderRentModel>?>
+      getAllRejectingCompletedOrderRentByCustomerID(int customerID) async {
+    final url = Uri.parse(
+        'http://fashionrental.online:8080/orderrent/cus/rejectcompleted/$customerID');
+
+    try {
+      final response = await http.get(url);
+
+      if (response.statusCode == 200) {
+        final List<dynamic> jsonList = json.decode(response.body);
+        if (jsonList.isEmpty) {
+          return null;
+        } else {
+          return jsonList.map((json) => OrderRentModel.fromJson(json)).toList();
+        }
+      } else {
+        throw Exception('Lấy danh sách order rejecting completed thất bại.');
+      }
+    } catch (e) {
+      throw Exception('Lỗi: $e');
+    }
+  }
+
   static Future<void> updateStatusOrderRent(
       int orderRentID, String status) async {
     final url = Uri.parse(

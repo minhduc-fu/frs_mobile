@@ -73,8 +73,10 @@ class _TraHangHoanTienOrderRentScreenState
         await ApiOderRentHistory.updateStatusOrderRent(
             widget.order.orderRentID, "REJECTING");
         Navigator.pop(context);
-        Navigator.popUntil(
-            context, ModalRoute.withName(MainOrderHistoryScreen.routeName));
+        Navigator.pop(context);
+        Navigator.of(context).pushReplacement(CupertinoPageRoute(
+          builder: (context) => MainOrderHistoryScreen(),
+        ));
       } catch (e) {}
     }
   }

@@ -80,8 +80,8 @@ class _RentalCartScreenState extends State<RentalCartScreen> {
                 height: 40,
                 width: 160,
                 onTap: () {
-                  Navigator.of(context).push(CupertinoPageRoute(
-                      builder: ((context) => WalletScreen())));
+                  Navigator.pop(context);
+                  Navigator.of(context).pushNamed(WalletScreen.routeName);
                 },
               ),
             ],
@@ -398,11 +398,25 @@ class _RentalCartScreenState extends State<RentalCartScreen> {
                       size: 22,
                       height: 70,
                       onTap: () {
-                        if (totalSelectedProducts > 0) {
-                          placeOrder();
+                        final userModel = AuthProvider.userModel;
+                        if (userModel != null) {
+                          if (AuthProvider.userModel!.status == "VERIFIED") {
+                            if (totalSelectedProducts > 0) {
+                              placeOrder();
+                            } else {
+                              showCustomDialog(context, "Lỗi",
+                                  "Làm ơn hãy chọn sản phẩm!", true);
+                            }
+                          } else {
+                            showCustomDialog(context, "Lỗi",
+                                "Hãy cập nhật thông tin cá nhân", true);
+                          }
                         } else {
-                          showCustomDialog(context, "Lỗi",
-                              "Làm ơn hãy chọn sản phẩm!", true);
+                          showCustomDialog(
+                              context,
+                              "Lỗi",
+                              "Hãy 'Đăng nhập' vào hệ thống để 'Đặt hàng'",
+                              true);
                         }
                       },
                     ),

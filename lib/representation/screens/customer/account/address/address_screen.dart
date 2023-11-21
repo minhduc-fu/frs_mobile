@@ -21,7 +21,7 @@ class AddressScreen extends StatefulWidget {
 
 class _AddressScreenState extends State<AddressScreen> {
   TextEditingController _addressController = TextEditingController();
-  int customerID = AuthProvider.userModel!.customer!.customerID;
+  // int customerID = AuthProvider.userModel!.customer!.customerID;
   late AddressProvider _addressProvider;
 
   @override
@@ -33,12 +33,14 @@ class _AddressScreenState extends State<AddressScreen> {
   @override
   void initState() {
     super.initState();
-    _loadAddresses();
+    if (AuthProvider.userModel!.status == "VERIFIED") {
+      _loadAddresses();
+    }
   }
 
   void _loadAddresses() async {
-    final addresses =
-        await AuthenticationService.getAllAddressByCustomerID(customerID);
+    final addresses = await AuthenticationService.getAllAddressByCustomerID(
+        AuthProvider.userModel!.customer!.customerID);
 
     if (addresses != null && addresses.isNotEmpty) {
       _addressProvider.setAddresses(addresses);
@@ -93,7 +95,7 @@ class _AddressScreenState extends State<AddressScreen> {
   void _addNewAddress(String addressDescription) async {
     final response = await AuthenticationService.createNewAddress(
       addressDescription,
-      customerID,
+      AuthProvider.userModel!.customer!.customerID,
     );
 
     if (response != null) {
@@ -117,81 +119,85 @@ class _AddressScreenState extends State<AddressScreen> {
   @override
   Widget build(BuildContext context) {
     return AppBarMain(
-        titleAppbar: 'Địa chỉ của tôi',
-        leading: GestureDetector(
-          onTap: () {
-            Navigator.pop(context);
-          },
-          child: Icon(FontAwesomeIcons.angleLeft),
-        ),
-        child: Scaffold(
-          body: Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Địa chỉ',
-                  style: TextStyles.h4.bold,
-                ),
-                SizedBox(height: 20),
-                Expanded(
-                  child: Consumer<AddressProvider>(
-                    builder: (context, addressProvider, child) {
-                      final addresses = addressProvider.addresses;
-                      if (addresses.isEmpty) {
-                        return Text('Bạn chưa có địa chỉ.');
-                      } else {
-                        return ListView.builder(
-                          itemCount: addresses.length,
-                          itemBuilder: (context, index) {
-                            final address = addresses[index];
-                            return Container(
-                              padding: EdgeInsets.all(10),
-                              height: 100,
-                              margin: EdgeInsets.only(bottom: 20),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius:
-                                    BorderRadius.circular(kDefaultCircle14),
-                              ),
-                              child: ListTile(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                      BorderRadius.circular(kDefaultCircle14),
-                                ),
-                                // tileColor: Colors.white,
-                                title: Text(address.addressDescription),
-                                leading: Icon(FontAwesomeIcons.locationDot),
-                                trailing: IconButton(
-                                    onPressed: () {
-                                      _deleteAddress(address.addressID);
-                                    },
-                                    icon: Icon(FontAwesomeIcons.trashCan)),
-                              ),
+      titleAppbar: 'Địa chỉ của tôi',
+      leading: GestureDetector(
+        onTap: () {
+          Navigator.pop(context);
+        },
+        child: Icon(FontAwesomeIcons.angleLeft),
+      ),
+      child: Scaffold(
+        body: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Địa chỉ',
+                style: TextStyles.h4.bold,
+              ),
+              SizedBox(height: 20),
+              Expanded(
+                child: AuthProvider.userModel!.status == "NOT_VERIFIED"
+                    ? Text('Làm ơn Cập nhật thông tin cá nhân')
+                    : Consumer<AddressProvider>(
+                        builder: (context, addressProvider, child) {
+                          final addresses = addressProvider.addresses;
+                          if (addresses.isEmpty) {
+                            return Text('Bạn chưa có địa chỉ.');
+                          } else {
+                            return ListView.builder(
+                              itemCount: addresses.length,
+                              itemBuilder: (context, index) {
+                                final address = addresses[index];
+                                return Container(
+                                  padding: EdgeInsets.all(10),
+                                  margin: EdgeInsets.only(bottom: 20),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius:
+                                        BorderRadius.circular(kDefaultCircle14),
+                                  ),
+                                  child: ListTile(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(
+                                          kDefaultCircle14),
+                                    ),
+                                    // tileColor: Colors.white,
+                                    title: Text(address.addressDescription),
+                                    leading: Icon(FontAwesomeIcons.locationDot),
+                                    trailing: IconButton(
+                                        onPressed: () {
+                                          _deleteAddress(address.addressID);
+                                        },
+                                        icon: Icon(FontAwesomeIcons.trashCan)),
+                                  ),
+                                );
+                              },
                             );
-                          },
-                        );
-                      }
-                    },
+                          }
+                        },
+                      ),
+              ),
+            ],
+          ),
+        ),
+        floatingActionButton: AuthProvider.userModel!.status == "NOT_VERIFIED"
+            ? SizedBox()
+            : SizedBox(
+                height: 61,
+                child: FloatingActionButton(
+                  onPressed: () {
+                    _showAddAddressDialog();
+                  },
+                  backgroundColor: ColorPalette.primaryColor,
+                  child: Icon(
+                    FontAwesomeIcons.plus,
+                    color: Colors.white,
                   ),
                 ),
-              ],
-            ),
-          ),
-          floatingActionButton: SizedBox(
-            height: 61,
-            child: FloatingActionButton(
-              onPressed: () {
-                _showAddAddressDialog();
-              },
-              backgroundColor: ColorPalette.primaryColor,
-              child: Icon(
-                FontAwesomeIcons.plus,
-                color: Colors.white,
               ),
-            ),
-          ),
-        ));
+      ),
+    );
   }
 }

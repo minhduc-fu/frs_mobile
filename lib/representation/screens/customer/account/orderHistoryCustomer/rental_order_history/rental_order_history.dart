@@ -6,6 +6,7 @@ import 'package:frs_mobile/representation/screens/customer/account/orderHistoryC
 import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/rental_order_history/screens/delivery_order_rent_screen.dart';
 import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/rental_order_history/screens/pending_order_rent_screen.dart';
 import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/rental_order_history/screens/prepare_order_rent_screen.dart';
+import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/rental_order_history/screens/reject_completed_order_rent_screen.dart';
 import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/rental_order_history/screens/reject_order_rent_screen.dart';
 import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/rental_order_history/screens/renting_order_rent_screen.dart';
 import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/rental_order_history/screens/return_order_rent_screen.dart';
@@ -26,7 +27,7 @@ class _RentalOrderHistoryState extends State<RentalOrderHistory>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 9, vsync: this);
+    _tabController = TabController(length: 10, vsync: this);
     _tabController.index = 0;
   }
 
@@ -92,6 +93,9 @@ class _RentalOrderHistoryState extends State<RentalOrderHistory>
                       Tab(
                         text: 'Đã hủy',
                       ),
+                      Tab(
+                        text: 'Trả hàng/Hoàn tiền',
+                      ),
                     ],
                   ),
                 ),
@@ -114,6 +118,7 @@ class _RentalOrderHistoryState extends State<RentalOrderHistory>
                 CompletedOrderRentScreen(),
                 RejectOrderRentScreen(),
                 CanceledOrderRentScreen(),
+                RejectCompletedOrderRentScreen()
               ],
             ),
           ),
