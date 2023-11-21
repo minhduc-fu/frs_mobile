@@ -1,51 +1,26 @@
 {
   "project_info": {
-    "project_number": "204374474957",
-    "project_id": "authtutorial-2b252",
-    "storage_bucket": "authtutorial-2b252.appspot.com"
+    "project_number": "1062952416923",
+    "project_id": "pass-2384b",
+    "storage_bucket": "pass-2384b.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:204374474957:android:59ddc396cc1b02235e2984",
+        "mobilesdk_app_id": "1:1062952416923:android:cddd899846a866f84bb83e",
         "android_client_info": {
           "package_name": "com.example.demo_frs_app"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "204374474957-a0t615frllc7ev554u8i6mndus1cgk0l.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.example.demo_frs_app",
-            "certificate_hash": "75deaa9e5b40b8a3967ce42f6c428dc40d3d072c"
-          }
-        },
-        {
-          "client_id": "204374474957-28hoojcrbh5os6ucohe7b54vuqsiiol2.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCdC0jMEcr_o-6VmMIhvKqRL25k5UcySbQ"
+          "current_key": "AIzaSyBMGSNW-61ZhVHhDYrMmqcrGM2f2lcXvuE"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "204374474957-28hoojcrbh5os6ucohe7b54vuqsiiol2.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "204374474957-8trjsnaffg33pkjid4d0lb8v4di8anj8.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.example.demoFrsApp.RunnerTests"
-              }
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/buy_order_history/screens/pending_order_buy_screen.dart';
+
 import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/rental_order_history/screens/canceled_order_rent_screen.dart';
 import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/rental_order_history/screens/completed_order_rent_screen.dart';
 import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/rental_order_history/screens/confirm_order_rent_screen.dart';

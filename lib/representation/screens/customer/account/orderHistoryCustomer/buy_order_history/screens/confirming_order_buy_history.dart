@@ -35,7 +35,6 @@ class _ConfirmingOrderBuyScreenState extends State<ConfirmingOrderBuyScreen> {
   Future<void> _completed(int orderBuyID) async {
     try {
       await ApiBuyOderHistory.updateStatusOrder(orderBuyID, "COMPLETED");
-      // Sau khi cập nhật thành công, rebuild màn hình
       setState(() {});
     } catch (e) {
       print('Lỗi khi hủy đặt hàng: $e');
@@ -45,7 +44,6 @@ class _ConfirmingOrderBuyScreenState extends State<ConfirmingOrderBuyScreen> {
   Future<void> _reject(int orderBuyID) async {
     try {
       await ApiBuyOderHistory.updateStatusOrder(orderBuyID, "REJECTING");
-      // Sau khi cập nhật thành công, rebuild màn hình
       setState(() {});
     } catch (e) {
       print('Lỗi khi hủy đặt hàng: $e');

@@ -32,10 +32,9 @@ class _PendingOrderRentScreenState extends State<PendingOrderRentScreen> {
     );
   }
 
-  Future<void> _cancelOrder(int orderBuyID) async {
+  Future<void> _cancelOrder(int orderRentID) async {
     try {
-      await ApiOderRentHistory.updateStatusOrderRent(orderBuyID, "CANCELED");
-      // Sau khi cập nhật thành công, rebuild màn hình
+      await ApiOderRentHistory.updateStatusOrderRent(orderRentID, "CANCELED");
       setState(() {});
     } catch (e) {
       showCustomDialog(context, "Lỗi", "Hủy đơn hàng không thành công", true);

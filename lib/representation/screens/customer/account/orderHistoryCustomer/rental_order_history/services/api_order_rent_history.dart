@@ -223,7 +223,7 @@ class ApiOderRentHistory {
           'Content-Type': 'application/json',
         },
         body: jsonEncode({
-          'orderBuyID': orderRentID,
+          'orderRentID': orderRentID,
           'status': status,
         }),
       );
@@ -264,7 +264,7 @@ class ApiOderRentHistory {
   }
 
   static Future<void> createNewPic(
-      int accountID, List<String> img, int orderRentDetailID) async {
+      int accountID, List<String> img, int orderRentID) async {
     final url = Uri.parse('http://fashionrental.online:8080/pic');
 
     try {
@@ -274,7 +274,7 @@ class ApiOderRentHistory {
         body: jsonEncode({
           'accountID': accountID,
           'img': img,
-          'orderRentDetailID': orderRentDetailID,
+          'orderRentID': orderRentID,
         }),
       );
 

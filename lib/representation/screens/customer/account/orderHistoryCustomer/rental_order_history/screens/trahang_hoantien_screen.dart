@@ -8,8 +8,10 @@ import 'package:frs_mobile/core/constants/color_constants.dart';
 import 'package:frs_mobile/core/constants/dismension_constants.dart';
 import 'package:frs_mobile/core/constants/textstyle_constants.dart';
 import 'package:frs_mobile/models/productOwner_model.dart';
+import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/main_order_history_screen.dart';
 import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/rental_order_history/models/order_rent_detail_model.dart';
 import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/rental_order_history/models/order_rent_model.dart';
+import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/rental_order_history/screens/confirm_order_rent_screen.dart';
 import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/rental_order_history/services/api_order_rent_history.dart';
 import 'package:frs_mobile/representation/screens/productowner_screen/productOwner_shop_screen.dart';
 import 'package:frs_mobile/representation/widgets/button_widget.dart';
@@ -52,8 +54,6 @@ class _TraHangHoanTienOrderRentScreenState
       showCustomDialog(context, 'Lỗi', 'Bạn chưa chọn "Ghi chú thêm".', true);
     } else if (selectedLyDo == "Chọn lý do") {
       showCustomDialog(context, 'Lỗi', 'Bạn chưa chọn "Chọn lý do".', true);
-    } else if (selectedOrderRentDetailID == null) {
-      showCustomDialog(context, 'Lỗi', 'Bạn chưa chọn "Sản phẩm".', true);
     } else {
       showDialog(
         context: context,
@@ -69,7 +69,12 @@ class _TraHangHoanTienOrderRentScreenState
         List<String> imageUrls = await AddImageCloud()
             .uploadListImageToStorage('imageReject', _images);
         await ApiOderRentHistory.createNewPic(
-            accountID!, imageUrls, selectedOrderRentDetailID!);
+            accountID!, imageUrls, widget.order.orderRentID);
+        await ApiOderRentHistory.updateStatusOrderRent(
+            widget.order.orderRentID, "REJECTING");
+        Navigator.pop(context);
+        Navigator.popUntil(
+            context, ModalRoute.withName(MainOrderHistoryScreen.routeName));
       } catch (e) {}
     }
   }
@@ -269,23 +274,23 @@ class _TraHangHoanTienOrderRentScreenState
                                         ),
                                         child: Row(
                                           children: [
-                                            Radio(
-                                              materialTapTargetSize:
-                                                  MaterialTapTargetSize
-                                                      .shrinkWrap,
-                                              toggleable: true,
-                                              value: detail.orderRentDetailID,
-                                              groupValue:
-                                                  selectedOrderRentDetailID,
-                                              onChanged: (int? value) {
-                                                setState(() {
-                                                  selectedOrderRentDetailID =
-                                                      value!;
-                                                });
-                                                print(
-                                                    selectedOrderRentDetailID);
-                                              },
-                                            ),
+                                            // Radio(
+                                            //   materialTapTargetSize:
+                                            //       MaterialTapTargetSize
+                                            //           .shrinkWrap,
+                                            //   toggleable: true,
+                                            //   value: detail.orderRentDetailID,
+                                            //   groupValue:
+                                            //       selectedOrderRentDetailID,
+                                            //   onChanged: (int? value) {
+                                            //     setState(() {
+                                            //       selectedOrderRentDetailID =
+                                            //           value!;
+                                            //     });
+                                            //     print(
+                                            //         selectedOrderRentDetailID);
+                                            //   },
+                                            // ),
                                             SizedBox(width: 10),
                                             ClipRRect(
                                               borderRadius:

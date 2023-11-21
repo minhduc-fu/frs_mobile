@@ -15,7 +15,7 @@ import 'package:intl/intl.dart';
 
 class ConfirmOrderRentScreen extends StatefulWidget {
   const ConfirmOrderRentScreen({super.key});
-
+  static const String routeName = '/confirm_order_rent_screen';
   @override
   State<ConfirmOrderRentScreen> createState() => _ConfirmOrderRentScreenState();
 }
@@ -41,20 +41,10 @@ class _ConfirmOrderRentScreenState extends State<ConfirmOrderRentScreen> {
     );
   }
 
-  Future<void> _renting(int orderBuyID) async {
+  Future<void> _renting(int orderRentID) async {
     try {
-      await ApiOderRentHistory.updateStatusOrderRent(orderBuyID, "RENTING");
-      // Sau khi cập nhật thành công, rebuild màn hình
-      setState(() {});
-    } catch (e) {
-      print('Lỗi khi hủy đặt hàng: $e');
-    }
-  }
+      await ApiOderRentHistory.updateStatusOrderRent(orderRentID, "RENTING");
 
-  Future<void> _reject(int orderBuyID) async {
-    try {
-      await ApiOderRentHistory.updateStatusOrderRent(orderBuyID, "REJECTING");
-      // Sau khi cập nhật thành công, rebuild màn hình
       setState(() {});
     } catch (e) {
       print('Lỗi khi hủy đặt hàng: $e');
@@ -296,9 +286,6 @@ class _ConfirmOrderRentScreenState extends State<ConfirmOrderRentScreen> {
                                       _navigateToTraHangHoanTienScreen(
                                           orders[index]);
                                     },
-                                    // onTap: () async {
-                                    //   await _reject(orders[index].orderRentID);
-                                    // },
                                     title: 'Từ chối',
                                     size: 18,
                                     width: 150,

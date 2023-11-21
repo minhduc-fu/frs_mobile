@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
@@ -21,12 +20,12 @@ class MainApp extends StatefulWidget {
 class _MainAppState extends State<MainApp> {
   int _currentIndex = 0;
   // final user = FirebaseAuth.instance.currentUser!;
-  User? user;
+  // User? user;
 
   @override
   void initState() {
     super.initState();
-    user = FirebaseAuth.instance.currentUser;
+    // user = FirebaseAuth.instance.currentUser;
   }
 
   @override

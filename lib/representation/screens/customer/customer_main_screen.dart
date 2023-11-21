@@ -1,4 +1,4 @@
-import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
@@ -24,12 +24,12 @@ class CustomerMainScreen extends StatefulWidget {
 class _CustomerMainScreen extends State<CustomerMainScreen> {
   int _currentIndex = 0;
   // final user = FirebaseAuth.instance.currentUser!;
-  User? user;
+  // User? user;
 
   @override
   void initState() {
     super.initState();
-    user = FirebaseAuth.instance.currentUser;
+    // user = FirebaseAuth.instance.currentUser;
   }
 
   // method logout
@@ -37,10 +37,10 @@ class _CustomerMainScreen extends State<CustomerMainScreen> {
     emailController.text = "";
     passwordController.text = "";
     confirmPasswordController.text = "";
-    FirebaseAuth.instance.signOut();
-    setState(() {
-      user = null;
-    });
+    // FirebaseAuth.instance.signOut();
+    // setState(() {
+    //   user = null;
+    // });
   }
 
   @override
