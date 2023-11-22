@@ -22,19 +22,16 @@ import 'package:frs_mobile/utils/image_picker.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
-class TraHangHoanTienOrderRentScreen extends StatefulWidget {
+class DangthueChotraScreen extends StatefulWidget {
   final OrderRentModel order;
-  const TraHangHoanTienOrderRentScreen({super.key, required this.order});
+  const DangthueChotraScreen({super.key, required this.order});
 
   @override
-  State<TraHangHoanTienOrderRentScreen> createState() =>
-      _TraHangHoanTienOrderRentScreenState();
+  State<DangthueChotraScreen> createState() => _DangthueChotraScreenState();
 }
 
-class _TraHangHoanTienOrderRentScreenState
-    extends State<TraHangHoanTienOrderRentScreen> {
+class _DangthueChotraScreenState extends State<DangthueChotraScreen> {
   int? accountID = AuthProvider.userModel?.accountID;
-  int? selectedOrderRentDetailID;
 
   List<Uint8List> _images = [];
   void selectImage() async {
@@ -46,13 +43,9 @@ class _TraHangHoanTienOrderRentScreenState
     }
   }
 
-  Future<void> traHang() async {
+  Future<void> received() async {
     if (_images.isEmpty) {
       showCustomDialog(context, 'Lỗi', 'Bạn chưa chọn "Thêm hình ảnh".', true);
-      // } else if (_textController.text.isEmpty) {
-      //   showCustomDialog(context, 'Lỗi', 'Bạn chưa chọn "Ghi chú thêm".', true);
-      // } else if (selectedLyDo == "Chọn lý do") {
-      //   showCustomDialog(context, 'Lỗi', 'Bạn chưa chọn "Chọn lý do".', true);
     } else {
       showDialog(
         context: context,
@@ -66,11 +59,41 @@ class _TraHangHoanTienOrderRentScreenState
       );
       try {
         List<String> imageUrls = await AddImageCloud().uploadListImageToStorage(
-            'imagesReject', _images, widget.order.orderRentID);
+            'imagesReceived', _images, widget.order.orderRentID);
         await ApiOderRentHistory.createNewPic(
             accountID!, imageUrls, widget.order.orderRentID);
         await ApiOderRentHistory.updateStatusOrderRent(
-            widget.order.orderRentID, "REJECTING");
+            widget.order.orderRentID, "RENTING");
+        Navigator.pop(context);
+        Navigator.pop(context);
+        Navigator.of(context).pushReplacement(CupertinoPageRoute(
+          builder: (context) => MainOrderHistoryScreen(),
+        ));
+      } catch (e) {}
+    }
+  }
+
+  Future<void> returning() async {
+    if (_images.isEmpty) {
+      showCustomDialog(context, 'Lỗi', 'Bạn chưa chọn "Thêm hình ảnh".', true);
+    } else {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return Center(
+            child: CircularProgressIndicator(
+              color: ColorPalette.primaryColor,
+            ),
+          );
+        },
+      );
+      try {
+        List<String> imageUrls = await AddImageCloud().uploadListImageToStorage(
+            'imagesReturn', _images, widget.order.orderRentID);
+        await ApiOderRentHistory.createNewPic(
+            accountID!, imageUrls, widget.order.orderRentID);
+        await ApiOderRentHistory.updateStatusOrderRent(
+            widget.order.orderRentID, "RETURNING");
         Navigator.pop(context);
         Navigator.pop(context);
         Navigator.of(context).pushReplacement(CupertinoPageRoute(
@@ -87,89 +110,6 @@ class _TraHangHoanTienOrderRentScreenState
     });
   }
 
-  // TextEditingController _textController = TextEditingController();
-  List<String> _lyDo = [
-    'Thiếu hàng',
-    'Chủ sản phẩm gửi sai hàng',
-    'Hàng bể vỡ',
-    'Hàng lỗi, không hoạt động',
-    'Hàng giả, nhái',
-    'Khác với mô tả',
-  ];
-
-  // String selectedLyDo = "Chọn lý do";
-
-  // Future<void> _openSelectVoucherScreen() async {
-  //   await showModalBottomSheet(
-  //     isScrollControlled: true,
-  //     shape: RoundedRectangleBorder(
-  //         borderRadius: BorderRadius.circular(kDefaultCircle14)),
-  //     backgroundColor: ColorPalette.backgroundScaffoldColor,
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return StatefulBuilder(builder: (context, setState) {
-  //         return Container(
-  //           height: 500,
-  //           child: Column(
-  //             children: [
-  //               Expanded(
-  //                 child: ListView.builder(
-  //                     shrinkWrap: true,
-  //                     itemCount: _lyDo.length,
-  //                     itemBuilder: (BuildContext context, int index) {
-  //                       String reason = _lyDo[index];
-  //                       return Padding(
-  //                         padding: const EdgeInsets.all(10.0),
-  //                         child: Container(
-  //                           padding: EdgeInsets.all(5),
-  //                           decoration: BoxDecoration(
-  //                             color: Colors.white,
-  //                             borderRadius:
-  //                                 BorderRadius.circular(kDefaultCircle14),
-  //                           ),
-  //                           child: Row(
-  //                             children: [
-  //                               Radio(
-  //                                 materialTapTargetSize:
-  //                                     MaterialTapTargetSize.shrinkWrap,
-  //                                 toggleable: true,
-  //                                 value: reason,
-  //                                 groupValue: selectedLyDo,
-  //                                 onChanged: (String? value) {
-  //                                   setState(() {
-  //                                     selectedLyDo = value!;
-  //                                   });
-  //                                 },
-  //                               ),
-  //                               Text(reason),
-  //                             ],
-  //                           ),
-  //                         ),
-  //                       );
-  //                     }),
-  //               ),
-  //               GestureDetector(
-  //                 onTap: () {
-  //                   Navigator.pop(context);
-  //                 },
-  //                 child: Container(
-  //                   height: 70,
-  //                   color: ColorPalette.primaryColor,
-  //                   child: Center(
-  //                       child: Text(
-  //                     'Đồng ý',
-  //                     style: TextStyles.h5.whiteTextColor.bold,
-  //                   )),
-  //                 ),
-  //               ),
-  //             ],
-  //           ),
-  //         );
-  //       });
-  //     },
-  //   );
-  // }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -180,7 +120,10 @@ class _TraHangHoanTienOrderRentScreenState
             },
             child: Icon(FontAwesomeIcons.angleLeft),
           ),
-          title: Center(child: Text('Từ chối')),
+          title: Center(
+            child: Text(
+                widget.order.status == "CONFIRMING" ? 'Đã nhận' : "Trả đồ"),
+          ),
           backgroundColor: ColorPalette.backgroundScaffoldColor,
         ),
         body: Column(
@@ -275,23 +218,6 @@ class _TraHangHoanTienOrderRentScreenState
                                         ),
                                         child: Row(
                                           children: [
-                                            // Radio(
-                                            //   materialTapTargetSize:
-                                            //       MaterialTapTargetSize
-                                            //           .shrinkWrap,
-                                            //   toggleable: true,
-                                            //   value: detail.orderRentDetailID,
-                                            //   groupValue:
-                                            //       selectedOrderRentDetailID,
-                                            //   onChanged: (int? value) {
-                                            //     setState(() {
-                                            //       selectedOrderRentDetailID =
-                                            //           value!;
-                                            //     });
-                                            //     print(
-                                            //         selectedOrderRentDetailID);
-                                            //   },
-                                            // ),
                                             SizedBox(width: 10),
                                             ClipRRect(
                                               borderRadius:
@@ -475,47 +401,6 @@ class _TraHangHoanTienOrderRentScreenState
                         ],
                       ),
                     ),
-                    // Container(
-                    //   padding: EdgeInsets.all(10),
-                    //   decoration: BoxDecoration(
-                    //     color: Colors.white,
-                    //     borderRadius: BorderRadius.circular(kDefaultCircle14),
-                    //   ),
-                    //   child: Column(
-                    //     crossAxisAlignment: CrossAxisAlignment.start,
-                    //     children: [
-                    //       Row(
-                    //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    //         children: [
-                    //           Text('Số tiền hoàn lại'),
-                    //           Row(
-                    //             children: [
-                    //               Text(
-                    //                 '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(widget.order.cocMoneyTotal + widget.order.totalRentPriceProduct)}',
-                    //               ),
-                    //             ],
-                    //           ),
-                    //         ],
-                    //       ),
-                    //       Divider(
-                    //         thickness: 0.5,
-                    //         color: ColorPalette.textHide,
-                    //       ),
-                    //       Row(
-                    //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    //         children: [
-                    //           Text('Hoàn tiền vào'),
-                    //           Row(
-                    //             children: [
-                    //               Text('Ví của bạn'),
-                    //             ],
-                    //           ),
-                    //         ],
-                    //       ),
-                    //     ],
-                    //   ),
-                    // ),
-                    // SizedBox(height: 20),
                     Container(
                       padding: EdgeInsets.all(10),
                       decoration: BoxDecoration(
@@ -536,35 +421,12 @@ class _TraHangHoanTienOrderRentScreenState
                                 'Tối đa 9 ảnh',
                                 style: TextStyles.h5.bold,
                               ),
-                              // GestureDetector(
-                              //   onTap: () async {
-                              //     await _openSelectVoucherScreen();
-                              //     setState(() {});
-                              //   },
-                              //   child: Row(
-                              //     children: [
-                              //       Text(selectedLyDo),
-                              //       SizedBox(width: 10),
-                              //       Icon(FontAwesomeIcons.angleRight)
-                              //     ],
-                              //   ),
-                              // ),
                             ],
                           ),
                           Divider(
                             thickness: 0.5,
                             color: ColorPalette.textHide,
                           ),
-                          // Text('Mô tả'),
-                          // TextFormField(
-                          //   controller: _textController,
-                          //   decoration: InputDecoration(
-                          //     hintStyle: TextStyles.defaultStyle
-                          //         .setColor(ColorPalette.textHide),
-                          //     border: InputBorder.none,
-                          //     hintText: 'Ghi chú thêm',
-                          //   ),
-                          // ),
                           _images.isNotEmpty
                               ? Container(
                                   height: 100,
@@ -631,10 +493,10 @@ class _TraHangHoanTienOrderRentScreenState
               ),
             ),
             ButtonWidget(
-              title: "Từ chối",
+              title: widget.order.status == "CONFIRMING" ? "Đã nhận" : "Trả đồ",
               size: 18,
               height: 70,
-              onTap: traHang,
+              onTap: widget.order.status == "CONFIRMING" ? received : returning,
             ),
           ],
         ));

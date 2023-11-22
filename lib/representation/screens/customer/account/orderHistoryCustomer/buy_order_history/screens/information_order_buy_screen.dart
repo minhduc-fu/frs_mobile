@@ -213,10 +213,17 @@ class _InforMationOrderBuyScreenState extends State<InforMationOrderBuyScreen> {
                                                     MainAxisAlignment
                                                         .spaceBetween,
                                                 children: [
-                                                  Text(
-                                                    detail.productDTOModel
-                                                        .productName,
-                                                    style: TextStyles.h5.bold,
+                                                  Container(
+                                                    width: 230,
+                                                    child: AutoSizeText(
+                                                      detail.productDTOModel
+                                                          .productName,
+                                                      minFontSize: 16,
+                                                      style: TextStyles.h5.bold,
+                                                      maxLines: 1,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    ),
                                                   ),
                                                   Text(
                                                     '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(

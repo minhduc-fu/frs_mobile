@@ -137,26 +137,42 @@ class _RentalCartScreenState extends State<RentalCartScreen> {
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(kDefaultCircle14),
                     ),
-                    child: CheckboxListTile(
-                      controlAffinity: ListTileControlAffinity.leading,
-                      title: Text(
-                        'Tất cả sản phẩm',
-                        style: TextStyles.h5.bold,
-                      ),
-                      value: rentalCartItems.every((rentalCartItemAll) =>
-                          rentalCartItemAll.productDetailModel.every(
-                              (product) =>
-                                  product.isChecked != null &&
-                                  product.isChecked)),
-                      onChanged: (value) {
-                        rentalCartItems.forEach((rentalCartItemAll) {
-                          rentalCartItemAll.productDetailModel
-                              .forEach((product) {
-                            product.isChecked = value!;
-                          });
-                        });
-                        rentalCartProvider.notifyListeners();
-                      },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          width: 250,
+                          child: CheckboxListTile(
+                            controlAffinity: ListTileControlAffinity.leading,
+                            title: Text(
+                              'Tất cả sản phẩm',
+                              style: TextStyles.h5.bold,
+                            ),
+                            value: rentalCartItems.every((rentalCartItemAll) =>
+                                rentalCartItemAll.productDetailModel.every(
+                                    (product) =>
+                                        product.isChecked != null &&
+                                        product.isChecked)),
+                            onChanged: (value) {
+                              rentalCartItems.forEach((rentalCartItemAll) {
+                                rentalCartItemAll.productDetailModel
+                                    .forEach((product) {
+                                  product.isChecked = value!;
+                                });
+                              });
+                              rentalCartProvider.notifyListeners();
+                            },
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            rentalCartProvider.clearCart();
+                          },
+                          child: Container(
+                              margin: EdgeInsets.only(right: 5),
+                              child: Icon(FontAwesomeIcons.trashCan)),
+                        )
+                      ],
                     ),
                   ),
                   SizedBox(height: 20),
@@ -341,7 +357,14 @@ class _RentalCartScreenState extends State<RentalCartScreen> {
                                       Padding(
                                         padding:
                                             const EdgeInsets.only(right: 10),
-                                        child: Icon(FontAwesomeIcons.trashCan),
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            rentalCartProvider
+                                                .removeProductFromCart(product);
+                                          },
+                                          child:
+                                              Icon(FontAwesomeIcons.trashCan),
+                                        ),
                                       ),
                                     ],
                                   ),

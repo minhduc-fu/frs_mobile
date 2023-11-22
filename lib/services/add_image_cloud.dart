@@ -19,12 +19,14 @@ class AddImageCloud {
   }
 
   Future<List<String>> uploadListImageToStorage(
-      String folderName, List<Uint8List> files) async {
+      String folderName, List<Uint8List> files, int orderRentID) async {
     List<String> imageUrls = [];
     try {
       for (int i = 0; i < files.length; i++) {
         Uint8List file = files[i];
-        String childName = '$folderName/image_$i.jpg';
+        String childName =
+            '$folderName/imagesByOrderRentID$orderRentID/image_$i.jpg';
+        // String childName = '$folderName/image_$i.jpg';
         Reference ref = _storage.ref().child(childName);
 
         UploadTask uploadTask = ref.putData(file);

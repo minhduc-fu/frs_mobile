@@ -9,6 +9,7 @@ class RentalCartItemModel {
   int serviceFee;
   double voucherDiscount;
   String slectedDiscountText;
+  String voucherCode;
 
   RentalCartItemModel({
     required this.productOwnerID,
@@ -19,6 +20,7 @@ class RentalCartItemModel {
     this.serviceFee = 0,
     this.voucherDiscount = 0,
     this.slectedDiscountText = 'Chọn voucher',
+    this.voucherCode = '',
   });
   void removeCheckedProducts() {
     productDetailModel.removeWhere((product) => product.isChecked == true);

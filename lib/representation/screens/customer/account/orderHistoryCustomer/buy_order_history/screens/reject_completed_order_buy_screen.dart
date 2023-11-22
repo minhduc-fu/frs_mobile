@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frs_mobile/core/constants/color_constants.dart';
@@ -161,12 +162,23 @@ class _RejectCompletedOrderBuyScreenState
                                                               MainAxisAlignment
                                                                   .spaceBetween,
                                                           children: [
-                                                            Text(
-                                                              detail
-                                                                  .productDTOModel
-                                                                  .productName,
-                                                              style: TextStyles
-                                                                  .h5.bold,
+                                                            Container(
+                                                              width: 230,
+                                                              child:
+                                                                  AutoSizeText(
+                                                                detail
+                                                                    .productDTOModel
+                                                                    .productName,
+                                                                minFontSize: 16,
+                                                                style:
+                                                                    TextStyles
+                                                                        .h5
+                                                                        .bold,
+                                                                maxLines: 1,
+                                                                overflow:
+                                                                    TextOverflow
+                                                                        .ellipsis,
+                                                              ),
                                                             ),
                                                             Text(
                                                               '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(

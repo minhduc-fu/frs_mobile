@@ -7,6 +7,7 @@ class VoucherModel {
   DateTime endDate;
   String description;
   int maxDiscount;
+  int quantity;
   int discountAmount;
   int voucherTypeID;
   int productOwnerID;
@@ -21,6 +22,7 @@ class VoucherModel {
     required this.endDate,
     required this.description,
     required this.maxDiscount,
+    required this.quantity,
     required this.discountAmount,
     required this.voucherTypeID,
     required this.productOwnerID,
@@ -40,6 +42,7 @@ class VoucherModel {
           DateTime(json['endDate'][0], json['endDate'][1], json['endDate'][2]),
       description: json['description'],
       maxDiscount: json['maxDiscount'],
+      quantity: json['quantity'],
       discountAmount: json['discountAmount'],
       voucherTypeID: json['voucherTypeID'],
       productOwnerID: json['productOwnerID'],

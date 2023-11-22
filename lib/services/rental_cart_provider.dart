@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frs_mobile/models/product_detail_model.dart';
 import 'package:frs_mobile/models/rental_cart_item_model.dart';
 
 class RentalCartProvider with ChangeNotifier {
@@ -11,15 +12,22 @@ class RentalCartProvider with ChangeNotifier {
   }
 
   void removeFromCartAndCheckOut() {
-    // Lọc và xóa sản phẩm có isChecked == true
     _rentalCartItems.forEach((rentalCartItem) {
       rentalCartItem.productDetailModel
           .removeWhere((product) => product.isChecked);
     });
-
-    // Loại bỏ các CartItemModel không chứa sản phẩm
     _rentalCartItems.removeWhere(
         (rentalCartItem) => rentalCartItem.productDetailModel.isEmpty);
+
+    notifyListeners();
+  }
+
+  void removeProductFromCart(ProductDetailModel product) {
+    _rentalCartItems.forEach((cartItem) {
+      cartItem.productDetailModel.remove(product);
+    });
+    _rentalCartItems
+        .removeWhere((cartItem) => cartItem.productDetailModel.isEmpty);
 
     notifyListeners();
   }

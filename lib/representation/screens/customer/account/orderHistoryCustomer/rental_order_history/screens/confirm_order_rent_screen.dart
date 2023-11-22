@@ -6,6 +6,7 @@ import 'package:frs_mobile/core/constants/dismension_constants.dart';
 import 'package:frs_mobile/core/constants/textstyle_constants.dart';
 import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/rental_order_history/models/order_rent_detail_model.dart';
 import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/rental_order_history/models/order_rent_model.dart';
+import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/rental_order_history/screens/dangthue_chotra_screen.dart';
 import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/rental_order_history/screens/information_order_rent_screen.dart';
 import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/rental_order_history/screens/trahang_hoantien_screen.dart';
 import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/rental_order_history/services/api_order_rent_history.dart';
@@ -39,14 +40,13 @@ class _ConfirmOrderRentScreenState extends State<ConfirmOrderRentScreen> {
     );
   }
 
-  Future<void> _renting(int orderRentID) async {
-    try {
-      await ApiOderRentHistory.updateStatusOrderRent(orderRentID, "RENTING");
-
-      setState(() {});
-    } catch (e) {
-      print('Lỗi khi hủy đặt hàng: $e');
-    }
+  void _navigateToDangthueChotraScreen(OrderRentModel order) {
+    Navigator.push(
+      context,
+      CupertinoPageRoute(
+        builder: (context) => DangthueChotraScreen(order: order),
+      ),
+    );
   }
 
   @override
@@ -288,9 +288,9 @@ class _ConfirmOrderRentScreenState extends State<ConfirmOrderRentScreen> {
                                           MainAxisAlignment.spaceBetween,
                                       children: [
                                         ButtonWidget(
-                                          onTap: () async {
-                                            await _renting(
-                                                orders[index].orderRentID);
+                                          onTap: () {
+                                            _navigateToDangthueChotraScreen(
+                                                orders[index]);
                                           },
                                           title: 'Đã nhận',
                                           size: 18,

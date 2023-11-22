@@ -531,7 +531,7 @@ class AuthenticationService {
     }
   }
 
-  static Future<List<VoucherModel>> getVoucherByProductOwnerID(
+  static Future<List<VoucherModel>> getVoucherByProrductOwnerIDNotExpired(
       int productOwnerID) async {
     final response = await http.get(
       Uri.parse('http://fashionrental.online:8080/voucher/$productOwnerID'),
@@ -544,6 +544,18 @@ class AuthenticationService {
       } else {
         return data.map((json) => VoucherModel.fromJson(json)).toList();
       }
+    } else {
+      throw Exception('Failed to load vouchers');
+    }
+  }
+
+  static Future<void> useVoucher(String voucherCode) async {
+    final response = await http.post(
+      Uri.parse('http://fashionrental.online:8080/voucher/$voucherCode'),
+    );
+
+    if (response.statusCode == 200) {
+      print('Gọi api useVoucher thành công');
     } else {
       throw Exception('Failed to load vouchers');
     }

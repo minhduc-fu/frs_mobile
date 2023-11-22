@@ -142,12 +142,11 @@ class _CheckoutForRentState extends State<CheckoutForRent> {
   Future<void> _openSelectVoucherScreen(
       int productOwnerID, RentalCartItemModel cartItemModel) async {
     final vouchers =
-        await AuthenticationService.getVoucherByProductOwnerID(productOwnerID);
+        await AuthenticationService.getVoucherByProrductOwnerIDNotExpired(
+            productOwnerID);
     bool isVoucherAvailable(VoucherModel voucher) {
       DateTime currentDate = DateTime.now();
       DateTime startDate = voucher.startDate;
-
-      // Nếu ngày hiện tại lớn hơn hoặc bằng ngày bắt đầu, voucher có thể sử dụng
       return currentDate.isAfter(startDate) ||
           currentDate.isAtSameMomentAs(startDate);
     }
@@ -239,6 +238,8 @@ class _CheckoutForRentState extends State<CheckoutForRent> {
                             cartItemModel.voucherDiscount = voucherDiscount;
                             cartItemModel.slectedDiscountText =
                                 'Giảm ${selectedVoucher!.discountAmount}%';
+                            cartItemModel.voucherCode =
+                                selectedVoucher!.voucherCode;
                           });
                         }
                         Navigator.pop(context);
@@ -911,6 +912,10 @@ class _CheckoutForRentState extends State<CheckoutForRent> {
                                     <Map<String, dynamic>>[];
                                 final voucherDiscount =
                                     cartItem.voucherDiscount;
+                                if (cartItem.voucherCode != '') {
+                                  await AuthenticationService.useVoucher(
+                                      cartItem.voucherCode);
+                                }
 
                                 // Duyệt qua các sản phẩm trong cartItem
                                 for (final product
@@ -966,6 +971,11 @@ class _CheckoutForRentState extends State<CheckoutForRent> {
                               final response = await AuthenticationService
                                   .createOrderRentAndOrderRentDetail(orderData);
                               if (response != null) {
+                                for (final cartItem in selectedCartItems) {
+                                  cartItem.serviceFee = 0;
+                                  cartItem.voucherDiscount = 0;
+                                  cartItem.slectedDiscountText = 'Chọn voucher';
+                                }
                                 showCustomDialog(context, 'Thành công',
                                     "Bạn đã thanh toán thành công!", false);
                                 await Future.delayed(Duration(seconds: 5));

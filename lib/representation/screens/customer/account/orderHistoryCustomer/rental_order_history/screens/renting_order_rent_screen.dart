@@ -6,8 +6,10 @@ import 'package:frs_mobile/core/constants/dismension_constants.dart';
 import 'package:frs_mobile/core/constants/textstyle_constants.dart';
 import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/rental_order_history/models/order_rent_detail_model.dart';
 import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/rental_order_history/models/order_rent_model.dart';
+import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/rental_order_history/screens/dangthue_chotra_screen.dart';
 import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/rental_order_history/screens/information_order_rent_screen.dart';
 import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/rental_order_history/services/api_order_rent_history.dart';
+import 'package:frs_mobile/representation/widgets/button_widget.dart';
 import 'package:frs_mobile/services/authprovider.dart';
 import 'package:intl/intl.dart';
 
@@ -24,6 +26,15 @@ class _RentingOrderRentScreenState extends State<RentingOrderRentScreen> {
       context,
       CupertinoPageRoute(
         builder: (context) => InforMationOrderRentScreen(order: order),
+      ),
+    );
+  }
+
+  void _navigateToDangthueChotraScreen(OrderRentModel order) {
+    Navigator.push(
+      context,
+      CupertinoPageRoute(
+        builder: (context) => DangthueChotraScreen(order: order),
       ),
     );
   }
@@ -256,6 +267,24 @@ class _RentingOrderRentScreenState extends State<RentingOrderRentScreen> {
                                           ),
                                         ],
                                       ),
+                                    ),
+                                    Divider(
+                                      thickness: 0.5,
+                                      color: ColorPalette.textHide,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        ButtonWidget(
+                                          onTap: () {
+                                            _navigateToDangthueChotraScreen(
+                                                orders[index]);
+                                          },
+                                          title: 'Trả đồ',
+                                          size: 18,
+                                          width: 150,
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),

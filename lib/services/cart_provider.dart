@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frs_mobile/models/product_detail_model.dart';
 
 import '../models/cart_item_model.dart';
 
@@ -14,6 +15,18 @@ class CartProvider with ChangeNotifier {
     // Lọc và xóa sản phẩm có isChecked == true
     _cartItems.forEach((cartItem) {
       cartItem.productDetailModel.removeWhere((product) => product.isChecked);
+    });
+
+    // Loại bỏ các CartItemModel không chứa sản phẩm
+    _cartItems.removeWhere((cartItem) => cartItem.productDetailModel.isEmpty);
+
+    notifyListeners();
+  }
+
+  void removeProductFromCart(ProductDetailModel product) {
+    // Lọc và xóa sản phẩm có isChecked == true
+    _cartItems.forEach((cartItem) {
+      cartItem.productDetailModel.remove(product);
     });
 
     // Loại bỏ các CartItemModel không chứa sản phẩm

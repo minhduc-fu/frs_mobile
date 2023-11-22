@@ -146,7 +146,8 @@ class _CheckoutForBuyState extends State<CheckoutForBuy> {
   Future<void> _openSelectVoucherScreen(
       int productOwnerID, CartItemModel cartItemModel) async {
     final vouchers =
-        await AuthenticationService.getVoucherByProductOwnerID(productOwnerID);
+        await AuthenticationService.getVoucherByProrductOwnerIDNotExpired(
+            productOwnerID);
     bool isVoucherAvailable(VoucherModel voucher) {
       DateTime currentDate = DateTime.now();
       DateTime startDate = voucher.startDate;
@@ -177,7 +178,7 @@ class _CheckoutForBuyState extends State<CheckoutForBuy> {
                         itemBuilder: (BuildContext context, int index) {
                           var voucher = buyVouchers[index];
                           return Padding(
-                            padding: const EdgeInsets.all(20.0),
+                            padding: const EdgeInsets.all(10.0),
                             child: Container(
                               padding: EdgeInsets.all(5),
                               decoration: BoxDecoration(
@@ -188,36 +189,45 @@ class _CheckoutForBuyState extends State<CheckoutForBuy> {
                                     BorderRadius.circular(kDefaultCircle14),
                               ),
                               child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Radio<VoucherModel>(
-                                    materialTapTargetSize:
-                                        MaterialTapTargetSize.shrinkWrap,
-                                    toggleable: true,
-                                    value: voucher,
-                                    groupValue: selectedVoucher,
-                                    onChanged: (VoucherModel? value) {
-                                      if (isVoucherAvailable(voucher))
-                                        setState(() {
-                                          selectedVoucher = value;
-                                        });
-                                    },
-                                  ),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                  Row(
                                     children: [
-                                      Text(
-                                        'Giảm ${voucher.discountAmount}% trên đơn',
-                                        style: TextStyles.h5.bold,
+                                      Radio<VoucherModel>(
+                                        materialTapTargetSize:
+                                            MaterialTapTargetSize.shrinkWrap,
+                                        toggleable: true,
+                                        value: voucher,
+                                        groupValue: selectedVoucher,
+                                        onChanged: (VoucherModel? value) {
+                                          if (isVoucherAvailable(voucher))
+                                            setState(() {
+                                              selectedVoucher = value;
+                                            });
+                                        },
                                       ),
-                                      Text(
-                                        'Giảm tối đa ${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(voucher.maxDiscount)} trên đơn',
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            voucher.voucherCode,
+                                            style: TextStyles.h5.bold,
+                                          ),
+                                          Text(
+                                            'Giảm tối đa ${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(voucher.maxDiscount)} trên đơn',
+                                          ),
+                                          Text(
+                                            'HSD: ${DateFormat('dd/MM/yyyy').format(voucher.startDate)} - ${DateFormat('dd/MM/yyyy').format(voucher.endDate)}',
+                                          )
+                                        ],
                                       ),
-                                      Text(
-                                        'HSD: ${DateFormat('dd/MM/yyyy').format(voucher.startDate)} - ${DateFormat('dd/MM/yyyy').format(voucher.endDate)}',
-                                      )
                                     ],
-                                  )
+                                  ),
+                                  Text(
+                                    'Giảm ${voucher.discountAmount}%',
+                                  ),
                                 ],
                               ),
                             ),
@@ -242,6 +252,8 @@ class _CheckoutForBuyState extends State<CheckoutForBuy> {
                             cartItemModel.voucherDiscount = voucherDiscount;
                             cartItemModel.slectedDiscountText =
                                 'Giảm ${selectedVoucher!.discountAmount}%';
+                            cartItemModel.voucherCode =
+                                selectedVoucher!.voucherCode;
                           });
                         }
                         Navigator.pop(context);
@@ -857,6 +869,10 @@ class _CheckoutForBuyState extends State<CheckoutForBuy> {
                                 final orderDetail = <Map<String, dynamic>>[];
                                 final voucherDiscount =
                                     cartItem.voucherDiscount;
+                                if (cartItem.voucherCode != '') {
+                                  await AuthenticationService.useVoucher(
+                                      cartItem.voucherCode);
+                                }
 
                                 // Duyệt qua các sản phẩm trong cartItem
                                 for (final product
@@ -895,6 +911,11 @@ class _CheckoutForBuyState extends State<CheckoutForBuy> {
                               final response = await AuthenticationService
                                   .createOrderBuyAndOrderBuyDetail(orderData);
                               if (response != null) {
+                                for (final cartItem in selectedCartItems) {
+                                  cartItem.serviceFee = 0;
+                                  cartItem.voucherDiscount = 0;
+                                  cartItem.slectedDiscountText = 'Chọn voucher';
+                                }
                                 showCustomDialog(context, 'Thành công',
                                     "Bạn đã thanh toán thành công!", false);
                                 await Future.delayed(Duration(seconds: 5));
