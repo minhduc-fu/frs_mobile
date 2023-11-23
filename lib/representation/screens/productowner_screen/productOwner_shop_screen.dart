@@ -28,10 +28,6 @@ class ProductOwnerShopScreen extends StatefulWidget {
 class _ProductOwnerShopScreenState extends State<ProductOwnerShopScreen> {
   int selectedAllProduct = 0;
 
-  // Future<List<ProductModel>?> fetchProducts() async {
-  //   return await APIProductOwner.getProductByProductOwnerID(
-  //       widget.productOwnerModel!.productOwnerID);
-  // }
   Future<List<ProductModel>?> fetchProducts() async {
     switch (selectedAllProduct) {
       case 0:

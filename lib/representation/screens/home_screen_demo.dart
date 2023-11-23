@@ -5,6 +5,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:frs_mobile/models/category.dart';
 import 'package:frs_mobile/models/product_detail_model.dart';
 import 'package:frs_mobile/models/product_image_model.dart';
+import 'package:frs_mobile/representation/screens/about_frs/about_us.dart';
+import 'package:frs_mobile/representation/screens/about_frs/privacy_policy.dart';
+import 'package:frs_mobile/representation/screens/about_frs/terms_of_service.dart';
 import 'package:frs_mobile/representation/screens/product_detail/product_detail_demo.dart';
 
 import '../../core/constants/color_constants.dart';
@@ -363,43 +366,60 @@ class _HomeScreenDemoState extends State<HomeScreenDemo> {
 
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 25),
-                      child: ListTile(
-                        leading: Icon(
-                          FontAwesomeIcons.userShield,
-                          size: kDefaultIconSize18,
-                          color: ColorPalette.primaryColor,
-                        ),
-                        title: Text(
-                          'Chính sách bảo mật',
-                          style: TextStyles.defaultStyle.setTextSize(18),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 25),
-                      child: ListTile(
-                        leading: Icon(
-                          FontAwesomeIcons.solidAddressBook,
-                          size: kDefaultIconSize18,
-                          color: ColorPalette.primaryColor,
-                        ),
-                        title: Text(
-                          'Điều khoản dịch vụ',
-                          style: TextStyles.defaultStyle.setTextSize(18),
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.of(context)
+                              .pushNamed(PrivacyPolicy.routeName);
+                        },
+                        child: ListTile(
+                          leading: Icon(
+                            FontAwesomeIcons.userShield,
+                            size: kDefaultIconSize18,
+                            color: ColorPalette.primaryColor,
+                          ),
+                          title: Text(
+                            'Chính sách bảo mật',
+                            style: TextStyles.defaultStyle.setTextSize(18),
+                          ),
                         ),
                       ),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 25),
-                      child: ListTile(
-                        leading: Icon(
-                          FontAwesomeIcons.users,
-                          size: kDefaultIconSize18,
-                          color: ColorPalette.primaryColor,
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.of(context)
+                              .pushNamed(TermsOfService.routeName);
+                        },
+                        child: ListTile(
+                          leading: Icon(
+                            FontAwesomeIcons.solidAddressBook,
+                            size: kDefaultIconSize18,
+                            color: ColorPalette.primaryColor,
+                          ),
+                          title: Text(
+                            'Điều khoản dịch vụ',
+                            style: TextStyles.defaultStyle.setTextSize(18),
+                          ),
                         ),
-                        title: Text(
-                          'Về chúng tôi',
-                          style: TextStyles.defaultStyle.setTextSize(18),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 25),
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).pushNamed(AboutUs.routeName);
+                        },
+                        child: ListTile(
+                          leading: Icon(
+                            FontAwesomeIcons.users,
+                            size: kDefaultIconSize18,
+                            color: ColorPalette.primaryColor,
+                          ),
+                          title: Text(
+                            'Về chúng tôi',
+                            style: TextStyles.defaultStyle.setTextSize(18),
+                          ),
                         ),
                       ),
                     ),
@@ -574,7 +594,7 @@ class _HomeScreenDemoState extends State<HomeScreenDemo> {
                           gridDelegate:
                               SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2,
-                            mainAxisExtent: 280,
+                            mainAxisExtent: 300,
                             // tỷ lệ giữa chiều rộng và chiều cao
                             // childAspectRatio: 1 / 2,
                             // (MediaQuery.of(context).size.width - 20 - 10) /

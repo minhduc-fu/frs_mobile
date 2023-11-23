@@ -219,6 +219,9 @@ class _CheckoutForBuyState extends State<CheckoutForBuy> {
                                             'Giảm tối đa ${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(voucher.maxDiscount)} trên đơn',
                                           ),
                                           Text(
+                                            'Số lượng: ${voucher.quantity}',
+                                          ),
+                                          Text(
                                             'HSD: ${DateFormat('dd/MM/yyyy').format(voucher.startDate)} - ${DateFormat('dd/MM/yyyy').format(voucher.endDate)}',
                                           )
                                         ],

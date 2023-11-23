@@ -32,4 +32,8 @@ class AssetHelper {
   // static const String imageVnpay = 'assets/images/vnpay.png';
   static const String imageVnpay = 'assets/images/logo_vnpay.png';
   static const String imageCoupon = 'assets/images/coupon.png';
+  static const String imageAboutUs = 'assets/images/about_us.png';
+  static const String imageGanGui = 'assets/images/ganGui.png';
+  static const String imageVuiVe = 'assets/images/vuiVe.png';
+  static const String imageDongLong = 'assets/images/dongLong.png';
 }

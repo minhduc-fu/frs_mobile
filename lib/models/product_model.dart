@@ -14,6 +14,7 @@ class ProductModel {
   List<RentalPriceModel?>? rentalPrice;
   Map<String, dynamic>? productSpecifications;
   CategoryModel category;
+  bool isFavorite;
 
   ProductModel({
     required this.productID,
@@ -27,6 +28,7 @@ class ProductModel {
     this.rentalPrice,
     this.productSpecifications,
     required this.category,
+    this.isFavorite = false,
   });
 
   String getBrandName() {

@@ -2,6 +2,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:like_button/like_button.dart';
 
 import '../../core/constants/color_constants.dart';
 import '../../core/constants/dismension_constants.dart';
@@ -10,7 +11,7 @@ import '../../models/product_model.dart';
 import '../../utils/asset_helper.dart';
 import '../../utils/image_helper.dart';
 
-class ProductCardDemo extends StatelessWidget {
+class ProductCardDemo extends StatefulWidget {
   final ProductModel product;
   // final double aspectRatio;
 
@@ -21,10 +22,16 @@ class ProductCardDemo extends StatelessWidget {
   });
 
   @override
+  State<ProductCardDemo> createState() => _ProductCardDemoState();
+}
+
+class _ProductCardDemoState extends State<ProductCardDemo> {
+  @override
   Widget build(BuildContext context) {
-    final bool isForSale = product.checkType.contains('SALE');
-    final bool isForRent = product.checkType.contains('RENT');
-    final bool isForSaleAndRent = product.checkType.contains('SALE_RENT');
+    final bool isForSale = widget.product.checkType.contains('SALE');
+    final bool isForRent = widget.product.checkType.contains('RENT');
+    final bool isForSaleAndRent =
+        widget.product.checkType.contains('SALE_RENT');
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(kDefaultCircle14),
@@ -34,13 +41,44 @@ class ProductCardDemo extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             //img
-            AspectRatio(
-              // aspectRatio: aspectRatio,
-              aspectRatio: 16 / 9,
-              child: product.productAvt == null
-                  ? ImageHelper.loadFromAsset(AssetHelper.imageKinhGucci,
-                      fit: BoxFit.contain)
-                  : Image.network(product.productAvt!, fit: BoxFit.cover),
+            Stack(
+              children: [
+                AspectRatio(
+                  // aspectRatio: aspectRatio,
+                  aspectRatio: 14 / 9,
+                  child: widget.product.productAvt == null
+                      ? ImageHelper.loadFromAsset(AssetHelper.imageKinhGucci,
+                          fit: BoxFit.contain)
+                      : Image.network(widget.product.productAvt!,
+                          fit: BoxFit.cover),
+                ),
+                Positioned(
+                  right: 1,
+                  top: 1,
+                  child: LikeButton(
+                    bubblesSize: 100,
+                    bubblesColor: BubblesColor(
+                        dotPrimaryColor: Colors.red,
+                        dotSecondaryColor: Colors.black),
+                    isLiked: widget.product.isFavorite,
+                    onTap: (bool isLiked) async {
+                      setState(() {
+                        widget.product.isFavorite = !widget.product.isFavorite;
+                      });
+                      return widget.product.isFavorite;
+                    },
+                    size: 38,
+                    likeBuilder: (isLiked) {
+                      return isLiked
+                          ? Icon(FontAwesomeIcons.solidHeart)
+                          : Icon(
+                              FontAwesomeIcons.heart,
+                              // color: isLiked ? Colors.red : Colors.amber,
+                            );
+                    },
+                  ),
+                ),
+              ],
             ),
             SizedBox(height: 5),
             Padding(
@@ -54,7 +92,7 @@ class ProductCardDemo extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                       minFontSize: 16,
                       maxLines: 1,
-                      product.productName,
+                      widget.product.productName,
                       style: TextStyles.h5.bold,
                     ),
                   ),
@@ -74,7 +112,7 @@ class ProductCardDemo extends StatelessWidget {
                                   style: TextStyles.defaultStyle.bold),
                               TextSpan(
                                 text:
-                                    '${product.productSpecifications != null ? (product.getBrandName()) : "N/A"}',
+                                    '${widget.product.productSpecifications != null ? (widget.product.getBrandName()) : "N/A"}',
                               )
                             ],
                           ),
@@ -96,7 +134,7 @@ class ProductCardDemo extends StatelessWidget {
                                   style: TextStyles.defaultStyle.bold),
                               TextSpan(
                                 text:
-                                    '${product.productCondition != null ? (product.productCondition) : "N/A"}%',
+                                    '${widget.product.productCondition != null ? (widget.product.productCondition) : "N/A"}%',
                               )
                             ],
                           ),
@@ -119,7 +157,7 @@ class ProductCardDemo extends StatelessWidget {
                                 style: TextStyles.defaultStyle.bold),
                             TextSpan(
                               text:
-                                  '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(product.price)}',
+                                  '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(widget.product.price)}',
                             ),
                           ],
                         ),
@@ -139,8 +177,8 @@ class ProductCardDemo extends StatelessWidget {
                                 text: 'Thuê: ',
                                 style: TextStyles.defaultStyle.bold),
                             TextSpan(
-                                text: product.rentalPrice!.isNotEmpty
-                                    ? '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(product.rentalPrice![0]!.rentPrice)}/${product.rentalPrice![0]!.mockDay} ngày'
+                                text: widget.product.rentalPrice!.isNotEmpty
+                                    ? '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(widget.product.rentalPrice![0]!.rentPrice)}/${widget.product.rentalPrice![0]!.mockDay} ngày'
                                     : 'N/A'),
                           ],
                         ),
@@ -165,27 +203,27 @@ class ProductCardDemo extends StatelessWidget {
                     ],
                   ),
                   SizedBox(height: 2),
-                  if (product.status == "SOLD_OUT")
+                  if (widget.product.status == "SOLD_OUT")
                     Text(
                       "HẾT HÀNG",
                       style: TextStyles.h5.bold.setColor(Colors.red),
                     ),
-                  if (product.status == "BLOCKED")
+                  if (widget.product.status == "BLOCKED")
                     Text(
                       "BỊ KHÓA",
                       style: TextStyles.h5.bold.setColor(Colors.red),
                     ),
-                  if (product.status == "WAITING")
+                  if (widget.product.status == "WAITING")
                     Text(
                       "ĐANG CHỜ",
                       style: TextStyles.h5.bold.setColor(Colors.red),
                     ),
-                  if (product.status == "AVAILABLE")
+                  if (widget.product.status == "AVAILABLE")
                     Text(
                       "CÓ SẴN",
                       style: TextStyles.h5.bold.setColor(Colors.green),
                     ),
-                  if (product.status == "RENTING")
+                  if (widget.product.status == "RENTING")
                     Text(
                       "ĐANG THUÊ",
                       style: TextStyles.h5.bold.setColor(Colors.blue),

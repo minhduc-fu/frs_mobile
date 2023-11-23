@@ -186,35 +186,45 @@ class _CheckoutForRentState extends State<CheckoutForRent> {
                                 ),
                                 child: Row(
                                   children: [
-                                    Radio<VoucherModel>(
-                                      materialTapTargetSize:
-                                          MaterialTapTargetSize.shrinkWrap,
-                                      toggleable: true,
-                                      value: voucher,
-                                      groupValue: selectedVoucher,
-                                      onChanged: (VoucherModel? value) {
-                                        if (isVoucherAvailable(voucher))
-                                          setState(() {
-                                            selectedVoucher = value;
-                                          });
-                                      },
-                                    ),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                    Row(
                                       children: [
-                                        Text(
-                                          'Giảm ${voucher.discountAmount}% trên đơn',
-                                          style: TextStyles.h5.bold,
+                                        Radio<VoucherModel>(
+                                          materialTapTargetSize:
+                                              MaterialTapTargetSize.shrinkWrap,
+                                          toggleable: true,
+                                          value: voucher,
+                                          groupValue: selectedVoucher,
+                                          onChanged: (VoucherModel? value) {
+                                            if (isVoucherAvailable(voucher))
+                                              setState(() {
+                                                selectedVoucher = value;
+                                              });
+                                          },
                                         ),
-                                        Text(
-                                          'Giảm tối đa ${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(voucher.maxDiscount)} trên đơn',
-                                        ),
-                                        Text(
-                                          'HSD: ${DateFormat('dd/MM/yyyy').format(voucher.startDate)} - ${DateFormat('dd/MM/yyyy').format(voucher.endDate)}',
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              voucher.voucherCode,
+                                              style: TextStyles.h5.bold,
+                                            ),
+                                            Text(
+                                              'Giảm tối đa ${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(voucher.maxDiscount)} trên đơn',
+                                            ),
+                                            Text(
+                                              'Số lượng: ${voucher.quantity}',
+                                            ),
+                                            Text(
+                                              'HSD: ${DateFormat('dd/MM/yyyy').format(voucher.startDate)} - ${DateFormat('dd/MM/yyyy').format(voucher.endDate)}',
+                                            )
+                                          ],
                                         )
                                       ],
-                                    )
+                                    ),
+                                    Text(
+                                      'Giảm ${voucher.discountAmount}%',
+                                    ),
                                   ],
                                 ),
                               ),
