@@ -7,7 +7,7 @@ import '../../../core/constants/color_constants.dart';
 import '../../../core/constants/dismension_constants.dart';
 import '../cart/main_cart_screen.dart';
 import '../chat_screen.dart';
-import '../favorite_screen.dart';
+import '../favorite/favorite_screen.dart';
 import '../home_screen_demo.dart';
 import '../login_or_register/register_screen.dart';
 import 'account/account_screen_true.dart';

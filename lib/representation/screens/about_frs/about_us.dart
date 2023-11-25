@@ -26,7 +26,7 @@ class AboutUs extends StatelessWidget {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(20.0),
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
         child: Column(
           children: [
             Container(
@@ -47,10 +47,10 @@ class AboutUs extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(height: 20),
+            SizedBox(height: 10),
             Text(
               'FRS là nền tảng thương mại điện tử hàng đầu trong tim chúng tôi',
-              style: TextStyles.h4,
+              style: TextStyles.h4.bold,
               textAlign: TextAlign.center,
             ),
             SizedBox(height: 10),
@@ -71,17 +71,45 @@ class AboutUs extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(height: 20),
+            SizedBox(height: 10),
+            Text(
+              'Đặc điểm về con người chúng tôi',
+              style: TextStyles.h5.bold,
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(height: 10),
             Row(
               children: [
                 Expanded(
-                    child: _build(
-                        ImageHelper.loadFromAsset(AssetHelper.imageGanGui,
-                            width: kBottomBarIconSize20,
-                            height: kBottomBarIconSize20),
-                        Colors.red,
-                        'Thân thiện',
-                        'subTitle')),
+                  child: _build(
+                      ImageHelper.loadFromAsset(AssetHelper.imageGanGui,
+                          width: 50, height: 50),
+                      Colors.white,
+                      'Thân thiện',
+                      'Chúng tôi thân thiện, gần gũi với tất cả mọi người.'),
+                ),
+                SizedBox(
+                  width: kDefaultPadding16,
+                ),
+                Expanded(
+                  child: _build(
+                      ImageHelper.loadFromAsset(AssetHelper.imageVuiVe,
+                          width: 50, height: 50),
+                      Colors.white,
+                      'Vui vẻ',
+                      'Chúng tôi dễ gần, đáng yêu và tràn đầy năng lượng.'),
+                ),
+                SizedBox(
+                  width: kDefaultPadding16,
+                ),
+                Expanded(
+                  child: _build(
+                      ImageHelper.loadFromAsset(AssetHelper.imageDongLong,
+                          width: 50, height: 50),
+                      Colors.white,
+                      'Đồng lòng',
+                      'Chúng tôi lắng nghe, thấu hiểu và cùng nhau.'),
+                ),
               ],
             ),
           ],
@@ -95,9 +123,10 @@ Widget _build(Widget icon, Color color, String title, String subTitle) {
   return Column(
     children: [
       Container(
-        padding: EdgeInsets.symmetric(vertical: kMediumPadding24),
+        width: double.infinity,
+        padding: EdgeInsets.symmetric(vertical: 10),
         decoration: BoxDecoration(
-          color: color.withOpacity(0.2),
+          color: color,
           borderRadius: BorderRadius.circular(kDefaultCircle14),
         ),
         child: icon,
@@ -105,7 +134,10 @@ Widget _build(Widget icon, Color color, String title, String subTitle) {
       SizedBox(
         height: kItemPadding10,
       ),
-      Text(title),
+      Text(
+        title,
+        style: TextStyles.defaultStyle.bold,
+      ),
       Text(subTitle),
     ],
   );

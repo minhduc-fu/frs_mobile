@@ -1,6 +1,9 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:frs_mobile/representation/screens/favorite/services/api_favorite.dart';
+import 'package:frs_mobile/services/authprovider.dart';
+import 'package:frs_mobile/utils/dialog_helper.dart';
 import 'package:intl/intl.dart';
 import 'package:like_button/like_button.dart';
 
@@ -8,17 +11,13 @@ import '../../core/constants/color_constants.dart';
 import '../../core/constants/dismension_constants.dart';
 import '../../core/constants/textstyle_constants.dart';
 import '../../models/product_model.dart';
-import '../../utils/asset_helper.dart';
-import '../../utils/image_helper.dart';
 
 class ProductCardDemo extends StatefulWidget {
   final ProductModel product;
-  // final double aspectRatio;
 
   const ProductCardDemo({
     super.key,
     required this.product,
-    // required this.aspectRatio,
   });
 
   @override
@@ -26,6 +25,87 @@ class ProductCardDemo extends StatefulWidget {
 }
 
 class _ProductCardDemoState extends State<ProductCardDemo> {
+  bool isFavorite = false;
+
+  @override
+  void initState() {
+    super.initState();
+    final userModel = AuthProvider.userModel;
+    if (userModel != null) {
+      checkFavoriteStatus();
+    }
+  }
+
+  void checkFavoriteStatus() async {
+    try {
+      List<Map<String, dynamic>>? favoriteProducts =
+          await ApiFavorite.getFavoriteByCusID(
+              AuthProvider.userModel!.customer!.customerID);
+
+      if (favoriteProducts != null && favoriteProducts.isNotEmpty) {
+        for (var favoriteProduct in favoriteProducts) {
+          var productDTO = favoriteProduct['productDTO'];
+
+          if (productDTO['productID'] == widget.product.productID) {
+            setState(() {
+              isFavorite = true;
+            });
+            break;
+          }
+        }
+      }
+    } catch (e) {
+      print('Error checking favorite status: $e');
+    }
+  }
+
+  void addToFavorites() async {
+    try {
+      await ApiFavorite.createFavoriteProduct(
+        AuthProvider.userModel!.customer!.customerID,
+        widget.product.productID,
+      );
+      print('Added to favorites successfully');
+    } catch (e) {
+      print('Error adding to favorites: $e');
+    }
+  }
+
+  void removeFromFavorites() async {
+    try {
+      List<Map<String, dynamic>>? favoriteProducts =
+          await ApiFavorite.getFavoriteByCusID(
+              AuthProvider.userModel!.customer!.customerID);
+
+      if (favoriteProducts != null && favoriteProducts.isNotEmpty) {
+        for (var favoriteProduct in favoriteProducts) {
+          var productDTO = favoriteProduct['productDTO'];
+
+          if (productDTO['productID'] == widget.product.productID) {
+            var favoriteProductID = favoriteProduct['favoriteProductID'];
+            await ApiFavorite.unmarkFavoriteStatus(favoriteProductID);
+            print('Removed from favorites successfully');
+            break;
+          }
+        }
+      }
+    } catch (e) {
+      print('Error removing from favorites: $e');
+    }
+  }
+
+  void _toggleFavoriteStatus() {
+    setState(() {
+      isFavorite = !isFavorite;
+    });
+
+    if (isFavorite) {
+      addToFavorites();
+    } else {
+      removeFromFavorites();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final bool isForSale = widget.product.checkType.contains('SALE');
@@ -46,26 +126,34 @@ class _ProductCardDemoState extends State<ProductCardDemo> {
                 AspectRatio(
                   // aspectRatio: aspectRatio,
                   aspectRatio: 14 / 9,
-                  child: widget.product.productAvt == null
-                      ? ImageHelper.loadFromAsset(AssetHelper.imageKinhGucci,
-                          fit: BoxFit.contain)
-                      : Image.network(widget.product.productAvt!,
-                          fit: BoxFit.cover),
+                  child: Image.network(widget.product.productAvt!,
+                      fit: BoxFit.cover),
                 ),
                 Positioned(
-                  right: 1,
-                  top: 1,
+                  right: 0,
+                  top: 0,
                   child: LikeButton(
                     bubblesSize: 100,
                     bubblesColor: BubblesColor(
                         dotPrimaryColor: Colors.red,
                         dotSecondaryColor: Colors.black),
-                    isLiked: widget.product.isFavorite,
-                    onTap: (bool isLiked) async {
-                      setState(() {
-                        widget.product.isFavorite = !widget.product.isFavorite;
-                      });
-                      return widget.product.isFavorite;
+                    isLiked: isFavorite,
+                    onTap: (bool isLiked) {
+                      final userModel = AuthProvider.userModel;
+                      if (userModel != null) {
+                        if (AuthProvider.userModel?.status == "NOT_VERIFIED") {
+                          showCustomDialog(context, "Lỗi",
+                              "Hãy cập nhật thông tin cá nhân", true);
+                          return Future.value(false);
+                        } else {
+                          _toggleFavoriteStatus();
+                          return Future.value(!isLiked);
+                        }
+                      } else {
+                        showCustomDialog(context, "Lỗi",
+                            "Hãy 'Đăng nhập' vào hệ thống để 'Đặt hàng'", true);
+                        return Future.value(false);
+                      }
                     },
                     size: 38,
                     likeBuilder: (isLiked) {
@@ -73,7 +161,6 @@ class _ProductCardDemoState extends State<ProductCardDemo> {
                           ? Icon(FontAwesomeIcons.solidHeart)
                           : Icon(
                               FontAwesomeIcons.heart,
-                              // color: isLiked ? Colors.red : Colors.amber,
                             );
                     },
                   ),

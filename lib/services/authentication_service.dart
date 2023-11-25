@@ -560,31 +560,4 @@ class AuthenticationService {
       throw Exception('Failed to load vouchers');
     }
   }
-
-  static Future<void> createFavoriteProduct(
-      int customerID, int productID) async {
-    final url = Uri.parse('http://fashionrental.online:8080/favoriteproduct');
-    final Map<String, dynamic> requestData = {
-      'customerID': customerID,
-      'productID': productID,
-    };
-
-    try {
-      final response = await http.post(
-        url,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: jsonEncode(requestData),
-      );
-
-      if (response.statusCode == 200) {
-        print('Gọi API createFavoriteProduct thành công');
-      } else {
-        throw Exception('Failed to create favorite product');
-      }
-    } catch (e) {
-      throw Exception('Error: $e');
-    }
-  }
 }

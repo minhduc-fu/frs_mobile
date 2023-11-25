@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:frs_mobile/core/constants/color_constants.dart';
@@ -5,6 +6,7 @@ import 'package:frs_mobile/core/constants/dismension_constants.dart';
 import 'package:frs_mobile/core/constants/my_textfield.dart';
 import 'package:frs_mobile/core/constants/textstyle_constants.dart';
 import 'package:frs_mobile/models/address_model.dart';
+import 'package:frs_mobile/representation/screens/customer/account/address/new_address_screen.dart';
 import 'package:frs_mobile/representation/widgets/app_bar_main.dart';
 import 'package:frs_mobile/representation/widgets/button_widget.dart';
 import 'package:frs_mobile/services/address_provider.dart';
@@ -187,8 +189,11 @@ class _AddressScreenState extends State<AddressScreen> {
             : SizedBox(
                 height: 61,
                 child: FloatingActionButton(
+                  // onPressed: () {
+                  //   _showAddAddressDialog();
+                  // },
                   onPressed: () {
-                    _showAddAddressDialog();
+                    Navigator.pushNamed(context, NewAddressScreen.routeName);
                   },
                   backgroundColor: ColorPalette.primaryColor,
                   child: Icon(

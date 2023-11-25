@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:frs_mobile/core/constants/dismension_constants.dart';
+import 'package:frs_mobile/representation/screens/about_frs/about_us.dart';
 import 'package:frs_mobile/representation/screens/customer/account/address/address_screen.dart';
 import 'package:frs_mobile/representation/screens/wallet/wallet_screen.dart';
 import 'package:hive/hive.dart';
@@ -231,7 +232,11 @@ class _AccountScreenTrueState extends State<AccountScreenTrue> {
                         .length, // Đổi yourData thành danh sách dữ liệu của bạn
                     itemBuilder: (context, index) {
                       return AccountTile(
-                        onTap: () {},
+                        onTap: () {
+                          if (index == 1) {
+                            Navigator.of(context).pushNamed(AboutUs.routeName);
+                          }
+                        },
                         icons: _iconTienIch[index],
                         title: _tienIch[index],
                         trailing: FontAwesomeIcons.angleRight,

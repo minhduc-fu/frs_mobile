@@ -8,14 +8,17 @@ import 'package:frs_mobile/models/cart_item_model.dart';
 import 'package:frs_mobile/models/product_detail_model.dart';
 import 'package:frs_mobile/models/product_image_model.dart';
 import 'package:frs_mobile/models/rental_cart_item_model.dart';
+import 'package:frs_mobile/representation/screens/favorite/services/api_favorite.dart';
 import 'package:frs_mobile/representation/screens/product_detail/full_screen_receipt.dart';
 import 'package:frs_mobile/representation/screens/product_detail/widgets/image_slider.dart';
 import 'package:frs_mobile/representation/screens/productowner_screen/productOwner_shop_screen.dart';
 import 'package:frs_mobile/representation/widgets/app_bar_main.dart';
+import 'package:frs_mobile/services/authprovider.dart';
 import 'package:frs_mobile/services/cart_provider.dart';
 import 'package:frs_mobile/services/rental_cart_provider.dart';
 import 'package:intl/intl.dart';
 import 'package:frs_mobile/core/extensions/date_ext.dart';
+import 'package:like_button/like_button.dart';
 import 'package:provider/provider.dart';
 import '../../../core/constants/color_constants.dart';
 import '../../../core/constants/dismension_constants.dart';
@@ -62,6 +65,86 @@ class _ProductDetailDemoState extends State<ProductDetailDemo> {
 
   int _currentImage = 0;
 
+  bool isFavorite = false;
+  @override
+  void initState() {
+    super.initState();
+    final userModel = AuthProvider.userModel;
+    if (userModel != null) {
+      checkFavoriteStatus();
+    }
+  }
+
+  void checkFavoriteStatus() async {
+    try {
+      List<Map<String, dynamic>>? favoriteProducts =
+          await ApiFavorite.getFavoriteByCusID(
+              AuthProvider.userModel!.customer!.customerID);
+
+      if (favoriteProducts != null && favoriteProducts.isNotEmpty) {
+        for (var favoriteProduct in favoriteProducts) {
+          var productDTO = favoriteProduct['productDTO'];
+
+          if (productDTO['productID'] == widget.productDetailModel!.productID) {
+            setState(() {
+              isFavorite = true;
+            });
+            break;
+          }
+        }
+      }
+    } catch (e) {
+      print('Error checking favorite status: $e');
+    }
+  }
+
+  void addToFavorites() async {
+    try {
+      await ApiFavorite.createFavoriteProduct(
+        AuthProvider.userModel!.customer!.customerID,
+        widget.productDetailModel!.productID,
+      );
+      print('Added to favorites successfully');
+    } catch (e) {
+      print('Error adding to favorites: $e');
+    }
+  }
+
+  void removeFromFavorites() async {
+    try {
+      List<Map<String, dynamic>>? favoriteProducts =
+          await ApiFavorite.getFavoriteByCusID(
+              AuthProvider.userModel!.customer!.customerID);
+
+      if (favoriteProducts != null && favoriteProducts.isNotEmpty) {
+        for (var favoriteProduct in favoriteProducts) {
+          var productDTO = favoriteProduct['productDTO'];
+
+          if (productDTO['productID'] == widget.productDetailModel!.productID) {
+            var favoriteProductID = favoriteProduct['favoriteProductID'];
+            await ApiFavorite.unmarkFavoriteStatus(favoriteProductID);
+            print('Removed from favorites successfully');
+            break;
+          }
+        }
+      }
+    } catch (e) {
+      print('Error removing from favorites: $e');
+    }
+  }
+
+  void _toggleFavoriteStatus() {
+    setState(() {
+      isFavorite = !isFavorite;
+    });
+
+    if (isFavorite) {
+      addToFavorites();
+    } else {
+      removeFromFavorites();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final cartProvider = Provider.of<CartProvider>(context, listen: false);
@@ -93,15 +176,59 @@ class _ProductDetailDemoState extends State<ProductDetailDemo> {
                 child: ListView(
                   children: [
                     // load ảnh productDetail
-                    ImageSlider(
-                      productImages: productImages,
-                      currentImage: _currentImage,
-                      onPageChanged: (int index) {
-                        setState(() {
-                          _currentImage = index;
-                        });
-                      },
-                      carouselController: _controller,
+                    Stack(
+                      children: [
+                        ImageSlider(
+                          productImages: productImages,
+                          currentImage: _currentImage,
+                          onPageChanged: (int index) {
+                            setState(() {
+                              _currentImage = index;
+                            });
+                          },
+                          carouselController: _controller,
+                        ),
+                        Positioned(
+                          right: 40,
+                          top: 10,
+                          child: LikeButton(
+                            bubblesSize: 100,
+                            bubblesColor: BubblesColor(
+                                dotPrimaryColor: Colors.red,
+                                dotSecondaryColor: Colors.black),
+                            isLiked: isFavorite,
+                            onTap: (bool isLiked) {
+                              final userModel = AuthProvider.userModel;
+                              if (userModel != null) {
+                                if (AuthProvider.userModel?.status ==
+                                    "NOT_VERIFIED") {
+                                  showCustomDialog(context, "Lỗi",
+                                      "Hãy cập nhật thông tin cá nhân", true);
+                                  return Future.value(false);
+                                } else {
+                                  _toggleFavoriteStatus();
+                                  return Future.value(!isLiked);
+                                }
+                              } else {
+                                showCustomDialog(
+                                    context,
+                                    "Lỗi",
+                                    "Hãy 'Đăng nhập' vào hệ thống để 'Đặt hàng'",
+                                    true);
+                                return Future.value(false);
+                              }
+                            },
+                            size: 38,
+                            likeBuilder: (isLiked) {
+                              return isLiked
+                                  ? Icon(FontAwesomeIcons.solidHeart)
+                                  : Icon(
+                                      FontAwesomeIcons.heart,
+                                    );
+                            },
+                          ),
+                        ),
+                      ],
                     ),
                     SizedBox(height: 10),
                     // cục indicator

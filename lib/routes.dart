@@ -4,6 +4,7 @@ import 'package:frs_mobile/representation/screens/about_frs/privacy_policy.dart'
 import 'package:frs_mobile/representation/screens/about_frs/terms_of_service.dart';
 import 'package:frs_mobile/representation/screens/cart/buy_cart_screen.dart';
 import 'package:frs_mobile/representation/screens/customer/account/address/address_screen.dart';
+import 'package:frs_mobile/representation/screens/customer/account/address/new_address_screen.dart';
 import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/rental_order_history/screens/confirm_order_rent_screen.dart';
 
 import 'package:frs_mobile/representation/screens/wallet/wallet_screen.dart';
@@ -16,7 +17,7 @@ import 'representation/screens/customer/account/account_screen_true.dart';
 import 'representation/screens/customer/account/orderHistoryCustomer/main_order_history_screen.dart';
 import 'representation/screens/customer/account/profile/customer_profile_screen.dart';
 import 'representation/screens/customer/customer_main_screen.dart';
-import 'representation/screens/favorite_screen.dart';
+import 'representation/screens/favorite/favorite_screen.dart';
 import 'representation/screens/home_screen.dart';
 import 'representation/screens/home_screen_demo.dart';
 import 'representation/screens/intro_screen.dart';
@@ -75,7 +76,10 @@ final Map<String, WidgetBuilder> routes = {
 
   SelectDateScreen.routeName: (context) => SelectDateScreen(),
   WalletScreen.routeName: (context) => WalletScreen(),
+
   AddressScreen.routeName: (context) => AddressScreen(),
+  NewAddressScreen.routeName: (context) => NewAddressScreen(),
+
   BuyCartScreen.routeName: (context) => BuyCartScreen(),
   ConfirmOrderRentScreen.routeName: (context) => ConfirmOrderRentScreen(),
 

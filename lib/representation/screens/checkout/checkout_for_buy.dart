@@ -389,6 +389,8 @@ class _CheckoutForBuyState extends State<CheckoutForBuy> {
           backgroundColor: ColorPalette.backgroundScaffoldColor,
           leading: GestureDetector(
             onTap: () {
+              Provider.of<AddressProvider>(context, listen: false)
+                  .clearSelectedAddress();
               setState(() {
                 for (final cartItem in cartItemsToDisplay) {
                   cartItem.serviceFee = 0;
@@ -411,7 +413,7 @@ class _CheckoutForBuyState extends State<CheckoutForBuy> {
           future: fetchServiceFee(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return CircularProgressIndicator();
+              return Center(child: CircularProgressIndicator());
             } else if (snapshot.hasError) {
               return Text('Error: ${snapshot.error}');
             } else {

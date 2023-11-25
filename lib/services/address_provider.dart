@@ -3,12 +3,10 @@ import 'package:frs_mobile/models/address_model.dart';
 
 class AddressProvider with ChangeNotifier {
   List<AddressModel> _addresses = [];
-  AddressModel? _defaultAddress;
   AddressModel? _selectedAddress;
 
   AddressModel? get selectedAddress => _selectedAddress;
   List<AddressModel> get addresses => _addresses;
-  AddressModel? get defaultAddress => _defaultAddress;
   void selectAddress(AddressModel address) {
     _selectedAddress = address;
     notifyListeners();
@@ -32,6 +30,11 @@ class AddressProvider with ChangeNotifier {
   // Xóa địa chỉ khỏi danh sách
   void deleteAddress(int addressID) {
     _addresses.removeWhere((address) => address.addressID == addressID);
+    notifyListeners();
+  }
+
+  void clearSelectedAddress() {
+    _selectedAddress = null;
     notifyListeners();
   }
 }

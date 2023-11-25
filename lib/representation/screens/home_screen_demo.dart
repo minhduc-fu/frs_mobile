@@ -630,7 +630,7 @@ class _HomeScreenDemoState extends State<HomeScreenDemo> {
                                           .getAllProductImgByProductID(
                                               products[index].productID);
 
-                                  Navigator.of(context).push(
+                                  await Navigator.of(context).push(
                                     CupertinoPageRoute(
                                       builder: (context) => ProductDetailDemo(
                                         productImageModel: productImages!,
@@ -639,7 +639,8 @@ class _HomeScreenDemoState extends State<HomeScreenDemo> {
                                       ),
                                     ),
                                   );
-                                  print(products[index].productID);
+                                  // print(products[index].productID);
+                                  setState(() {});
                                 },
                                 child: ProductCardDemo(
                                   product: products[index],
