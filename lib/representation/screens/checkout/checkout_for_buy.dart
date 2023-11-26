@@ -98,10 +98,15 @@ class _CheckoutForBuyState extends State<CheckoutForBuy> {
   Future<int> getDistrictID(String address, int provinceID) async {
     try {
       final districts = await GHNApiService.getDistricts(provinceID);
+      final districtsTrue = districts
+          .where((district) =>
+              district['NameExtension'] != null &&
+              district['NameExtension'].isNotEmpty)
+          .toList();
       List<String> addressComponents = address.split(', ');
       String district =
           addressComponents[addressComponents.length - 2].toLowerCase();
-      for (final districtData in districts) {
+      for (final districtData in districtsTrue) {
         List<dynamic> nameExtensionsDynamic = districtData['NameExtension'];
         List<String> nameExtensions = nameExtensionsDynamic
             .map((e) => e.toString().toLowerCase())
@@ -122,10 +127,14 @@ class _CheckoutForBuyState extends State<CheckoutForBuy> {
   Future<String> getWardCode(String address, int districtID) async {
     try {
       final wards = await GHNApiService.getWards(districtID);
+      final wardsTrue = wards
+          .where((ward) =>
+              ward['NameExtension'] != null && ward['NameExtension'].isNotEmpty)
+          .toList();
       List<String> addressComponents = address.split(', ');
       String ward =
           addressComponents[addressComponents.length - 3].toLowerCase();
-      for (final wardData in wards) {
+      for (final wardData in wardsTrue) {
         List<dynamic> nameExtensionsDynamic = wardData['NameExtension'];
         List<String> nameExtensions = nameExtensionsDynamic
             .map((e) => e.toString().toLowerCase())
@@ -257,6 +266,8 @@ class _CheckoutForBuyState extends State<CheckoutForBuy> {
                                 'Giảm ${selectedVoucher!.discountAmount}%';
                             cartItemModel.voucherCode =
                                 selectedVoucher!.voucherCode;
+                            cartItemModel.voucherID =
+                                selectedVoucher!.voucherID;
                           });
                         }
                         Navigator.pop(context);
@@ -874,6 +885,7 @@ class _CheckoutForBuyState extends State<CheckoutForBuy> {
                                 final orderDetail = <Map<String, dynamic>>[];
                                 final voucherDiscount =
                                     cartItem.voucherDiscount;
+                                final voucherID = cartItem.voucherID;
                                 if (cartItem.voucherCode != '') {
                                   await AuthenticationService.useVoucher(
                                       cartItem.voucherCode);
@@ -900,19 +912,34 @@ class _CheckoutForBuyState extends State<CheckoutForBuy> {
                                           voucherDiscount;
                                   final total =
                                       totalBuyPriceProduct + shippingFee;
-                                  final order = {
-                                    'customerAddress': customerAddress,
-                                    'customerID': customerID,
-                                    'orderDetail': orderDetail,
-                                    'productownerID': productOwnerID,
-                                    'shippingFee': shippingFee,
-                                    'total': total,
-                                    'totalBuyPriceProduct': totalBuyPriceProduct
-                                  };
-                                  orderData.add(order);
+                                  if (voucherID == 0) {
+                                    final order = {
+                                      'customerAddress': customerAddress,
+                                      'customerID': customerID,
+                                      'orderDetail': orderDetail,
+                                      'productownerID': productOwnerID,
+                                      'shippingFee': shippingFee,
+                                      'total': total,
+                                      'totalBuyPriceProduct':
+                                          totalBuyPriceProduct
+                                    };
+                                    orderData.add(order);
+                                  } else {
+                                    final order = {
+                                      'customerAddress': customerAddress,
+                                      'customerID': customerID,
+                                      'orderDetail': orderDetail,
+                                      'productownerID': productOwnerID,
+                                      'shippingFee': shippingFee,
+                                      'total': total,
+                                      'totalBuyPriceProduct':
+                                          totalBuyPriceProduct,
+                                      'voucherID': voucherID
+                                    };
+                                    orderData.add(order);
+                                  }
                                 }
                               }
-
                               final response = await AuthenticationService
                                   .createOrderBuyAndOrderBuyDetail(orderData);
                               if (response != null) {

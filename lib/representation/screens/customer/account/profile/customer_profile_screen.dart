@@ -5,7 +5,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
-
 import '../../../../../bloc/register_stepper_bloc.dart';
 import '../../../../../core/constants/color_constants.dart';
 import '../../../../../core/constants/dismension_constants.dart';
@@ -175,6 +174,11 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
     }
   }
 
+  bool isFullNameValid(String fullName) {
+    return fullName.trim().contains(' ');
+  }
+
+  String? fullNameErrorText;
   @override
   Widget build(BuildContext context) {
     authProvider = Provider.of<AuthProvider>(context);
@@ -410,11 +414,48 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                         style: TextStyles.h5.bold,
                       ),
                       SizedBox(height: 10),
-                      MyTextField(
+                      TextField(
+                        onSubmitted: (String value) {
+                          if (!isFullNameValid(value)) {
+                            setState(() {
+                              fullNameErrorText =
+                                  'Họ và tên phải chứa khoảng trắng.';
+                            });
+                          } else {
+                            setState(() {
+                              fullNameErrorText = null;
+                            });
+                          }
+                        },
                         controller: fullNameController,
-                        hintText: 'Họ và tên',
+                        decoration: InputDecoration(
+                          labelText: 'Họ và tên',
+                          labelStyle: TextStyles.defaultStyle
+                              .setColor(ColorPalette.textHide),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.circular(kDefaultCircle14),
+                            borderSide:
+                                BorderSide(color: ColorPalette.textHide),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: ColorPalette.primaryColor),
+                          ),
+                          fillColor: Colors.white,
+                          filled: true,
+                          hintText: 'Họ và tên',
+                          hintStyle: TextStyles.defaultStyle
+                              .setColor(ColorPalette.textHide),
+                          errorText: fullNameErrorText,
+                        ),
                         obscureText: false,
                       ),
+                      // MyTextField(
+                      //   controller: fullNameController,
+                      //   hintText: 'Họ và tên',
+                      //   obscureText: false,
+                      // ),
                       SizedBox(height: 10),
 
                       //phone

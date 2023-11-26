@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -26,14 +28,24 @@ class ProductCardDemo extends StatefulWidget {
 
 class _ProductCardDemoState extends State<ProductCardDemo> {
   bool isFavorite = false;
+  late Completer<void> _favoriteStatusCompleter;
 
   @override
   void initState() {
     super.initState();
     final userModel = AuthProvider.userModel;
+    _favoriteStatusCompleter = Completer<void>();
     if (userModel != null) {
       checkFavoriteStatus();
     }
+  }
+
+  @override
+  void dispose() {
+    if (!_favoriteStatusCompleter.isCompleted) {
+      _favoriteStatusCompleter.complete(); // Complete the task when disposing
+    } // Complete the task when disposing
+    super.dispose();
   }
 
   void checkFavoriteStatus() async {
@@ -41,6 +53,9 @@ class _ProductCardDemoState extends State<ProductCardDemo> {
       List<Map<String, dynamic>>? favoriteProducts =
           await ApiFavorite.getFavoriteByCusID(
               AuthProvider.userModel!.customer!.customerID);
+      if (_favoriteStatusCompleter.isCompleted) {
+        return; // Do nothing if the widget is already disposed
+      }
 
       if (favoriteProducts != null && favoriteProducts.isNotEmpty) {
         for (var favoriteProduct in favoriteProducts) {
@@ -55,7 +70,13 @@ class _ProductCardDemoState extends State<ProductCardDemo> {
         }
       }
     } catch (e) {
-      print('Error checking favorite status: $e');
+      if (!_favoriteStatusCompleter.isCompleted) {
+        print('Error checking favorite status: $e');
+      }
+    } finally {
+      if (!_favoriteStatusCompleter.isCompleted) {
+        _favoriteStatusCompleter.complete(); // Complete the task
+      }
     }
   }
 
@@ -95,9 +116,11 @@ class _ProductCardDemoState extends State<ProductCardDemo> {
   }
 
   void _toggleFavoriteStatus() {
-    setState(() {
-      isFavorite = !isFavorite;
-    });
+    if (mounted) {
+      setState(() {
+        isFavorite = !isFavorite;
+      });
+    }
 
     if (isFavorite) {
       addToFavorites();

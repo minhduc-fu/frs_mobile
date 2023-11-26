@@ -32,32 +32,102 @@ class _NewAddressScreenState extends State<NewAddressScreen> {
 
   Future<void> _showProvinceDialog() async {
     List<Map<String, dynamic>> provinces = await GHNApiService.getProvinces();
-    return showDialog<void>(
+    List<Map<String, dynamic>> provincesTrue = provinces
+        .where((province) =>
+            province['NameExtension'] != null &&
+            province['NameExtension'].isNotEmpty)
+        .toList();
+    provincesTrue
+        .sort((a, b) => a['NameExtension'][0].compareTo(b['NameExtension'][0]));
+    showModalBottomSheet(
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(kDefaultCircle14)),
+      backgroundColor: Colors.white,
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Chọn Tỉnh/Thành phố'),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: provinces.map((province) {
-                return GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      selectedProvinceId = province['ProvinceID'];
-                      provinceName = province['NameExtension'][0];
-                      districtName = 'Quận/Huyện';
-                      wardName = 'Phường/Xã';
-                      selectedDistrictId = -1;
-                    });
-                    Navigator.of(context).pop();
-                    print(selectedProvinceId);
-                  },
+        String currentFirstLetter = '';
+        return Container(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Center(
                   child: Container(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text(province['NameExtension'][0]),
+                    decoration: BoxDecoration(
+                        color: ColorPalette.primaryColor,
+                        borderRadius: BorderRadius.circular(kDefaultCircle14)),
+                    height: 7,
+                    width: 50,
                   ),
-                );
-              }).toList(),
+                ),
+                SizedBox(height: 20),
+                Text('Chọn Tỉnh/Thành phố', style: TextStyles.h5.bold),
+                SizedBox(height: 10),
+                Expanded(
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: provincesTrue.length,
+                    itemBuilder: (context, index) {
+                      String firstLetter = provincesTrue[index]['NameExtension']
+                              [0][0]
+                          .toUpperCase();
+                      Widget firstLetterWidget =
+                          (firstLetter != currentFirstLetter)
+                              ? Column(
+                                  children: [
+                                    Text(
+                                      firstLetter,
+                                      style: TextStyles.defaultStyle,
+                                    ),
+                                    SizedBox(height: 17)
+                                  ],
+                                )
+                              : SizedBox(
+                                  width: 10,
+                                );
+                      currentFirstLetter = firstLetter;
+                      return Row(
+                        children: [
+                          firstLetterWidget,
+                          SizedBox(width: 20),
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  selectedProvinceId =
+                                      provincesTrue[index]['ProvinceID'];
+                                  provinceName =
+                                      provincesTrue[index]['NameExtension'][0];
+                                  districtName = 'Quận/Huyện';
+                                  wardName = 'Phường/Xã';
+                                  selectedDistrictId = -1;
+                                });
+                                Navigator.pop(context);
+                                print(selectedProvinceId);
+                              },
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                      width: double.infinity,
+                                      child: Text(provincesTrue[index]
+                                          ['NameExtension'][0])),
+                                  Divider(
+                                    thickness: 0.5,
+                                    color: ColorPalette.primaryColor,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                ),
+              ],
             ),
           ),
         );
@@ -68,30 +138,101 @@ class _NewAddressScreenState extends State<NewAddressScreen> {
   Future<void> _showDistrictDialog(int provinceId) async {
     List<Map<String, dynamic>> districts =
         await GHNApiService.getDistricts(provinceId);
-    return showDialog<void>(
+    List<Map<String, dynamic>> districtTrue = districts
+        .where((district) =>
+            district['NameExtension'] != null &&
+            district['NameExtension'].isNotEmpty)
+        .toList();
+
+    districtTrue
+        .sort((a, b) => a['NameExtension'][0].compareTo(b['NameExtension'][0]));
+    return showModalBottomSheet(
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(kDefaultCircle14)),
+      backgroundColor: Colors.white,
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Chọn Quận/Huyện'),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: districts.map((district) {
-                return GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      selectedDistrictId = district['DistrictID'];
-                      districtName = district['NameExtension'][0];
-                      wardName = 'Phường/Xã';
-                    });
-                    Navigator.of(context).pop();
-                    print(selectedDistrictId);
-                  },
+        String currentFirstLetter = '';
+        return Container(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Center(
                   child: Container(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text(district['NameExtension'][0]),
+                    decoration: BoxDecoration(
+                        color: ColorPalette.primaryColor,
+                        borderRadius: BorderRadius.circular(kDefaultCircle14)),
+                    height: 7,
+                    width: 50,
                   ),
-                );
-              }).toList(),
+                ),
+                SizedBox(height: 20),
+                Text('Chọn Quận/Huyện', style: TextStyles.h5.bold),
+                SizedBox(height: 10),
+                Expanded(
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: districtTrue.length,
+                    itemBuilder: (context, index) {
+                      String firstLetter = districtTrue[index]['NameExtension']
+                              [0][0]
+                          .toUpperCase();
+                      Widget firstLetterWidget =
+                          (firstLetter != currentFirstLetter)
+                              ? Column(
+                                  children: [
+                                    Text(
+                                      firstLetter,
+                                      style: TextStyles.defaultStyle,
+                                    ),
+                                    SizedBox(height: 17)
+                                  ],
+                                )
+                              : SizedBox(
+                                  width: 10,
+                                );
+                      currentFirstLetter = firstLetter;
+                      return Row(
+                        children: [
+                          firstLetterWidget,
+                          SizedBox(width: 20),
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  selectedDistrictId =
+                                      districtTrue[index]['DistrictID'];
+                                  districtName =
+                                      districtTrue[index]['NameExtension'][0];
+                                  wardName = 'Phường/Xã';
+                                });
+                                Navigator.of(context).pop();
+                                print(selectedDistrictId);
+                              },
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                      width: double.infinity,
+                                      child: Text(districtTrue[index]
+                                          ['NameExtension'][0])),
+                                  Divider(
+                                    thickness: 0.5,
+                                    color: ColorPalette.primaryColor,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                ),
+              ],
             ),
           ),
         );
@@ -100,30 +241,98 @@ class _NewAddressScreenState extends State<NewAddressScreen> {
   }
 
   Future<void> _showWardDialog(int districtId) async {
-    // Gọi API getWards và hiển thị danh sách phường xã dựa trên districtId
     List<Map<String, dynamic>> wards = await GHNApiService.getWards(districtId);
-    return showDialog<void>(
+    List<Map<String, dynamic>> wardsTrue = wards
+        .where((ward) =>
+            ward['NameExtension'] != null && ward['NameExtension'].isNotEmpty)
+        .toList();
+    wardsTrue
+        .sort((a, b) => a['NameExtension'][0].compareTo(b['NameExtension'][0]));
+
+    return showModalBottomSheet(
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(kDefaultCircle14)),
+      backgroundColor: Colors.white,
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Chọn Phường/Xã'),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: wards.map((ward) {
-                return GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      wardName = ward['NameExtension'][0];
-                    });
-                    Navigator.of(context).pop();
-                    print(wardName);
-                  },
+        String currentFirstLetter = '';
+        return Container(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Center(
                   child: Container(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text(ward['NameExtension'][0]),
+                    decoration: BoxDecoration(
+                        color: ColorPalette.primaryColor,
+                        borderRadius: BorderRadius.circular(kDefaultCircle14)),
+                    height: 7,
+                    width: 50,
                   ),
-                );
-              }).toList(),
+                ),
+                SizedBox(height: 20),
+                Text('Chọn Phường/Xã', style: TextStyles.h5.bold),
+                SizedBox(height: 10),
+                Expanded(
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: wardsTrue.length,
+                    itemBuilder: (context, index) {
+                      String firstLetter =
+                          wardsTrue[index]['NameExtension'][0][0].toUpperCase();
+                      Widget firstLetterWidget =
+                          (firstLetter != currentFirstLetter)
+                              ? Column(
+                                  children: [
+                                    Text(
+                                      firstLetter,
+                                      style: TextStyles.defaultStyle,
+                                    ),
+                                    SizedBox(height: 17)
+                                  ],
+                                )
+                              : SizedBox(
+                                  width: 10,
+                                );
+
+                      currentFirstLetter = firstLetter;
+                      return Row(
+                        children: [
+                          firstLetterWidget,
+                          SizedBox(width: 20),
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  wardName =
+                                      wardsTrue[index]['NameExtension'][0];
+                                });
+                                Navigator.of(context).pop();
+                                print(wardName);
+                              },
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                      width: double.infinity,
+                                      child: Text(wardsTrue[index]
+                                          ['NameExtension'][0])),
+                                  Divider(
+                                    thickness: 0.5,
+                                    color: ColorPalette.primaryColor,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                )
+              ],
             ),
           ),
         );
@@ -201,9 +410,7 @@ class _NewAddressScreenState extends State<NewAddressScreen> {
                 GestureDetector(
                   onTap: () async {
                     await _showProvinceDialog();
-                    setState(() {
-                      // Update UI based on selected province
-                    });
+                    setState(() {});
                   },
                   child: Container(
                     decoration: BoxDecoration(
@@ -225,9 +432,7 @@ class _NewAddressScreenState extends State<NewAddressScreen> {
                   onTap: () async {
                     if (selectedProvinceId != -1) {
                       await _showDistrictDialog(selectedProvinceId);
-                      setState(() {
-                        // Update UI based on selected district
-                      });
+                      setState(() {});
                     }
                   },
                   child: Container(
@@ -250,9 +455,7 @@ class _NewAddressScreenState extends State<NewAddressScreen> {
                   onTap: () async {
                     if (selectedDistrictId != -1) {
                       await _showWardDialog(selectedDistrictId);
-                      setState(() {
-                        // Update UI based on selected ward
-                      });
+                      setState(() {});
                     }
                   },
                   child: Container(

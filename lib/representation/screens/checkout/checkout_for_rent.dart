@@ -94,10 +94,15 @@ class _CheckoutForRentState extends State<CheckoutForRent> {
   Future<int> getDistrictID(String address, int provinceID) async {
     try {
       final districts = await GHNApiService.getDistricts(provinceID);
+      final districtsTrue = districts
+          .where((district) =>
+              district['NameExtension'] != null &&
+              district['NameExtension'].isNotEmpty)
+          .toList();
       List<String> addressComponents = address.split(', ');
       String district =
           addressComponents[addressComponents.length - 2].toLowerCase();
-      for (final districtData in districts) {
+      for (final districtData in districtsTrue) {
         List<dynamic> nameExtensionsDynamic = districtData['NameExtension'];
         List<String> nameExtensions = nameExtensionsDynamic
             .map((e) => e.toString().toLowerCase())
@@ -118,10 +123,14 @@ class _CheckoutForRentState extends State<CheckoutForRent> {
   Future<String> getWardCode(String address, int districtID) async {
     try {
       final wards = await GHNApiService.getWards(districtID);
+      final wardsTrue = wards
+          .where((ward) =>
+              ward['NameExtension'] != null && ward['NameExtension'].isNotEmpty)
+          .toList();
       List<String> addressComponents = address.split(', ');
       String ward =
           addressComponents[addressComponents.length - 3].toLowerCase();
-      for (final wardData in wards) {
+      for (final wardData in wardsTrue) {
         List<dynamic> nameExtensionsDynamic = wardData['NameExtension'];
         List<String> nameExtensions = nameExtensionsDynamic
             .map((e) => e.toString().toLowerCase())
@@ -185,6 +194,8 @@ class _CheckoutForRentState extends State<CheckoutForRent> {
                                       BorderRadius.circular(kDefaultCircle14),
                                 ),
                                 child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
                                     Row(
                                       children: [
@@ -250,6 +261,8 @@ class _CheckoutForRentState extends State<CheckoutForRent> {
                                 'Giảm ${selectedVoucher!.discountAmount}%';
                             cartItemModel.voucherCode =
                                 selectedVoucher!.voucherCode;
+                            cartItemModel.voucherID =
+                                selectedVoucher!.voucherID;
                           });
                         }
                         Navigator.pop(context);
@@ -924,6 +937,7 @@ class _CheckoutForRentState extends State<CheckoutForRent> {
                                     <Map<String, dynamic>>[];
                                 final voucherDiscount =
                                     cartItem.voucherDiscount;
+                                final voucherID = cartItem.voucherID;
                                 if (cartItem.voucherCode != '') {
                                   await AuthenticationService.useVoucher(
                                       cartItem.voucherCode);
@@ -965,18 +979,34 @@ class _CheckoutForRentState extends State<CheckoutForRent> {
                                   final total = totalRentPriceProduct +
                                       cocMoneyTotal +
                                       shippingFee;
-                                  final order = {
-                                    'cocMoneyTotal': cocMoneyTotal,
-                                    'customerAddress': customerAddress,
-                                    'customerID': customerID,
-                                    'orderRentDetail': orderRentDetail,
-                                    'productownerID': productOwnerID,
-                                    'shippingFee': shippingFee,
-                                    'total': total,
-                                    'totalRentPriceProduct':
-                                        totalRentPriceProduct
-                                  };
-                                  orderData.add(order);
+                                  if (voucherID == 0) {
+                                    final order = {
+                                      'cocMoneyTotal': cocMoneyTotal,
+                                      'customerAddress': customerAddress,
+                                      'customerID': customerID,
+                                      'orderRentDetail': orderRentDetail,
+                                      'productownerID': productOwnerID,
+                                      'shippingFee': shippingFee,
+                                      'total': total,
+                                      'totalRentPriceProduct':
+                                          totalRentPriceProduct
+                                    };
+                                    orderData.add(order);
+                                  } else {
+                                    final order = {
+                                      'cocMoneyTotal': cocMoneyTotal,
+                                      'customerAddress': customerAddress,
+                                      'customerID': customerID,
+                                      'orderRentDetail': orderRentDetail,
+                                      'productownerID': productOwnerID,
+                                      'shippingFee': shippingFee,
+                                      'total': total,
+                                      'totalRentPriceProduct':
+                                          totalRentPriceProduct,
+                                      'voucherID': voucherID
+                                    };
+                                    orderData.add(order);
+                                  }
                                 }
                               }
 
