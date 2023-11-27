@@ -42,6 +42,18 @@ class _PendingOrderBuyScreenState extends State<PendingOrderBuyScreen> {
     }
   }
 
+  Future<void> _cancelOrderAndCancelVoucher(
+      int orderBuyID, String voucherCode) async {
+    try {
+      await ApiBuyOderHistory.cancelVoucher(voucherCode);
+      await ApiBuyOderHistory.updateStatusOrder(orderBuyID, "CANCELED");
+      setState(() {});
+    } catch (e) {
+      showCustomDialog(context, "Lỗi", "Hủy đơn hàng không thành công", true);
+      print('$e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,7 +66,7 @@ class _PendingOrderBuyScreenState extends State<PendingOrderBuyScreen> {
                     AuthProvider.userModel!.customer!.customerID),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CircularProgressIndicator();
+                    return Center(child: CircularProgressIndicator());
                   } else if (snapshot.hasError) {
                     return Text('Error: ${snapshot.error}');
                   } else {
@@ -239,8 +251,26 @@ class _PendingOrderBuyScreenState extends State<PendingOrderBuyScreen> {
                                       children: [
                                         ButtonWidget(
                                           onTap: () async {
-                                            await _cancelOrder(
-                                                orders[index].orderBuyID);
+                                            if (orders[index].status ==
+                                                "PENDING") {
+                                              if (orders[index].voucherDTO !=
+                                                  null) {
+                                                await _cancelOrderAndCancelVoucher(
+                                                    orders[index].orderBuyID,
+                                                    orders[index]
+                                                        .voucherDTO!
+                                                        .voucherCode);
+                                              } else {
+                                                await _cancelOrder(
+                                                    orders[index].orderBuyID);
+                                              }
+                                            } else {
+                                              showCustomDialog(
+                                                  context,
+                                                  "Lỗi",
+                                                  "Bạn không thể hủy đơn hàng",
+                                                  true);
+                                            }
                                           },
                                           title: 'Hủy đơn hàng',
                                           size: 18,

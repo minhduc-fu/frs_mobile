@@ -1,3 +1,5 @@
+import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/buy_order_history/model/voucherDTO.dart';
+
 class OrderRentModel {
   int orderRentID;
   double totalRentPriceProduct;
@@ -11,6 +13,7 @@ class OrderRentModel {
   String customerName;
   int customerID;
   int productownerID;
+  VoucherDTO? voucherDTO;
 
   OrderRentModel({
     required this.orderRentID,
@@ -25,6 +28,7 @@ class OrderRentModel {
     required this.customerName,
     required this.customerID,
     required this.productownerID,
+    this.voucherDTO,
   });
 
   factory OrderRentModel.fromJson(Map<String, dynamic> json) {
@@ -45,6 +49,9 @@ class OrderRentModel {
       customerName: json['customerName'],
       customerID: json['customerID'],
       productownerID: json['productownerID'],
+      voucherDTO: json['voucherDTO'] != null
+          ? VoucherDTO.fromJson(json['voucherDTO'])
+          : null,
       // customerName: json['customerName'],
       // productOwnerName: json['productOwnerName'],
     );

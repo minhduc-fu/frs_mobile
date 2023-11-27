@@ -49,6 +49,12 @@ class _InforMationOrderRentScreenState
                       'Thông tin nhận hàng',
                       style: TextStyles.defaultStyle.setTextSize(20).bold,
                     ),
+                    Text(
+                      widget.order.voucherDTO != null
+                          ? widget.order.voucherDTO!.voucherCode
+                          : 'Không có',
+                      style: TextStyles.defaultStyle.setTextSize(20).bold,
+                    ),
                     SizedBox(height: 10),
                     Container(
                       padding: EdgeInsets.all(10),

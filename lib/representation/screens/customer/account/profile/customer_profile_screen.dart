@@ -178,6 +178,11 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
     return fullName.trim().contains(' ');
   }
 
+  bool isFullNameValidAbc(String fullName) {
+    return fullName.trim().contains(' ');
+  }
+
+  final _formKey = GlobalKey<FormState>();
   String? fullNameErrorText;
   @override
   Widget build(BuildContext context) {
@@ -192,338 +197,366 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
         child: Icon(FontAwesomeIcons.angleLeft),
       ),
       child: Scaffold(
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Column(
-              children: [
-                SizedBox(height: 20),
-                if (AuthProvider.userModel?.status == "NOT_VERIFIED")
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Center(
-                        child: Stack(
-                          children: [
-                            _image != null
-                                ? CircleAvatar(
-                                    radius: 40,
-                                    backgroundImage: MemoryImage(_image!),
-                                  )
-                                : CircleAvatar(
-                                    radius: 40,
-                                    backgroundImage: AssetImage(
-                                        AssetHelper.imageCircleAvtMain),
-                                  ),
-                            Positioned(
-                              bottom: 1,
-                              left: 50,
-                              child: Center(
-                                child: CircleAvatar(
-                                  backgroundColor: ColorPalette.primaryColor,
-                                  radius: 15,
-                                  child: IconButton(
-                                    onPressed: selectImage,
-                                    icon: Icon(
-                                      color: Colors.white,
-                                      FontAwesomeIcons.plus,
-                                      size: 16,
+        body: Form(
+          key: _formKey,
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                children: [
+                  SizedBox(height: 20),
+                  if (AuthProvider.userModel?.status == "NOT_VERIFIED")
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Center(
+                          child: Stack(
+                            children: [
+                              _image != null
+                                  ? CircleAvatar(
+                                      radius: 40,
+                                      backgroundImage: MemoryImage(_image!),
+                                    )
+                                  : CircleAvatar(
+                                      radius: 40,
+                                      backgroundImage: AssetImage(
+                                          AssetHelper.imageCircleAvtMain),
+                                    ),
+                              Positioned(
+                                bottom: 1,
+                                left: 50,
+                                child: Center(
+                                  child: CircleAvatar(
+                                    backgroundColor: ColorPalette.primaryColor,
+                                    radius: 15,
+                                    child: IconButton(
+                                      onPressed: selectImage,
+                                      icon: Icon(
+                                        color: Colors.white,
+                                        FontAwesomeIcons.plus,
+                                        size: 16,
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(height: 10),
-                      Column(
-                        children: [
-                          // tên
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                "Tên của bạn",
-                                style: TextStyles.h5.setTextSize(20).bold,
-                              ),
                             ],
                           ),
-                          //gmail
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                AuthProvider.userModel?.email ?? '',
-                                style: TextStyles.h5,
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 20),
-                      //fullName
-                      Text(
-                        'Họ và tên',
-                        style: TextStyles.h5.bold,
-                      ),
-                      SizedBox(height: 10),
-                      MyTextField(
-                        controller: fullNameController,
-                        hintText: 'Họ và tên',
-                        obscureText: false,
-                      ),
-                      SizedBox(height: 10),
-                      //phone
-                      Text(
-                        'Số điện thoại',
-                        style: TextStyles.h5.bold,
-                      ),
-                      SizedBox(height: 10),
-                      MyTextField(
-                        textInputType: TextInputType.number,
-                        controller: phoneController,
-                        hintText: 'Số điện thoại',
-                        obscureText: false,
-                      ),
-                      SizedBox(height: 10),
-                      Text(
-                        'Giới tính',
-                        style: TextStyles.h5.bold,
-                      ),
-                      SizedBox(height: 10),
-                      //gioi tinh
-                      Container(
-                        decoration: BoxDecoration(
-                          color: ColorPalette.hideColor,
-                          borderRadius: BorderRadius.circular(kDefaultCircle14),
-                          border: Border.all(color: ColorPalette.textHide),
                         ),
-                        child: ListTile(
-                          title: Text('Giới tính'),
-                          trailing: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                isMale == null
-                                    ? 'Chưa chọn giới tính'
-                                    : (isMale! ? 'Nữ' : 'Nam'),
-                                style: TextStyles.defaultStyle,
-                              ),
-                              SizedBox(width: 10),
-                              Icon(
-                                FontAwesomeIcons.angleRight,
-                                size: kDefaultIconSize18,
-                                color: ColorPalette.primaryColor,
-                              )
-                            ],
-                          ),
-                          onTap: () async {
-                            final result =
-                                await RegisterStepperBloc.showGenderBottomSheet(
-                                    context);
-                            if (result != null) {
-                              setState(() {
-                                isMale = result;
-                              });
-                            }
-                          },
-                        ),
-                      ),
-                      SizedBox(height: 20),
-                      ButtonWidget(
-                        height: 70,
-                        size: 22,
-                        title: 'Xác minh',
-                        onTap: createCustomer,
-                      ),
-                    ],
-                  ),
-                if (AuthProvider.userModel?.status == "VERIFIED")
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Center(
-                        child: Stack(
+                        SizedBox(height: 10),
+                        Column(
                           children: [
-                            _image != null
-                                ? CircleAvatar(
-                                    radius: 40,
-                                    backgroundImage: MemoryImage(_image!),
-                                  )
-                                : CircleAvatar(
-                                    radius: 40,
-                                    backgroundImage: NetworkImage(
-                                      AuthProvider
-                                              .userModel?.customer?.avatarUrl ??
-                                          '',
-                                    ),
-                                  ),
-                            Positioned(
-                              bottom: 1,
-                              left: 50,
-                              child: Center(
-                                child: CircleAvatar(
-                                  backgroundColor: ColorPalette.primaryColor,
-                                  radius: 15,
-                                  child: IconButton(
-                                    onPressed: selectImage,
-                                    icon: Icon(
-                                      color: Colors.white,
-                                      FontAwesomeIcons.plus,
-                                      size: 16,
-                                    ),
-                                  ),
+                            // tên
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "Tên của bạn",
+                                  style: TextStyles.h5.setTextSize(20).bold,
                                 ),
-                              ),
+                              ],
+                            ),
+                            //gmail
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  AuthProvider.userModel?.email ?? '',
+                                  style: TextStyles.h5,
+                                ),
+                              ],
                             ),
                           ],
                         ),
-                      ),
-                      SizedBox(height: 10),
-                      //fullName
-                      Column(
-                        children: [
-                          // tên
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                AuthProvider.userModel?.customer?.fullName ??
-                                    '',
-                                style: TextStyles.h5.setTextSize(20).bold,
-                              ),
-                            ],
+                        SizedBox(height: 20),
+                        //fullName
+                        Text(
+                          'Họ và tên',
+                          style: TextStyles.h5.bold,
+                        ),
+                        SizedBox(height: 10),
+                        TextFormField(
+                          controller: fullNameController,
+                          validator: (value) =>
+                              value!.trim().contains(' ') ? null : 'DMM',
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          decoration: InputDecoration(
+                            hintText: "Họ và tên",
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.circular(kDefaultCircle14),
+                              borderSide:
+                                  BorderSide(color: ColorPalette.textHide),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: ColorPalette.primaryColor),
+                            ),
+                            fillColor: Colors.white,
+                            filled: true,
+                            hintStyle: TextStyles.defaultStyle
+                                .setColor(ColorPalette.textHide),
                           ),
-                          //gmail
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                AuthProvider.userModel?.email ?? '',
-                                style: TextStyles.h5,
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 20),
-                      //fullName
-                      Text(
-                        'Họ và tên',
-                        style: TextStyles.h5.bold,
-                      ),
-                      SizedBox(height: 10),
-                      TextField(
-                        onSubmitted: (String value) {
-                          if (!isFullNameValid(value)) {
-                            setState(() {
-                              fullNameErrorText =
-                                  'Họ và tên phải chứa khoảng trắng.';
-                            });
-                          } else {
-                            setState(() {
-                              fullNameErrorText = null;
-                            });
-                          }
-                        },
-                        controller: fullNameController,
-                        decoration: InputDecoration(
-                          labelText: 'Họ và tên',
-                          labelStyle: TextStyles.defaultStyle
-                              .setColor(ColorPalette.textHide),
-                          enabledBorder: OutlineInputBorder(
+                        ),
+                        // MyTextField(
+                        //   controller: fullNameController,
+                        //   hintText: 'Họ và tên',
+                        //   obscureText: false,
+                        // ),
+                        SizedBox(height: 10),
+                        //phone
+                        Text(
+                          'Số điện thoại',
+                          style: TextStyles.h5.bold,
+                        ),
+                        SizedBox(height: 10),
+                        MyTextField(
+                          textInputType: TextInputType.number,
+                          controller: phoneController,
+                          hintText: 'Số điện thoại',
+                          obscureText: false,
+                        ),
+                        SizedBox(height: 10),
+                        Text(
+                          'Giới tính',
+                          style: TextStyles.h5.bold,
+                        ),
+                        SizedBox(height: 10),
+                        //gioi tinh
+                        Container(
+                          decoration: BoxDecoration(
+                            color: ColorPalette.hideColor,
                             borderRadius:
                                 BorderRadius.circular(kDefaultCircle14),
-                            borderSide:
-                                BorderSide(color: ColorPalette.textHide),
+                            border: Border.all(color: ColorPalette.textHide),
                           ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide:
-                                BorderSide(color: ColorPalette.primaryColor),
+                          child: ListTile(
+                            title: Text('Giới tính'),
+                            trailing: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  isMale == null
+                                      ? 'Chưa chọn giới tính'
+                                      : (isMale! ? 'Nữ' : 'Nam'),
+                                  style: TextStyles.defaultStyle,
+                                ),
+                                SizedBox(width: 10),
+                                Icon(
+                                  FontAwesomeIcons.angleRight,
+                                  size: kDefaultIconSize18,
+                                  color: ColorPalette.primaryColor,
+                                )
+                              ],
+                            ),
+                            onTap: () async {
+                              final result = await RegisterStepperBloc
+                                  .showGenderBottomSheet(context);
+                              if (result != null) {
+                                setState(() {
+                                  isMale = result;
+                                });
+                              }
+                            },
                           ),
-                          fillColor: Colors.white,
-                          filled: true,
-                          hintText: 'Họ và tên',
-                          hintStyle: TextStyles.defaultStyle
-                              .setColor(ColorPalette.textHide),
-                          errorText: fullNameErrorText,
                         ),
-                        obscureText: false,
-                      ),
-                      // MyTextField(
-                      //   controller: fullNameController,
-                      //   hintText: 'Họ và tên',
-                      //   obscureText: false,
-                      // ),
-                      SizedBox(height: 10),
-
-                      //phone
-                      Text(
-                        'Số điện thoại',
-                        style: TextStyles.h5.bold,
-                      ),
-                      SizedBox(height: 10),
-                      MyTextField(
-                        controller: phoneController,
-                        hintText: 'Số điện thoại',
-                        obscureText: false,
-                      ),
-                      SizedBox(height: 10),
-                      Text(
-                        'Giới tính',
-                        style: TextStyles.h5.bold,
-                      ),
-                      SizedBox(height: 10),
-                      //gioi tinh
-                      Container(
-                        decoration: BoxDecoration(
-                          color: ColorPalette.hideColor,
-                          borderRadius: BorderRadius.circular(kDefaultCircle14),
-                          border: Border.all(color: ColorPalette.textHide),
+                        SizedBox(height: 20),
+                        ButtonWidget(
+                          height: 70,
+                          size: 22,
+                          title: 'Xác minh',
+                          onTap: createCustomer,
                         ),
-                        child: ListTile(
-                          title: Text('Giới tính'),
-                          trailing: Row(
-                            mainAxisSize: MainAxisSize.min,
+                      ],
+                    ),
+                  if (AuthProvider.userModel?.status == "VERIFIED")
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Center(
+                          child: Stack(
                             children: [
-                              Text(
-                                AuthProvider.userModel?.customer?.sex == true
-                                    ? 'Nữ'
-                                    : "Nam",
-                                style: TextStyles.defaultStyle,
+                              _image != null
+                                  ? CircleAvatar(
+                                      radius: 40,
+                                      backgroundImage: MemoryImage(_image!),
+                                    )
+                                  : CircleAvatar(
+                                      radius: 40,
+                                      backgroundImage: NetworkImage(
+                                        AuthProvider.userModel?.customer
+                                                ?.avatarUrl ??
+                                            '',
+                                      ),
+                                    ),
+                              Positioned(
+                                bottom: 1,
+                                left: 50,
+                                child: Center(
+                                  child: CircleAvatar(
+                                    backgroundColor: ColorPalette.primaryColor,
+                                    radius: 15,
+                                    child: IconButton(
+                                      onPressed: selectImage,
+                                      icon: Icon(
+                                        color: Colors.white,
+                                        FontAwesomeIcons.plus,
+                                        size: 16,
+                                      ),
+                                    ),
+                                  ),
+                                ),
                               ),
-                              SizedBox(width: 10),
-                              Icon(
-                                FontAwesomeIcons.angleRight,
-                                size: kDefaultIconSize18,
-                                color: ColorPalette.primaryColor,
-                              )
                             ],
                           ),
-                          onTap: () async {
-                            final result =
-                                await RegisterStepperBloc.showGenderBottomSheet(
-                                    context);
-                            if (result != null) {
+                        ),
+                        SizedBox(height: 10),
+                        //fullName
+                        Column(
+                          children: [
+                            // tên
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  AuthProvider.userModel?.customer?.fullName ??
+                                      '',
+                                  style: TextStyles.h5.setTextSize(20).bold,
+                                ),
+                              ],
+                            ),
+                            //gmail
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  AuthProvider.userModel?.email ?? '',
+                                  style: TextStyles.h5,
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 20),
+                        //fullName
+                        Text(
+                          'Họ và tên',
+                          style: TextStyles.h5.bold,
+                        ),
+                        SizedBox(height: 10),
+                        TextField(
+                          onSubmitted: (String value) {
+                            if (!isFullNameValid(value)) {
                               setState(() {
-                                AuthProvider.userModel?.customer?.sex = result;
-                                isMale = AuthProvider.userModel?.customer?.sex;
+                                fullNameErrorText =
+                                    'Họ và tên phải chứa khoảng trắng.';
+                              });
+                            } else {
+                              setState(() {
+                                fullNameErrorText = null;
                               });
                             }
                           },
+                          controller: fullNameController,
+                          decoration: InputDecoration(
+                            labelText: 'Họ và tên',
+                            labelStyle: TextStyles.defaultStyle
+                                .setColor(ColorPalette.textHide),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.circular(kDefaultCircle14),
+                              borderSide:
+                                  BorderSide(color: ColorPalette.textHide),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide:
+                                  BorderSide(color: ColorPalette.primaryColor),
+                            ),
+                            fillColor: Colors.white,
+                            filled: true,
+                            hintText: 'Họ và tên',
+                            hintStyle: TextStyles.defaultStyle
+                                .setColor(ColorPalette.textHide),
+                            errorText: fullNameErrorText,
+                          ),
+                          obscureText: false,
                         ),
-                      ),
-                      SizedBox(height: 20),
-                      ButtonWidget(
-                        height: 70,
-                        size: 22,
-                        title: 'Cập nhật',
-                        onTap: updateCustomerProfile,
-                      ),
-                    ],
-                  ),
-              ],
+                        // MyTextField(
+                        //   controller: fullNameController,
+                        //   hintText: 'Họ và tên',
+                        //   obscureText: false,
+                        // ),
+                        SizedBox(height: 10),
+
+                        //phone
+                        Text(
+                          'Số điện thoại',
+                          style: TextStyles.h5.bold,
+                        ),
+                        SizedBox(height: 10),
+                        MyTextField(
+                          controller: phoneController,
+                          hintText: 'Số điện thoại',
+                          obscureText: false,
+                        ),
+                        SizedBox(height: 10),
+                        Text(
+                          'Giới tính',
+                          style: TextStyles.h5.bold,
+                        ),
+                        SizedBox(height: 10),
+                        //gioi tinh
+                        Container(
+                          decoration: BoxDecoration(
+                            color: ColorPalette.hideColor,
+                            borderRadius:
+                                BorderRadius.circular(kDefaultCircle14),
+                            border: Border.all(color: ColorPalette.textHide),
+                          ),
+                          child: ListTile(
+                            title: Text('Giới tính'),
+                            trailing: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  AuthProvider.userModel?.customer?.sex == true
+                                      ? 'Nữ'
+                                      : "Nam",
+                                  style: TextStyles.defaultStyle,
+                                ),
+                                SizedBox(width: 10),
+                                Icon(
+                                  FontAwesomeIcons.angleRight,
+                                  size: kDefaultIconSize18,
+                                  color: ColorPalette.primaryColor,
+                                )
+                              ],
+                            ),
+                            onTap: () async {
+                              final result = await RegisterStepperBloc
+                                  .showGenderBottomSheet(context);
+                              if (result != null) {
+                                setState(() {
+                                  AuthProvider.userModel?.customer?.sex =
+                                      result;
+                                  isMale =
+                                      AuthProvider.userModel?.customer?.sex;
+                                });
+                              }
+                            },
+                          ),
+                        ),
+                        SizedBox(height: 20),
+                        ButtonWidget(
+                          height: 70,
+                          size: 22,
+                          title: 'Cập nhật',
+                          onTap: updateCustomerProfile,
+                        ),
+                      ],
+                    ),
+                ],
+              ),
             ),
           ),
         ),

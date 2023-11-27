@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:frs_mobile/core/constants/color_constants.dart';
 import 'package:frs_mobile/core/constants/dismension_constants.dart';
 import 'package:frs_mobile/core/constants/textstyle_constants.dart';
+import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/buy_order_history/services/api_buy_order_history.dart';
 import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/rental_order_history/models/order_rent_detail_model.dart';
 import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/rental_order_history/models/order_rent_model.dart';
 import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/rental_order_history/screens/information_order_rent_screen.dart';
@@ -32,6 +33,18 @@ class _PendingOrderRentScreenState extends State<PendingOrderRentScreen> {
 
   Future<void> _cancelOrder(int orderRentID) async {
     try {
+      await ApiOderRentHistory.updateStatusOrderRent(orderRentID, "CANCELED");
+      setState(() {});
+    } catch (e) {
+      showCustomDialog(context, "Lỗi", "Hủy đơn hàng không thành công", true);
+      print('$e');
+    }
+  }
+
+  Future<void> _cancelOrderAndCancelVoucher(
+      int orderRentID, String voucherCode) async {
+    try {
+      await ApiBuyOderHistory.cancelVoucher(voucherCode);
       await ApiOderRentHistory.updateStatusOrderRent(orderRentID, "CANCELED");
       setState(() {});
     } catch (e) {
@@ -278,8 +291,17 @@ class _PendingOrderRentScreenState extends State<PendingOrderRentScreen> {
                                         onTap: () async {
                                           if (orders[index].status ==
                                               "PENDING") {
-                                            await _cancelOrder(
-                                                orders[index].orderRentID);
+                                            if (orders[index].voucherDTO !=
+                                                null) {
+                                              await _cancelOrderAndCancelVoucher(
+                                                  orders[index].orderRentID,
+                                                  orders[index]
+                                                      .voucherDTO!
+                                                      .voucherCode);
+                                            } else {
+                                              await _cancelOrder(
+                                                  orders[index].orderRentID);
+                                            }
                                           } else {
                                             showCustomDialog(
                                                 context,

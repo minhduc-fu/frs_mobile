@@ -131,6 +131,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                                       },
                                       child: Icon(
                                         FontAwesomeIcons.solidHeart,
+                                        color: Colors.redAccent,
                                       ),
                                     ),
                                   ),

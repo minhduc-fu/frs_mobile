@@ -181,9 +181,13 @@ class _ProductCardDemoState extends State<ProductCardDemo> {
                     size: 38,
                     likeBuilder: (isLiked) {
                       return isLiked
-                          ? Icon(FontAwesomeIcons.solidHeart)
+                          ? Icon(
+                              FontAwesomeIcons.solidHeart,
+                              color: Colors.redAccent,
+                            )
                           : Icon(
                               FontAwesomeIcons.heart,
+                              color: Colors.redAccent,
                             );
                     },
                   ),

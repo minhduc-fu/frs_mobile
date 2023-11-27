@@ -238,4 +238,21 @@ class ApiBuyOderHistory {
       throw Exception('Lỗi: $e');
     }
   }
+
+  static Future<void> cancelVoucher(String voucherCode) async {
+    final url = Uri.parse(
+        'http://fashionrental.online:8080/voucher/cancel/$voucherCode');
+
+    try {
+      final response = await http.post(url);
+
+      if (response.statusCode == 200) {
+        return json.decode(response.body);
+      } else {
+        throw Exception('Hủy voucher không thành công');
+      }
+    } catch (e) {
+      throw Exception('Lỗi: $e');
+    }
+  }
 }
