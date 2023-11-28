@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:frs_mobile/core/constants/color_constants.dart';
 import 'package:frs_mobile/core/constants/dismension_constants.dart';
+import 'package:frs_mobile/core/constants/my_textformfield.dart';
 import 'package:frs_mobile/core/constants/textstyle_constants.dart';
 import 'package:frs_mobile/models/address_model.dart';
 import 'package:frs_mobile/representation/widgets/button_widget.dart';
@@ -350,28 +351,45 @@ class _NewAddressScreenState extends State<NewAddressScreen> {
     } else if (_controller.text.isEmpty) {
       showCustomDialog(
           context, "Lỗi", "Vui lòng nhập Tên đường, Tòa nhà, Số nhà", true);
-    } else if (_controller.text.contains(',')) {
-      showCustomDialog(context, "Lỗi",
-          "Tên đường, Tòa nhà, Số nhà không được chứa dấu ','", true);
     } else {
-      String addressString =
-          "${_controller.text}, $wardName, $districtName, $provinceName";
-      final response = await AuthenticationService.createNewAddress(
-        addressString,
-        AuthProvider.userModel!.customer!.customerID,
-      );
-      if (response != null) {
-        final newAddress = AddressModel(
-          addressID: response['addressID'],
-          addressDescription: response['addressDescription'],
-          customerID: response['customerID'],
+      if (validateStreet(_controller.text) == null) {
+        String addressString =
+            "${_controller.text}, $wardName, $districtName, $provinceName";
+        final response = await AuthenticationService.createNewAddress(
+          addressString,
+          AuthProvider.userModel!.customer!.customerID,
         );
-        Provider.of<AddressProvider>(context, listen: false)
-            .addAddress(newAddress);
+        if (response != null) {
+          final newAddress = AddressModel(
+            addressID: response['addressID'],
+            addressDescription: response['addressDescription'],
+            customerID: response['customerID'],
+          );
+          Provider.of<AddressProvider>(context, listen: false)
+              .addAddress(newAddress);
+        }
+        print("Địa chỉ hoàn thành: $addressString");
+        Navigator.pop(context);
       }
-      print("Địa chỉ hoàn thành: $addressString");
-      Navigator.pop(context);
     }
+  }
+
+  String? validateStreet(String? street) {
+    if (street == null || street.isEmpty) {
+      return 'Vui lòng nhập Tên đường, Tòa nhà, Số nhà';
+    }
+
+    if (street.contains(',')) {
+      return 'Không được chứa dấu ","';
+    }
+
+    String pattern = r'[!@#\$%^&*(),.?":{}|<>]';
+    RegExp regex = RegExp(pattern);
+    if (regex.hasMatch(street)) {
+      return 'Không được chứa ký tự đặc biệt';
+    }
+
+    return null;
   }
 
   @override
@@ -479,10 +497,11 @@ class _NewAddressScreenState extends State<NewAddressScreen> {
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(kDefaultCircle14),
                       color: Colors.white),
-                  child: TextFormField(
+                  child: MyTextFormField(
                     controller: _controller,
-                    decoration: InputDecoration(
-                        border: InputBorder.none, hintText: streetName),
+                    hintText: streetName,
+                    validator: validateStreet,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
                   ),
                 ),
               ],

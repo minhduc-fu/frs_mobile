@@ -27,6 +27,9 @@ class ProductOwnerShopScreen extends StatefulWidget {
 
 class _ProductOwnerShopScreenState extends State<ProductOwnerShopScreen> {
   int selectedAllProduct = 0;
+  bool isAllProduct = true;
+  bool isBuyProduct = false;
+  bool isRentProduct = false;
 
   Future<List<ProductModel>?> fetchProducts() async {
     switch (selectedAllProduct) {
@@ -59,7 +62,7 @@ class _ProductOwnerShopScreenState extends State<ProductOwnerShopScreen> {
             height: 230,
             color: ColorPalette.primaryColor,
             child: Padding(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.all(10),
               child: Column(
                 children: [
                   Row(
@@ -126,7 +129,7 @@ class _ProductOwnerShopScreenState extends State<ProductOwnerShopScreen> {
                         Stack(
                           children: [
                             CircleAvatar(
-                              radius: 40,
+                              radius: 30,
                               backgroundColor: Colors.white,
                             ),
                             Positioned(
@@ -143,6 +146,7 @@ class _ProductOwnerShopScreenState extends State<ProductOwnerShopScreen> {
                             ),
                           ],
                         ),
+                        SizedBox(width: 5),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -153,7 +157,7 @@ class _ProductOwnerShopScreenState extends State<ProductOwnerShopScreen> {
                                   widget.productOwnerModel!.fullName,
                                   style: TextStyles.h5.bold.whiteTextColor,
                                 ),
-                                SizedBox(width: 75),
+                                SizedBox(width: 60),
                                 Container(
                                   decoration: BoxDecoration(
                                     color: Colors.white,
@@ -245,42 +249,42 @@ class _ProductOwnerShopScreenState extends State<ProductOwnerShopScreen> {
                 GestureDetector(
                     onTap: () {
                       setState(() {
-                        selectedAllProduct = 2;
-                      });
-                    },
-                    child: Text('Có sẵn', style: TextStyles.h5)),
-                Text('|', style: TextStyles.h5),
-                GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        selectedAllProduct = 3;
-                      });
-                    },
-                    child: Text('Hết hàng', style: TextStyles.h5)),
-                Text('|', style: TextStyles.h5),
-                GestureDetector(
-                    onTap: () {
-                      setState(() {
                         selectedAllProduct = 0;
+                        isAllProduct = true;
+                        isBuyProduct = false;
+                        isRentProduct = false;
                       });
                     },
-                    child: Text('Tất cả', style: TextStyles.h5)),
+                    child: Text('Tất cả',
+                        style:
+                            isAllProduct ? TextStyles.h5.bold : TextStyles.h5)),
                 Text('|', style: TextStyles.h5),
                 GestureDetector(
                     onTap: () {
                       setState(() {
                         selectedAllProduct = 5;
+                        isAllProduct = false;
+                        isBuyProduct = true;
+                        isRentProduct = false;
                       });
                     },
-                    child: Text('Mua', style: TextStyles.h5)),
+                    child: Text('Mua',
+                        style:
+                            isBuyProduct ? TextStyles.h5.bold : TextStyles.h5)),
                 Text('|', style: TextStyles.h5),
                 GestureDetector(
                     onTap: () {
                       setState(() {
                         selectedAllProduct = 4;
+                        isAllProduct = false;
+                        isBuyProduct = false;
+                        isRentProduct = true;
                       });
                     },
-                    child: Text('Thuê', style: TextStyles.h5)),
+                    child: Text('Thuê',
+                        style: isRentProduct
+                            ? TextStyles.h5.bold
+                            : TextStyles.h5)),
               ],
             ),
           ),
@@ -301,23 +305,13 @@ class _ProductOwnerShopScreenState extends State<ProductOwnerShopScreen> {
                         physics: ScrollPhysics(),
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
-                          mainAxisExtent: 280,
-                          // tỷ lệ giữa chiều rộng và chiều cao
-                          // childAspectRatio: 1 / 2,
-                          // (MediaQuery.of(context).size.width - 20 - 10) /
-                          //     (2 * 260),
+                          mainAxisExtent: 270,
                           mainAxisSpacing: 20,
                           crossAxisSpacing: 10,
                         ),
                         shrinkWrap: true,
                         itemCount: products.length,
                         itemBuilder: ((context, index) {
-                          // double aspectRatio = index.isEven ? 1.5 : 1.0;
-                          // return ProductCardDemo(
-                          //   product: products[index],
-                          //   aspectRatio: aspectRatio,
-                          // );
-
                           return Transform.translate(
                             offset: Offset(0, index.isOdd ? 0.0 : 0.0),
                             child: GestureDetector(

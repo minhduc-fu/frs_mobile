@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:frs_mobile/core/constants/my_textformfield.dart';
 import '../../../bloc/register_stepper_bloc.dart';
 import '../../../core/constants/color_constants.dart';
 import '../../../core/constants/dismension_constants.dart';
-import '../../../core/constants/my_textfield.dart';
 import '../../../core/constants/textstyle_constants.dart';
 import '../../../services/authentication_service.dart';
 import '../../../utils/dialog_helper.dart';
@@ -29,15 +29,13 @@ class _RegisterAccountState extends State<RegisterAccount> {
   int? accountID;
   Future<void> createAccount() async {
     if (emailController.text.isEmpty) {
-      showCustomDialog(context, 'Lỗi', 'Bạn chưa điền "Email".', true);
-    } else if (!emailController.text.endsWith('@gmail.com')) {
-      showCustomDialog(
-          context,
-          'Lỗi',
-          'Emal không hợp lệ. Vui lòng sử dụng email có định dạng "@gmail.com"',
-          true);
+      showCustomDialog(context, 'Lỗi', 'Vui lòng nhập "Email".', true);
+    } else if (validateEmail(emailController.text) != null) {
+      showCustomDialog(context, 'Lỗi', 'Email không hợp lệ', true);
     } else if (passwordController.text.isEmpty) {
       showCustomDialog(context, 'Lỗi', 'Bạn chưa điền "Mật khẩu".', true);
+    } else if (validatePassword(passwordController.text) != null) {
+      showCustomDialog(context, 'Lỗi', 'Mật khẩu không hợp lệ', true);
     } else if (confirmPasswordController.text.isEmpty) {
       showCustomDialog(
           context, 'Lỗi', 'Bạn chưa điền "Xác nhận mật khẩu".', true);
@@ -104,6 +102,37 @@ class _RegisterAccountState extends State<RegisterAccount> {
     });
   }
 
+  String? validateEmail(String? email) {
+    if (email == null || email.isEmpty) {
+      return 'Vui lòng nhập Email';
+    }
+
+    String emailPattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$';
+    RegExp regex = RegExp(emailPattern);
+
+    if (!regex.hasMatch(email)) {
+      return 'Email không hợp lệ';
+    }
+
+    return null;
+  }
+
+  String? validatePassword(String? password) {
+    if (password == null || password.isEmpty) {
+      return 'Vui lòng nhập Password';
+    }
+
+    if (password.contains(',')) {
+      return 'Không được chứa dấu ","';
+    }
+
+    if (password.contains(' ')) {
+      return 'Mật khẩu không được chứa khoảng trắng';
+    }
+
+    return null;
+  }
+
   Widget createAccountWidget() {
     return Column(
       children: [
@@ -132,17 +161,41 @@ class _RegisterAccountState extends State<RegisterAccount> {
                 ),
               ),
               SizedBox(height: 25),
-              MyTextField(
+
+              // Email
+              MyTextFormField(
+                controller: emailController,
+                hintText: 'Email',
+                obscureText: false,
+                validator: validateEmail,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
                 prefixIcon: Icon(
                   FontAwesomeIcons.solidEnvelope,
                   size: kDefaultIconSize18,
                 ),
-                controller: emailController,
-                hintText: 'Email',
-                obscureText: false,
               ),
+              // MyTextField(
+              //   prefixIcon: Icon(
+              //     FontAwesomeIcons.solidEnvelope,
+              //     size: kDefaultIconSize18,
+              //   ),
+              //   controller: emailController,
+              //   hintText: 'Email',
+              //   obscureText: false,
+              // ),
               SizedBox(height: 10),
-              MyTextField(
+
+              //  Password
+              MyTextFormField(
+                controller: passwordController,
+                hintText: 'Mật khẩu',
+                obscureText: !_showPass,
+                validator: validatePassword,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                prefixIcon: Icon(
+                  FontAwesomeIcons.key,
+                  size: kDefaultIconSize18,
+                ),
                 suffixIcon: GestureDetector(
                   onTap: onToggleShowPass,
                   child: Icon(
@@ -153,18 +206,49 @@ class _RegisterAccountState extends State<RegisterAccount> {
                     color: ColorPalette.primaryColor,
                   ),
                 ),
-                prefixIcon: Icon(
-                  FontAwesomeIcons.key,
-                  size: kDefaultIconSize18,
-                ),
-                controller: passwordController,
-                hintText: 'Mật khẩu',
-                obscureText: !_showPass,
               ),
+              // MyTextField(
+              //   suffixIcon: GestureDetector(
+              //     onTap: onToggleShowPass,
+              //     child: Icon(
+              //       _showPass
+              //           ? FontAwesomeIcons.eyeSlash
+              //           : FontAwesomeIcons.eye,
+              //       size: kDefaultIconSize18,
+              //       color: ColorPalette.primaryColor,
+              //     ),
+              //   ),
+              //   prefixIcon: Icon(
+              //     FontAwesomeIcons.key,
+              //     size: kDefaultIconSize18,
+              //   ),
+              //   controller: passwordController,
+              //   hintText: 'Mật khẩu',
+              //   obscureText: !_showPass,
+              // ),
               SizedBox(height: 10),
 
               // Confirm password
-              MyTextField(
+              MyTextFormField(
+                controller: confirmPasswordController,
+                hintText: 'Xác nhận mật khẩu',
+                obscureText: !_showConfirmPass,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Vui lòng nhập Confirm Password';
+                  }
+                  if (value.contains(' ')) {
+                    return 'Mật khẩu không được chứa khoảng trắng';
+                  }
+                  if (value.contains(',')) {
+                    return 'Không được chứa dấu ","';
+                  }
+                  if (value != passwordController.text) {
+                    return 'Xác nhận mật khẩu không trùng khớp với mật khẩu';
+                  }
+                  return null;
+                },
+                autovalidateMode: AutovalidateMode.onUserInteraction,
                 suffixIcon: GestureDetector(
                   onTap: onToggleShowConfirmPass,
                   child: Icon(
@@ -179,10 +263,26 @@ class _RegisterAccountState extends State<RegisterAccount> {
                   FontAwesomeIcons.check,
                   size: kDefaultIconSize18,
                 ),
-                controller: confirmPasswordController,
-                hintText: 'Xác nhận mật khẩu',
-                obscureText: !_showConfirmPass,
               ),
+              // MyTextField(
+              //   suffixIcon: GestureDetector(
+              //     onTap: onToggleShowConfirmPass,
+              //     child: Icon(
+              //       _showConfirmPass
+              //           ? FontAwesomeIcons.eyeSlash
+              //           : FontAwesomeIcons.eye,
+              //       size: kDefaultIconSize18,
+              //       color: ColorPalette.primaryColor,
+              //     ),
+              //   ),
+              //   prefixIcon: Icon(
+              //     FontAwesomeIcons.check,
+              //     size: kDefaultIconSize18,
+              //   ),
+              //   controller: confirmPasswordController,
+              //   hintText: 'Xác nhận mật khẩu',
+              //   obscureText: !_showConfirmPass,
+              // ),
               SizedBox(height: 25),
               Container(
                 alignment: Alignment.centerLeft,

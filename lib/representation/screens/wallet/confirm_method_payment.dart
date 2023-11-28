@@ -2,7 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:frs_mobile/core/constants/color_constants.dart';
-import 'package:frs_mobile/core/constants/my_textfield.dart';
+
+import 'package:frs_mobile/core/constants/my_textformfield.dart';
 import 'package:frs_mobile/core/constants/textstyle_constants.dart';
 import 'package:frs_mobile/representation/screens/wallet/webview.dart';
 import 'package:frs_mobile/representation/widgets/button_widget.dart';
@@ -23,7 +24,10 @@ class _ConfirmMethodPaymentState extends State<ConfirmMethodPayment> {
   void confirmPayment() async {
     final accountID = AuthProvider.userModel!.accountID;
     final amount = int.tryParse(_moneyToDeposit.text);
-    if (amount != null && amount > 0) {
+
+    if (amount != null &&
+        amount > 0 &&
+        validateAmount(_moneyToDeposit.text) == null) {
       final response = await AuthenticationService.submitOrder(
           accountID, amount, 'Nap $amount vnd');
 
@@ -32,6 +36,23 @@ class _ConfirmMethodPaymentState extends State<ConfirmMethodPayment> {
             builder: ((context) => WebView(response: response))));
       }
     }
+  }
+
+  String? validateAmount(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Số tiền không được để trống';
+    }
+
+    try {
+      int amount = int.parse(value);
+      if (amount < 5000 || amount > 1000000000) {
+        return 'Số tiền phải nằm trong khoảng từ 5000 vnđ đến 1 tỷ';
+      }
+    } catch (e) {
+      return 'Số tiền không hợp lệ';
+    }
+
+    return null;
   }
 
   @override
@@ -59,11 +80,13 @@ class _ConfirmMethodPaymentState extends State<ConfirmMethodPayment> {
                 children: [
                   Text('Số tiền cần nạp', style: TextStyles.h5.bold),
                   SizedBox(height: 10),
-                  MyTextField(
-                      textInputType: TextInputType.number,
-                      controller: _moneyToDeposit,
-                      hintText: 'Số tiền cần nạp',
-                      obscureText: false),
+                  MyTextFormField(
+                    controller: _moneyToDeposit,
+                    hintText: 'Số tiền cần nạp',
+                    keyboardType: TextInputType.number,
+                    validator: validateAmount,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                  ),
                   SizedBox(height: 20),
                 ],
               ),

@@ -1,0 +1,63 @@
+import 'package:flutter/material.dart';
+import 'package:frs_mobile/core/constants/color_constants.dart';
+import 'package:frs_mobile/core/constants/dismension_constants.dart';
+import 'package:frs_mobile/core/constants/textstyle_constants.dart';
+
+class MyTextFormField extends StatelessWidget {
+  final controller;
+  final String hintText;
+  final bool? obscureText;
+  final Widget? prefixIcon;
+  final Widget? suffixIcon;
+  final String? Function(String?)? validator;
+  final TextInputType? keyboardType;
+  final AutovalidateMode? autovalidateMode;
+
+  const MyTextFormField({
+    super.key,
+    required this.controller,
+    required this.hintText,
+    this.validator,
+    this.obscureText = false,
+    this.prefixIcon,
+    this.suffixIcon,
+    this.keyboardType,
+    this.autovalidateMode,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      obscureText: obscureText!,
+      keyboardType: keyboardType,
+      controller: controller,
+      validator: validator,
+      autovalidateMode: autovalidateMode,
+      decoration: InputDecoration(
+        hintText: hintText,
+        prefixIcon: prefixIcon,
+        suffixIcon: suffixIcon,
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(kDefaultCircle14),
+          borderSide: BorderSide(color: ColorPalette.textHide),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: ColorPalette.primaryColor),
+          borderRadius: BorderRadius.circular(kDefaultCircle14),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(kDefaultCircle14),
+          borderSide: BorderSide(color: Colors.redAccent),
+        ),
+        errorStyle: TextStyles.defaultStyle.setColor(Colors.redAccent),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(kDefaultCircle14),
+          borderSide: BorderSide(color: Colors.redAccent),
+        ),
+        fillColor: Colors.white,
+        filled: true,
+        hintStyle: TextStyles.defaultStyle.setColor(ColorPalette.textHide),
+      ),
+    );
+  }
+}

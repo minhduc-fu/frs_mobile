@@ -61,7 +61,7 @@ class _DangthueChotraScreenState extends State<DangthueChotraScreen> {
         List<String> imageUrls = await AddImageCloud().uploadListImageToStorage(
             'imagesReceived', _images, widget.order.orderRentID);
         await ApiOderRentHistory.createNewPic(
-            accountID!, imageUrls, widget.order.orderRentID);
+            accountID!, imageUrls, widget.order.orderRentID, 'CUS_RECEIVED');
         await ApiOderRentHistory.updateStatusOrderRent(
             widget.order.orderRentID, "RENTING");
         Navigator.pop(context);
@@ -91,7 +91,7 @@ class _DangthueChotraScreenState extends State<DangthueChotraScreen> {
         List<String> imageUrls = await AddImageCloud().uploadListImageToStorage(
             'imagesReturn', _images, widget.order.orderRentID);
         await ApiOderRentHistory.createNewPic(
-            accountID!, imageUrls, widget.order.orderRentID);
+            accountID!, imageUrls, widget.order.orderRentID, "CUS_SEND");
         await ApiOderRentHistory.updateStatusOrderRent(
             widget.order.orderRentID, "RETURNING");
         Navigator.pop(context);

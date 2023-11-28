@@ -79,6 +79,7 @@ class _FullScreenImageState extends State<FullScreenImage> {
               ),
             ),
           ),
+          SizedBox(height: 10)
         ],
       ),
     );

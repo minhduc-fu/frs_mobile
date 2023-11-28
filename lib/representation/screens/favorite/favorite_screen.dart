@@ -24,14 +24,20 @@ class FavoriteScreen extends StatefulWidget {
 }
 
 class _FavoriteScreenState extends State<FavoriteScreen> {
+  final AutoSizeGroup autoSizeGroup = AutoSizeGroup();
+
   @override
   void initState() {
     super.initState();
   }
 
   Future<List<Map<String, dynamic>>?> fetchFavoriteProducts() async {
-    return await ApiFavorite.getFavoriteByCusID(
-        AuthProvider.userModel!.customer!.customerID);
+    if (AuthProvider.userModel?.status == "VERIFIED") {
+      return await ApiFavorite.getFavoriteByCusID(
+          AuthProvider.userModel!.customer!.customerID);
+    } else {
+      return null;
+    }
   }
 
   @override
@@ -45,7 +51,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(10),
         child: FutureBuilder<List<Map<String, dynamic>>?>(
           future: fetchFavoriteProducts(),
           builder: (context, snapshot) {
@@ -64,7 +70,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                 physics: ScrollPhysics(),
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
-                  mainAxisExtent: 300,
+                  mainAxisExtent: 270,
                   mainAxisSpacing: 20,
                   crossAxisSpacing: 10,
                 ),
@@ -108,7 +114,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                               Stack(
                                 children: [
                                   AspectRatio(
-                                    aspectRatio: 14 / 9,
+                                    aspectRatio: 13 / 9,
                                     child: Image.network(
                                         products[index]['productDTO']
                                             ['productAvt'],
@@ -158,8 +164,9 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                                     Row(
                                       children: [
                                         Container(
-                                          width: 160,
+                                          width: 140,
                                           child: AutoSizeText.rich(
+                                            group: autoSizeGroup,
                                             maxLines: 1,
                                             TextSpan(
                                               children: [
@@ -187,6 +194,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                                       Container(
                                         width: 160,
                                         child: AutoSizeText.rich(
+                                          group: autoSizeGroup,
                                           maxLines: 1,
                                           TextSpan(
                                             children: [
@@ -214,6 +222,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                                       Container(
                                         width: 160,
                                         child: AutoSizeText.rich(
+                                          group: autoSizeGroup,
                                           maxLines: 1,
                                           TextSpan(
                                             children: [
@@ -287,7 +296,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                 }),
               );
             } else {
-              return Text('Không có dữ liệu sản phẩm');
+              return Text('Vui lòng cập nhật thông tin cá nhân');
             }
           },
         ),

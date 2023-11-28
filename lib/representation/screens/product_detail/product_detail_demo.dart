@@ -172,7 +172,7 @@ class _ProductDetailDemoState extends State<ProductDetailDemo> {
           children: [
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
+                padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: ListView(
                   children: [
                     // load ảnh productDetail
@@ -464,7 +464,7 @@ class _ProductDetailDemoState extends State<ProductDetailDemo> {
                                       Stack(
                                         children: [
                                           CircleAvatar(
-                                            radius: 35,
+                                            radius: 30,
                                             backgroundColor:
                                                 ColorPalette.primaryColor,
                                           ),
@@ -484,7 +484,8 @@ class _ProductDetailDemoState extends State<ProductDetailDemo> {
                                       SizedBox(width: 10),
                                       Text(
                                         productOwnerModel.fullName,
-                                        style: TextStyles.h5.bold,
+                                        style:
+                                            TextStyles.h5.bold.setTextSize(15),
                                       ),
                                     ],
                                   ),

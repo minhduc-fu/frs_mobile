@@ -125,7 +125,7 @@ class _HomeScreenDemoState extends State<HomeScreenDemo> {
   final GlobalKey<ScaffoldState> _scaffoldKey =
       GlobalKey<ScaffoldState>(); // để gọi Drawer
 
-  void _openshowModalBottomSheet() {
+  void _openShowModalBottomSheet() {
     showModalBottomSheet(
         shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(kDefaultCircle14)),
@@ -133,7 +133,7 @@ class _HomeScreenDemoState extends State<HomeScreenDemo> {
         context: context,
         builder: (BuildContext context) {
           return Padding(
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.all(10),
             child: Container(
               height: 250,
               child: Column(
@@ -445,7 +445,7 @@ class _HomeScreenDemoState extends State<HomeScreenDemo> {
           extendBodyBehindAppBar: true,
           body: SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+              padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Column(
                 children: [
                   //search
@@ -490,7 +490,7 @@ class _HomeScreenDemoState extends State<HomeScreenDemo> {
 
                       // filter category
                       GestureDetector(
-                        onTap: _openshowModalBottomSheet,
+                        onTap: _openShowModalBottomSheet,
                         child: Icon(
                           FontAwesomeIcons.sliders,
                         ),
@@ -594,7 +594,7 @@ class _HomeScreenDemoState extends State<HomeScreenDemo> {
                           gridDelegate:
                               SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2,
-                            mainAxisExtent: 300,
+                            mainAxisExtent: 270,
                             // tỷ lệ giữa chiều rộng và chiều cao
                             // childAspectRatio: 1 / 2,
                             // (MediaQuery.of(context).size.width - 20 - 10) /

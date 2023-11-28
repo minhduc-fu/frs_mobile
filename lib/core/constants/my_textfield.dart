@@ -8,7 +8,6 @@ class MyTextField extends StatelessWidget {
   final controller;
   final String hintText;
   final bool obscureText;
-  // final String messageError;
   final bool invalid = false;
   final TextInputType? textInputType;
   final Widget? prefixIcon;
@@ -20,7 +19,6 @@ class MyTextField extends StatelessWidget {
       required this.hintText,
       required this.obscureText,
       this.textInputType,
-      // required this.messageError,
       this.prefixIcon,
       this.suffixIcon});
 

@@ -29,6 +29,7 @@ class ProductCardDemo extends StatefulWidget {
 class _ProductCardDemoState extends State<ProductCardDemo> {
   bool isFavorite = false;
   late Completer<void> _favoriteStatusCompleter;
+  final AutoSizeGroup autoSizeGroup = AutoSizeGroup();
 
   @override
   void initState() {
@@ -50,22 +51,24 @@ class _ProductCardDemoState extends State<ProductCardDemo> {
 
   void checkFavoriteStatus() async {
     try {
-      List<Map<String, dynamic>>? favoriteProducts =
-          await ApiFavorite.getFavoriteByCusID(
-              AuthProvider.userModel!.customer!.customerID);
-      if (_favoriteStatusCompleter.isCompleted) {
-        return; // Do nothing if the widget is already disposed
-      }
+      if (AuthProvider.userModel?.status == "VERIFIED") {
+        List<Map<String, dynamic>>? favoriteProducts =
+            await ApiFavorite.getFavoriteByCusID(
+                AuthProvider.userModel!.customer!.customerID);
+        if (_favoriteStatusCompleter.isCompleted) {
+          return; // Do nothing if the widget is already disposed
+        }
 
-      if (favoriteProducts != null && favoriteProducts.isNotEmpty) {
-        for (var favoriteProduct in favoriteProducts) {
-          var productDTO = favoriteProduct['productDTO'];
+        if (favoriteProducts != null && favoriteProducts.isNotEmpty) {
+          for (var favoriteProduct in favoriteProducts) {
+            var productDTO = favoriteProduct['productDTO'];
 
-          if (productDTO['productID'] == widget.product.productID) {
-            setState(() {
-              isFavorite = true;
-            });
-            break;
+            if (productDTO['productID'] == widget.product.productID) {
+              setState(() {
+                isFavorite = true;
+              });
+              break;
+            }
           }
         }
       }
@@ -148,7 +151,7 @@ class _ProductCardDemoState extends State<ProductCardDemo> {
               children: [
                 AspectRatio(
                   // aspectRatio: aspectRatio,
-                  aspectRatio: 14 / 9,
+                  aspectRatio: 13 / 9,
                   child: Image.network(widget.product.productAvt!,
                       fit: BoxFit.cover),
                 ),
@@ -166,15 +169,18 @@ class _ProductCardDemoState extends State<ProductCardDemo> {
                       if (userModel != null) {
                         if (AuthProvider.userModel?.status == "NOT_VERIFIED") {
                           showCustomDialog(context, "Lỗi",
-                              "Hãy cập nhật thông tin cá nhân", true);
+                              "Vui lòng cập nhật thông tin cá nhân", true);
                           return Future.value(false);
                         } else {
                           _toggleFavoriteStatus();
                           return Future.value(!isLiked);
                         }
                       } else {
-                        showCustomDialog(context, "Lỗi",
-                            "Hãy 'Đăng nhập' vào hệ thống để 'Đặt hàng'", true);
+                        showCustomDialog(
+                            context,
+                            "Lỗi",
+                            "Vui lòng 'Đăng nhập' vào hệ thống để 'Đặt hàng'",
+                            true);
                         return Future.value(false);
                       }
                     },
@@ -213,22 +219,25 @@ class _ProductCardDemoState extends State<ProductCardDemo> {
                   SizedBox(height: 2),
                   Row(
                     children: [
-                      Container(
-                        width: 160,
-                        child: AutoSizeText.rich(
-                          minFontSize: 14,
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                          TextSpan(
-                            children: [
-                              TextSpan(
-                                  text: 'Thương hiệu: ',
-                                  style: TextStyles.defaultStyle.bold),
-                              TextSpan(
-                                text:
-                                    '${widget.product.productSpecifications != null ? (widget.product.getBrandName()) : "N/A"}',
-                              )
-                            ],
+                      Expanded(
+                        child: Container(
+                          width: 160,
+                          child: AutoSizeText.rich(
+                            group: autoSizeGroup,
+                            minFontSize: 14,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                            TextSpan(
+                              children: [
+                                TextSpan(
+                                    text: 'Thương hiệu: ',
+                                    style: TextStyles.defaultStyle.bold),
+                                TextSpan(
+                                  text:
+                                      '${widget.product.productSpecifications != null ? (widget.product.getBrandName()) : "N/A"}',
+                                )
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -237,20 +246,23 @@ class _ProductCardDemoState extends State<ProductCardDemo> {
                   SizedBox(height: 2),
                   Row(
                     children: [
-                      Container(
-                        width: 160,
-                        child: AutoSizeText.rich(
-                          maxLines: 1,
-                          TextSpan(
-                            children: [
-                              TextSpan(
-                                  text: 'Tình trạng: ',
-                                  style: TextStyles.defaultStyle.bold),
-                              TextSpan(
-                                text:
-                                    '${widget.product.productCondition != null ? (widget.product.productCondition) : "N/A"}%',
-                              )
-                            ],
+                      Expanded(
+                        child: Container(
+                          width: 160,
+                          child: AutoSizeText.rich(
+                            group: autoSizeGroup,
+                            maxLines: 1,
+                            TextSpan(
+                              children: [
+                                TextSpan(
+                                    text: 'Tình trạng: ',
+                                    style: TextStyles.defaultStyle.bold),
+                                TextSpan(
+                                  text:
+                                      '${widget.product.productCondition != null ? (widget.product.productCondition) : "N/A"}%',
+                                )
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -263,6 +275,7 @@ class _ProductCardDemoState extends State<ProductCardDemo> {
                     Container(
                       width: 160,
                       child: AutoSizeText.rich(
+                        group: autoSizeGroup,
                         maxLines: 1,
                         TextSpan(
                           children: [
@@ -284,6 +297,7 @@ class _ProductCardDemoState extends State<ProductCardDemo> {
                     Container(
                       width: 160,
                       child: AutoSizeText.rich(
+                        group: autoSizeGroup,
                         maxLines: 1,
                         TextSpan(
                           children: [

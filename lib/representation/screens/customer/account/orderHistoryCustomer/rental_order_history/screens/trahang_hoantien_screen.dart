@@ -68,7 +68,7 @@ class _TraHangHoanTienOrderRentScreenState
         List<String> imageUrls = await AddImageCloud().uploadListImageToStorage(
             'imagesReject', _images, widget.order.orderRentID);
         await ApiOderRentHistory.createNewPic(
-            accountID!, imageUrls, widget.order.orderRentID);
+            accountID!, imageUrls, widget.order.orderRentID, 'CUS_RECEIVED');
         await ApiOderRentHistory.updateStatusOrderRent(
             widget.order.orderRentID, "REJECTING");
         Navigator.pop(context);

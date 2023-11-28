@@ -3,12 +3,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:frs_mobile/core/constants/my_textformfield.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
-
 import '../../../core/constants/color_constants.dart';
 import '../../../core/constants/dismension_constants.dart';
-import '../../../core/constants/my_textfield.dart';
+
 import '../../../core/constants/textstyle_constants.dart';
 import '../../../models/user_model.dart';
 import '../../../services/authentication_service.dart';
@@ -112,47 +112,84 @@ class _LoginScreenState extends State<LoginScreen> {
     } else if (passwordController.text.isEmpty) {
       showCustomDialog(context, 'Lỗi', 'Bạn chưa nhập "Password".', true);
     } else {
-      showDialog(
-        context: context,
-        builder: (context) {
-          return Center(
-            child: CircularProgressIndicator(
-              color: ColorPalette.primaryColor,
-            ),
-          );
-        },
-      );
-      try {
-        final response = await AuthenticationService.logIn(
-            emailController.text, passwordController.text);
-        Navigator.pop(context);
-        if (response != null) {
-          final userModel = UserModel.fromJson(response);
-          var box = Hive.box('userBox');
-          box.put('user', json.encode(userModel.toJson()));
-          final authProvider =
-              Provider.of<AuthProvider>(context, listen: false);
-          authProvider.setUser(userModel);
-          if (userModel.role.roleName == 'Customer') {
-            Navigator.of(context).pushNamed(CustomerMainScreen.routeName);
-          } else if (userModel.role.roleName == "ProductOwner") {
-            Navigator.of(context).pushNamed(ProductOwnerMainScreen.routeName);
+      if (validateEmail(emailController.text) == null &&
+          validatePassword(passwordController.text) == null) {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return Center(
+              child: CircularProgressIndicator(
+                color: ColorPalette.primaryColor,
+              ),
+            );
+          },
+        );
+        try {
+          final response = await AuthenticationService.logIn(
+              emailController.text, passwordController.text);
+          Navigator.pop(context);
+          if (response != null) {
+            final userModel = UserModel.fromJson(response);
+            var box = Hive.box('userBox');
+            box.put('user', json.encode(userModel.toJson()));
+            final authProvider =
+                Provider.of<AuthProvider>(context, listen: false);
+            authProvider.setUser(userModel);
+            if (userModel.role.roleName == 'Customer') {
+              Navigator.of(context).pushNamed(CustomerMainScreen.routeName);
+            } else if (userModel.role.roleName == "ProductOwner") {
+              Navigator.of(context).pushNamed(ProductOwnerMainScreen.routeName);
+            }
+          } else {
+            showCustomDialog(
+                context, 'Lỗi', 'Xin lỗi! Đăng nhập thất bại.', true);
           }
-        } else {
-          showCustomDialog(
-              context, 'Lỗi', 'Xin lỗi! Đăng nhập thất bại.', true);
+        } catch (e) {
+          showCustomDialog(context, 'Lỗi', e.toString(), true);
         }
-      } catch (e) {
-        showCustomDialog(context, 'Lỗi', e.toString(), true);
       }
     }
   }
 
-  // Show and Hide password
   void onToggleShowPass() {
     setState(() {
       _showPass = !_showPass;
     });
+  }
+
+  //ít nhất một ký tự trước và sau ký tự @,
+  //có một dấu . sau ký tự @,
+  //tên miền có ít nhất hai ký tự.
+  //Cho phép sử dụng các ký tự đặc biệt như _, %, +, và - trong phần tên người dùng.
+  String? validateEmail(String? email) {
+    if (email == null || email.isEmpty) {
+      return 'Vui lòng nhập Email';
+    }
+
+    String emailPattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$';
+    RegExp regex = RegExp(emailPattern);
+
+    if (!regex.hasMatch(email)) {
+      return 'Email không hợp lệ';
+    }
+
+    return null;
+  }
+
+  String? validatePassword(String? password) {
+    if (password == null || password.isEmpty) {
+      return 'Vui lòng nhập Password';
+    }
+
+    if (password.contains(',')) {
+      return 'Không được chứa dấu ","';
+    }
+
+    if (password.contains(' ')) {
+      return 'Mật khẩu không được chứa khoảng trắng';
+    }
+
+    return null;
   }
 
   @override
@@ -191,20 +228,26 @@ class _LoginScreenState extends State<LoginScreen> {
                   SizedBox(height: 25),
 
                   // email textField
-                  MyTextField(
+                  MyTextFormField(
+                    controller: emailController,
+                    hintText: 'Email',
+                    validator: validateEmail,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
                     prefixIcon: Icon(
                       FontAwesomeIcons.solidEnvelope,
                       size: kDefaultIconSize18,
                       color: ColorPalette.primaryColor,
                     ),
-                    controller: emailController,
-                    hintText: 'Email',
-                    obscureText: false,
                   ),
                   SizedBox(height: 10),
 
                   // password textField
-                  MyTextField(
+                  MyTextFormField(
+                    controller: passwordController,
+                    hintText: 'Password',
+                    obscureText: !_showPass,
+                    validator: validatePassword,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
                     prefixIcon: Icon(
                       FontAwesomeIcons.key,
                       size: kDefaultIconSize18,
@@ -220,9 +263,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         color: ColorPalette.primaryColor,
                       ),
                     ),
-                    controller: passwordController,
-                    hintText: 'Password',
-                    obscureText: !_showPass,
                   ),
                   SizedBox(height: 10),
 

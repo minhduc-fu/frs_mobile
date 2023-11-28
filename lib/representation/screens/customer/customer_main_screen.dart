@@ -68,8 +68,9 @@ class _CustomerMainScreen extends State<CustomerMainScreen> {
         currentIndex: _currentIndex,
         selectedItemColor: ColorPalette.primaryColor,
         unselectedItemColor: ColorPalette.textHide,
-        margin: EdgeInsets.symmetric(
-            horizontal: kMediumPadding24, vertical: kDefaultPadding16),
+
+        // margin: EdgeInsets.symmetric(
+        //     horizontal: kMediumPadding24, vertical: kDefaultPadding16),
         items: [
           SalomonBottomBarItem(
             title: Text('Trang chủ'),

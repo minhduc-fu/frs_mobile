@@ -287,7 +287,7 @@ class ApiOderRentHistory {
   }
 
   static Future<void> createNewPic(
-      int accountID, List<String> img, int orderRentID) async {
+      int accountID, List<String> img, int orderRentID, String status) async {
     final url = Uri.parse('http://fashionrental.online:8080/pic');
 
     try {
@@ -298,6 +298,7 @@ class ApiOderRentHistory {
           'accountID': accountID,
           'img': img,
           'orderRentID': orderRentID,
+          'status': status
         }),
       );
 
