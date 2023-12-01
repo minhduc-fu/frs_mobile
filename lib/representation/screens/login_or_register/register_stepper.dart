@@ -2,6 +2,7 @@ import 'dart:typed_data';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:frs_mobile/services/authprovider.dart';
 import 'package:im_stepper/stepper.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -524,8 +525,10 @@ class _RegisterStepperState extends State<RegisterStepper> {
                       showErrorMsg('Vui lòng điền đầy đủ thông tin!');
                       return;
                     } else {
-                      imageUrl = await AddImageCloud()
-                          .uploadImageToStorage('avatarCustomer', _image!);
+                      imageUrl = await AddImageCloud().uploadImageToStorage(
+                          'avatarCustomer',
+                          _image!,
+                          AuthProvider.userModel!.accountID);
                       final response =
                           await AuthenticationService.createCustomer(
                         accountID!,

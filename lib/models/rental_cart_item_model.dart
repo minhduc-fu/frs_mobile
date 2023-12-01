@@ -3,6 +3,7 @@ import 'product_detail_model.dart';
 class RentalCartItemModel {
   final int productOwnerID;
   final String productOwnerName;
+  final String productOwnerAddress;
   List<ProductDetailModel> productDetailModel;
   bool isChecked;
   int productOwnerProvinceID;
@@ -15,6 +16,7 @@ class RentalCartItemModel {
   RentalCartItemModel({
     required this.productOwnerID,
     required this.productOwnerName,
+    required this.productOwnerAddress,
     required this.productDetailModel,
     this.isChecked = false,
     this.productOwnerProvinceID = 0,

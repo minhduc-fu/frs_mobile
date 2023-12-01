@@ -32,9 +32,15 @@ class _InforMationOrderRentScreenState
             onTap: () {
               Navigator.pop(context);
             },
-            child: Icon(FontAwesomeIcons.angleLeft),
+            child: Container(
+                color: ColorPalette.backgroundScaffoldColor,
+                child: Icon(FontAwesomeIcons.angleLeft)),
           ),
-          title: Center(child: Text('Thông tin đơn hàng')),
+          centerTitle: true,
+          title: Text(
+            'Thông tin đơn hàng',
+            style: TextStyles.defaultStyle.bold.setTextSize(19),
+          ),
           backgroundColor: ColorPalette.backgroundScaffoldColor,
         ),
         body: Column(
@@ -50,9 +56,7 @@ class _InforMationOrderRentScreenState
                       style: TextStyles.defaultStyle.setTextSize(20).bold,
                     ),
                     Text(
-                      widget.order.voucherDTO != null
-                          ? widget.order.voucherDTO!.voucherCode
-                          : 'Không có',
+                      '${widget.order.orderRentID}',
                       style: TextStyles.defaultStyle.setTextSize(20).bold,
                     ),
                     SizedBox(height: 10),
@@ -173,7 +177,8 @@ class _InforMationOrderRentScreenState
                               builder: ((context, snapshot) {
                                 if (snapshot.connectionState ==
                                     ConnectionState.waiting) {
-                                  return CircularProgressIndicator();
+                                  return Center(
+                                      child: CircularProgressIndicator());
                                 } else if (snapshot.hasError) {
                                   return Text('Error: ${snapshot.error}');
                                 } else {

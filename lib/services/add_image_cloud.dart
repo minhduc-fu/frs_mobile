@@ -5,8 +5,10 @@ import 'package:firebase_storage/firebase_storage.dart';
 final FirebaseStorage _storage = FirebaseStorage.instance;
 
 class AddImageCloud {
-  Future<String> uploadImageToStorage(String childName, Uint8List file) async {
+  Future<String> uploadImageToStorage(
+      String folderName, Uint8List file, int accountID) async {
     try {
+      String childName = '$folderName/avatarAccount$accountID';
       Reference ref = _storage.ref().child(childName);
       UploadTask uploadTask = ref.putData(file);
       TaskSnapshot snapshot = await uploadTask;

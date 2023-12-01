@@ -4,7 +4,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:frs_mobile/core/constants/color_constants.dart';
 import 'package:frs_mobile/core/constants/dismension_constants.dart';
 import 'package:frs_mobile/core/constants/textstyle_constants.dart';
-import 'package:frs_mobile/models/address_model.dart';
 import 'package:frs_mobile/representation/screens/customer/account/address/new_address_screen.dart';
 import 'package:frs_mobile/services/address_provider.dart';
 import 'package:frs_mobile/services/authentication_service.dart';
@@ -62,6 +61,7 @@ class _SelectAddressScreenState extends State<SelectAddressScreen> {
         ),
         backgroundColor: ColorPalette.backgroundScaffoldColor,
         title: Center(child: Text('Chọn địa chỉ')),
+        centerTitle: true,
       ),
       body: Padding(
         padding: const EdgeInsets.all(20),

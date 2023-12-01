@@ -118,7 +118,9 @@ class _DangthueChotraScreenState extends State<DangthueChotraScreen> {
             onTap: () {
               Navigator.pop(context);
             },
-            child: Icon(FontAwesomeIcons.angleLeft),
+            child: Container(
+                color: ColorPalette.backgroundScaffoldColor,
+                child: Icon(FontAwesomeIcons.angleLeft)),
           ),
           title: Center(
             child: Text(
@@ -197,7 +199,8 @@ class _DangthueChotraScreenState extends State<DangthueChotraScreen> {
                               builder: ((context, snapshot) {
                                 if (snapshot.connectionState ==
                                     ConnectionState.waiting) {
-                                  return CircularProgressIndicator();
+                                  return Center(
+                                      child: CircularProgressIndicator());
                                 } else if (snapshot.hasError) {
                                   return Text('Error: ${snapshot.error}');
                                 } else {

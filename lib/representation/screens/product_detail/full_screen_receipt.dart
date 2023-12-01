@@ -19,10 +19,13 @@ class FullScreenReceipt extends StatelessWidget {
           onTap: () {
             Navigator.pop(context);
           },
-          child: Icon(
-            color: Colors.white,
-            FontAwesomeIcons.angleLeft,
-            size: kDefaultIconSize18,
+          child: Container(
+            color: Colors.black,
+            child: Icon(
+              color: Colors.white,
+              FontAwesomeIcons.angleLeft,
+              size: kDefaultIconSize18,
+            ),
           ),
         ),
       ),

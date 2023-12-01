@@ -55,15 +55,21 @@ class _WalletScreenState extends State<WalletScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         backgroundColor: ColorPalette.backgroundScaffoldColor,
-        title: Center(child: Text('Ví của bạn')),
+        title: Text(
+          'Ví của bạn',
+          style: TextStyles.defaultStyle.bold.setTextSize(19),
+        ),
         leading: GestureDetector(
           onTap: () {
             Navigator.pop(context);
           },
-          child: Icon(
-            FontAwesomeIcons.angleLeft,
-            size: kDefaultIconSize18,
+          child: Container(
+            color: ColorPalette.backgroundScaffoldColor,
+            child: Icon(
+              FontAwesomeIcons.angleLeft,
+            ),
           ),
         ),
       ),
@@ -79,18 +85,18 @@ class _WalletScreenState extends State<WalletScreen> {
                     padding: EdgeInsets.all(10),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(kDefaultCircle14),
-                        color: ColorPalette.hideColor),
+                        color: ColorPalette.primaryColor),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           'Số dư trong ví',
-                          style: TextStyles.h5.bold,
+                          style: TextStyles.h5.bold.whiteTextColor,
                         ),
                         SizedBox(height: 10),
                         Text(
                           '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(wallet?.balance ?? 0)}',
-                          style: TextStyles.h4.bold,
+                          style: TextStyles.h4.bold.setColor(Colors.green),
                         )
                       ],
                     ),

@@ -38,6 +38,7 @@ class RentalCartProvider with ChangeNotifier {
       orElse: () => RentalCartItemModel(
         productOwnerID: item.productOwnerID,
         productOwnerName: item.productOwnerName,
+        productOwnerAddress: item.productOwnerAddress,
         productDetailModel: [],
       ),
     );

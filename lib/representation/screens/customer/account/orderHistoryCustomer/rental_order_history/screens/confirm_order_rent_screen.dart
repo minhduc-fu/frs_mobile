@@ -62,7 +62,7 @@ class _ConfirmOrderRentScreenState extends State<ConfirmOrderRentScreen> {
                         AuthProvider.userModel!.customer!.customerID),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CircularProgressIndicator();
+                    return Center(child: CircularProgressIndicator());
                   } else if (snapshot.hasError) {
                     return Text('Error: ${snapshot.error}');
                   } else {
@@ -126,7 +126,9 @@ class _ConfirmOrderRentScreenState extends State<ConfirmOrderRentScreen> {
                                         builder: ((context, snapshot) {
                                           if (snapshot.connectionState ==
                                               ConnectionState.waiting) {
-                                            return CircularProgressIndicator();
+                                            return Center(
+                                                child:
+                                                    CircularProgressIndicator());
                                           } else if (snapshot.hasError) {
                                             return Text(
                                                 'Error: ${snapshot.error}');

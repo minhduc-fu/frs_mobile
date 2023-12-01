@@ -19,8 +19,10 @@ class PrivacyPolicy extends StatelessWidget {
           },
           child: Icon(FontAwesomeIcons.angleLeft),
         ),
-        title: Center(
-          child: Text('Chính sách bảo mật'),
+        centerTitle: true,
+        title: Text(
+          'Chính sách bảo mật',
+          style: TextStyles.h5.bold.setTextSize(19),
         ),
       ),
       body: Padding(

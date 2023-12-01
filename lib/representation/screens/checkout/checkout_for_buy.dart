@@ -180,6 +180,18 @@ class _CheckoutForBuyState extends State<CheckoutForBuy> {
               builder: (context, setState) {
                 return Column(
                   children: [
+                    SizedBox(height: 20),
+                    Center(
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: ColorPalette.primaryColor,
+                            borderRadius:
+                                BorderRadius.circular(kDefaultCircle14)),
+                        height: 7,
+                        width: 50,
+                      ),
+                    ),
+                    SizedBox(height: 10),
                     Expanded(
                       child: ListView.builder(
                         itemCount: buyVouchers.length,
@@ -194,8 +206,7 @@ class _CheckoutForBuyState extends State<CheckoutForBuy> {
                                 color: isVoucherAvailable(voucher) == true
                                     ? Colors.white
                                     : ColorPalette.backgroundScaffoldColor,
-                                borderRadius:
-                                    BorderRadius.circular(kDefaultCircle14),
+                                borderRadius: BorderRadius.circular(18),
                               ),
                               child: Row(
                                 mainAxisAlignment:
@@ -224,8 +235,14 @@ class _CheckoutForBuyState extends State<CheckoutForBuy> {
                                             voucher.voucherCode,
                                             style: TextStyles.h5.bold,
                                           ),
-                                          Text(
-                                            'Giảm tối đa ${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(voucher.maxDiscount)} trên đơn',
+                                          Container(
+                                            width: 230,
+                                            child: AutoSizeText(
+                                              minFontSize: 14,
+                                              maxLines: 2,
+                                              overflow: TextOverflow.ellipsis,
+                                              'Giảm tối đa ${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(voucher.maxDiscount)} trên đơn',
+                                            ),
                                           ),
                                           Text(
                                             'Số lượng: ${voucher.quantity}',
@@ -237,8 +254,20 @@ class _CheckoutForBuyState extends State<CheckoutForBuy> {
                                       ),
                                     ],
                                   ),
-                                  Text(
-                                    'Giảm ${voucher.discountAmount}%',
+                                  Container(
+                                    height: 100,
+                                    decoration: BoxDecoration(
+                                      border: Border(
+                                          left: BorderSide(
+                                              color: ColorPalette.textHide
+                                                  .withOpacity(0.2),
+                                              width: 1)),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        ' Giảm ${voucher.discountAmount}%',
+                                      ),
+                                    ),
                                   ),
                                 ],
                               ),
@@ -413,11 +442,12 @@ class _CheckoutForBuyState extends State<CheckoutForBuy> {
             },
             child: Icon(
               FontAwesomeIcons.angleLeft,
-              size: kDefaultIconSize18,
             ),
           ),
-          title: Center(
-            child: Text('Thanh toán'),
+          centerTitle: true,
+          title: Text(
+            'Thanh toán',
+            style: TextStyles.defaultStyle.bold.setTextSize(19),
           ),
         ),
         body: FutureBuilder(
@@ -432,7 +462,7 @@ class _CheckoutForBuyState extends State<CheckoutForBuy> {
                 children: [
                   Expanded(
                     child: Padding(
-                      padding: const EdgeInsets.all(20),
+                      padding: const EdgeInsets.all(10),
                       child: ListView(
                         children: [
                           // //address
@@ -544,6 +574,25 @@ class _CheckoutForBuyState extends State<CheckoutForBuy> {
                                         Text(
                                           cartItem.productOwnerName,
                                           style: TextStyles.h5.bold,
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(height: 10),
+                                    Row(
+                                      children: [
+                                        SizedBox(width: 10),
+                                        Icon(
+                                          FontAwesomeIcons.locationDot,
+                                          size: 14,
+                                        ),
+                                        SizedBox(width: 10),
+                                        Container(
+                                          width: 320,
+                                          child: AutoSizeText(
+                                            cartItem.productOwnerAddress,
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
                                         ),
                                       ],
                                     ),

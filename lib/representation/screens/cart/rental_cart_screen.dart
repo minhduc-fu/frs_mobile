@@ -290,7 +290,7 @@ class _RentalCartScreenState extends State<RentalCartScreen> {
                                                   MainAxisAlignment.spaceAround,
                                               children: [
                                                 Container(
-                                                  width: 180,
+                                                  width: 165,
                                                   child: AutoSizeText(
                                                     product.productName,
                                                     minFontSize: 16,

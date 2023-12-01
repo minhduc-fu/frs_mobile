@@ -254,7 +254,7 @@ class _NewAddressScreenState extends State<NewAddressScreen> {
       elevation: 0,
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(kDefaultCircle14)),
-      backgroundColor: Colors.white,
+      backgroundColor: ColorPalette.backgroundScaffoldColor,
       context: context,
       builder: (BuildContext context) {
         String currentFirstLetter = '';
@@ -401,10 +401,14 @@ class _NewAddressScreenState extends State<NewAddressScreen> {
           onTap: () {
             Navigator.pop(context);
           },
-          child: Icon(FontAwesomeIcons.angleLeft),
+          child: Container(
+              color: ColorPalette.backgroundScaffoldColor,
+              child: Icon(FontAwesomeIcons.angleLeft)),
         ),
-        title: Center(
-          child: Text('Địa chỉ mới'),
+        centerTitle: true,
+        title: Text(
+          'Địa chỉ mới',
+          style: TextStyles.defaultStyle.setTextSize(18).bold,
         ),
       ),
       body: Column(

@@ -6,9 +6,12 @@ import 'package:frs_mobile/core/constants/dismension_constants.dart';
 import 'package:frs_mobile/core/constants/textstyle_constants.dart';
 import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/rental_order_history/models/order_rent_detail_model.dart';
 import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/rental_order_history/models/order_rent_model.dart';
+import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/rental_order_history/screens/feeback_screen.dart';
 import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/rental_order_history/screens/information_order_rent_screen.dart';
 import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/rental_order_history/services/api_order_rent_history.dart';
+import 'package:frs_mobile/representation/widgets/button_widget.dart';
 import 'package:frs_mobile/services/authprovider.dart';
+import 'package:frs_mobile/utils/dialog_helper.dart';
 import 'package:intl/intl.dart';
 
 class CompletedOrderRentScreen extends StatefulWidget {
@@ -29,6 +32,24 @@ class _CompletedOrderRentScreenState extends State<CompletedOrderRentScreen> {
     );
   }
 
+  void _feedbackOrder() async {
+    Navigator.push(
+      context,
+      CupertinoPageRoute(
+        builder: (context) => FeedbackScreen(),
+      ),
+    );
+  }
+
+  // void _navigateToTraHangHoanTienScreen(OrderRentModel order) {
+  //   Navigator.push(
+  //     context,
+  //     CupertinoPageRoute(
+  //       builder: (context) => TraHangHoanTienOrderRentScreen(order: order),
+  //     ),
+  //   );
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,7 +62,7 @@ class _CompletedOrderRentScreenState extends State<CompletedOrderRentScreen> {
                     AuthProvider.userModel!.customer!.customerID),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CircularProgressIndicator();
+                    return Center(child: CircularProgressIndicator());
                   } else if (snapshot.hasError) {
                     return Text('Error: ${snapshot.error}');
                   } else {
@@ -105,7 +126,9 @@ class _CompletedOrderRentScreenState extends State<CompletedOrderRentScreen> {
                                         builder: ((context, snapshot) {
                                           if (snapshot.connectionState ==
                                               ConnectionState.waiting) {
-                                            return CircularProgressIndicator();
+                                            return Center(
+                                                child:
+                                                    CircularProgressIndicator());
                                           } else if (snapshot.hasError) {
                                             return Text(
                                                 'Error: ${snapshot.error}');
@@ -257,6 +280,23 @@ class _CompletedOrderRentScreenState extends State<CompletedOrderRentScreen> {
                                           ),
                                         ],
                                       ),
+                                    ),
+                                    Divider(
+                                      thickness: 0.5,
+                                      color: ColorPalette.textHide,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        ButtonWidget(
+                                          onTap: () {
+                                            _feedbackOrder();
+                                          },
+                                          title: 'Đánh giá',
+                                          size: 18,
+                                          width: 150,
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),

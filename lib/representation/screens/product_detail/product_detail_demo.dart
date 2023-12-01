@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:frs_mobile/models/cart_item_model.dart';
+import 'package:frs_mobile/models/feedback_model.dart';
 import 'package:frs_mobile/models/product_detail_model.dart';
 import 'package:frs_mobile/models/product_image_model.dart';
 import 'package:frs_mobile/models/rental_cart_item_model.dart';
@@ -27,17 +28,19 @@ import '../../../models/productOwner_model.dart';
 import '../../../utils/dialog_helper.dart';
 import '../../widgets/button_widget.dart';
 import '../../widgets/indicator_widget.dart';
-import '../select_date_screen.dart';
+import 'select_date_screen.dart';
 
 class ProductDetailDemo extends StatefulWidget {
   final ProductDetailModel? productDetailModel;
   final ProductOwnerModel? productOwnerModel;
   final List<ProductImageModel> productImageModel;
+  final List<FeedbackModel> feedbackList;
   const ProductDetailDemo({
     super.key,
     required this.productDetailModel,
     required this.productOwnerModel,
     required this.productImageModel,
+    required this.feedbackList,
   });
   static const String routeName = '/product_detail_demo';
   @override
@@ -57,6 +60,7 @@ class _ProductDetailDemoState extends State<ProductDetailDemo> {
   double selectedRenPrice = 0;
 
   bool? isRenting = null;
+  bool isAccept = false;
   void toggleRenting(bool? value) {
     setState(() {
       isRenting = value ?? false;
@@ -145,6 +149,102 @@ class _ProductDetailDemoState extends State<ProductDetailDemo> {
     }
   }
 
+  Widget buildRatingHeader() {
+    return Padding(
+      padding: const EdgeInsets.all(10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            children: [
+              Icon(
+                FontAwesomeIcons.solidStar,
+                color: Colors.amber,
+              ),
+              SizedBox(width: 10),
+              Text(
+                'Khách hàng đánh giá',
+                style: TextStyles.h5.bold,
+              ),
+            ],
+          ),
+          Text(
+            '${widget.feedbackList.length} đánh giá',
+            style: TextStyles.defaultStyle.setColor(Colors.blue),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildFeedbackList() {
+    return ListView.builder(
+      shrinkWrap: true,
+      itemCount: widget.feedbackList.length,
+      itemBuilder: (context, index) {
+        return buildFeedbackItem(widget.feedbackList[index]);
+      },
+    );
+  }
+
+  Widget buildFeedbackItem(FeedbackModel feedback) {
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(kDefaultCircle14),
+          border: Border.all(color: ColorPalette.textHide),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    CircleAvatar(
+                      radius: 10,
+                      backgroundImage:
+                          NetworkImage(feedback.customerDTO.avatarUrl),
+                    ),
+                    SizedBox(width: 10),
+                    Text(
+                      '${feedback.customerDTO.fullName}',
+                      style: TextStyles.defaultStyle.bold,
+                    ),
+                  ],
+                ),
+                Text(
+                  '${DateFormat.yMd().format(feedback.createdDate)}',
+                ),
+              ],
+            ),
+            SizedBox(height: 10),
+            Row(
+              children: [
+                Icon(
+                  FontAwesomeIcons.solidStar,
+                  size: 16,
+                  color: Colors.amber,
+                ),
+                SizedBox(width: 10),
+                Text('${feedback.ratingPoint}'),
+              ],
+            ),
+            SizedBox(height: 10),
+            Text(
+              '${feedback.description}',
+              style: TextStyles.defaultStyle
+                  .setColor(ColorPalette.textColor.withOpacity(0.6)),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final cartProvider = Provider.of<CartProvider>(context, listen: false);
@@ -161,9 +261,12 @@ class _ProductDetailDemoState extends State<ProductDetailDemo> {
         onTap: () {
           Navigator.pop(context);
         },
-        child: Icon(
-          FontAwesomeIcons.angleLeft,
-          size: kDefaultIconSize18,
+        child: Container(
+          color: ColorPalette.backgroundScaffoldColor,
+          child: Icon(
+            FontAwesomeIcons.angleLeft,
+            // size: kDefaultIconSize18,
+          ),
         ),
       ),
       child: Scaffold(
@@ -221,9 +324,13 @@ class _ProductDetailDemoState extends State<ProductDetailDemo> {
                             size: 38,
                             likeBuilder: (isLiked) {
                               return isLiked
-                                  ? Icon(FontAwesomeIcons.solidHeart)
+                                  ? Icon(
+                                      FontAwesomeIcons.solidHeart,
+                                      color: Colors.redAccent,
+                                    )
                                   : Icon(
                                       FontAwesomeIcons.heart,
+                                      color: Colors.redAccent,
                                     );
                             },
                           ),
@@ -384,53 +491,175 @@ class _ProductDetailDemoState extends State<ProductDetailDemo> {
                               ],
                             ),
                             SizedBox(height: 10),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Barcode',
+                                  style: TextStyles.h5.bold,
+                                ),
+                                SizedBox(height: 10),
+                                Row(
+                                  children: [
+                                    Text(''),
+                                  ],
+                                ),
+                              ],
+                            ),
                             if (checkType == "RENT" || checkType == "SALE_RENT")
-                              Column(
+                              Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(
-                                    'Tiền cọc',
-                                    style: TextStyles.h5.bold,
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Tiền cọc',
+                                        style: TextStyles.h5.bold,
+                                      ),
+                                      SizedBox(height: 10),
+                                      Text(
+                                        '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(productDetailModel.price)}',
+                                      ),
+                                    ],
                                   ),
-                                  SizedBox(height: 10),
-                                  Text(
-                                    '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(productDetailModel.price)}',
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      Text(
+                                        'Hóa đơn',
+                                        style: TextStyles.h5.bold,
+                                      ),
+                                      SizedBox(height: 10),
+                                      GestureDetector(
+                                        onTap: () {
+                                          Navigator.of(context).push(
+                                            CupertinoPageRoute(
+                                              builder: (context) =>
+                                                  FullScreenReceipt(
+                                                      productReceiptUrl:
+                                                          productDetailModel
+                                                              .productReceiptUrl),
+                                            ),
+                                          );
+                                        },
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.circular(
+                                              kDefaultCircle14),
+                                          child: Image.network(
+                                            cacheHeight: 80,
+                                            cacheWidth: 80,
+                                            productDetailModel
+                                                .productReceiptUrl,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
-
-                            SizedBox(height: 10),
-                            //productReceiptUrl
-                            Text(
-                              'Hóa đơn',
-                              style: TextStyles.h5.bold,
-                            ),
-                            SizedBox(height: 10),
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.of(context).push(
-                                  CupertinoPageRoute(
-                                    builder: (context) => FullScreenReceipt(
-                                        productReceiptUrl: productDetailModel
-                                            .productReceiptUrl),
-                                  ),
-                                );
-                              },
-                              child: ClipRRect(
-                                borderRadius:
-                                    BorderRadius.circular(kDefaultCircle14),
-                                child: Image.network(
-                                  cacheHeight: 100,
-                                  cacheWidth: 80,
-                                  productDetailModel.productReceiptUrl,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
+                            //   Column(
+                            //     crossAxisAlignment: CrossAxisAlignment.start,
+                            //     children: [
+                            //       Text(
+                            //         'Tiền cọc',
+                            //         style: TextStyles.h5.bold,
+                            //       ),
+                            //       SizedBox(height: 10),
+                            //       Text(
+                            //         '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(productDetailModel.price)}',
+                            //       ),
+                            //     ],
+                            //   ),
+                            // SizedBox(height: 10),
+                            // //productReceiptUrl
+                            // Text(
+                            //   'Hóa đơn',
+                            //   style: TextStyles.h5.bold,
+                            // ),
+                            // SizedBox(height: 10),
+                            // GestureDetector(
+                            //   onTap: () {
+                            //     Navigator.of(context).push(
+                            //       CupertinoPageRoute(
+                            //         builder: (context) => FullScreenReceipt(
+                            //             productReceiptUrl: productDetailModel
+                            //                 .productReceiptUrl),
+                            //       ),
+                            //     );
+                            //   },
+                            //   child: ClipRRect(
+                            //     borderRadius:
+                            //         BorderRadius.circular(kDefaultCircle14),
+                            //     child: Image.network(
+                            //       cacheHeight: 100,
+                            //       cacheWidth: 80,
+                            //       productDetailModel.productReceiptUrl,
+                            //       fit: BoxFit.cover,
+                            //     ),
+                            //   ),
+                            // ),
                           ],
                         ),
                       ),
                     ),
+                    SizedBox(height: 20),
+                    if (checkType == "RENT" || checkType == "SALE_RENT")
+                      Container(
+                        decoration: BoxDecoration(
+                            borderRadius:
+                                BorderRadius.circular(kDefaultCircle14),
+                            color: ColorPalette.hideColor),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 10),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Icon(
+                                    FontAwesomeIcons.rectangleList,
+                                    size: 20,
+                                  ),
+                                  SizedBox(width: 10),
+                                  Text(
+                                    "Điều khoản thuê",
+                                    style: TextStyles.h5.bold.setTextSize(15),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(height: 10),
+                              Text('1. Giao hàng nhanh toàn quốc'),
+                              Text('2. Giao hàng nhanh toàn quốc'),
+                              Text('3. Giao hàng nhanh toàn quốc'),
+                              Text('4. Giao hàng nhanh toàn quốc'),
+                              Row(
+                                children: [
+                                  SizedBox(
+                                    width: 20,
+                                    child: Radio(
+                                      materialTapTargetSize:
+                                          MaterialTapTargetSize.shrinkWrap,
+                                      activeColor: ColorPalette.primaryColor,
+                                      value: true,
+                                      groupValue: isAccept,
+                                      onChanged: (value) {},
+                                    ),
+                                  ),
+                                  SizedBox(width: 10),
+                                  Text('Tôi đã đọc và đồng ý với các quy định',
+                                      style: TextStyles.defaultStyle.bold),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
                     SizedBox(height: 20),
                     // information PO
                     Container(
@@ -569,89 +798,16 @@ class _ProductDetailDemoState extends State<ProductDetailDemo> {
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(kDefaultCircle14),
                           color: ColorPalette.hideColor),
-                      child: Padding(
-                        padding: EdgeInsets.all(10),
-                        child: Column(
-                          children: [
-                            // Khách hàng đánh giá
-                            Container(
-                              padding: const EdgeInsets.all(12),
-                              decoration: BoxDecoration(
-                                borderRadius:
-                                    BorderRadius.circular(kDefaultCircle14),
-                                border:
-                                    Border.all(color: ColorPalette.textHide),
-                              ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Icon(
-                                        FontAwesomeIcons.solidStar,
-                                        color: Colors.amber,
-                                      ),
-                                      SizedBox(width: 10),
-                                      Text(
-                                        'Khách hàng đánh giá',
-                                        style: TextStyles.h5.bold,
-                                      ),
-                                    ],
-                                  ),
-                                  Text(
-                                    '3 đánh giá',
-                                    style: TextStyles.defaultStyle
-                                        .setColor(Colors.blue),
-                                  )
-                                ],
-                              ),
-                            ),
-                            SizedBox(height: 10),
-
-                            // List đánh giá
-                            Container(
-                              padding: const EdgeInsets.all(12),
-                              decoration: BoxDecoration(
-                                borderRadius:
-                                    BorderRadius.circular(kDefaultCircle14),
-                                border:
-                                    Border.all(color: ColorPalette.textHide),
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Text(
-                                        'Tên khách hàng',
-                                        style: TextStyles.defaultStyle.bold,
-                                      ),
-                                      SizedBox(height: 10),
-                                    ],
-                                  ),
-                                  SizedBox(height: 10),
-                                  Row(
-                                    children: [
-                                      Text('03:18'),
-                                      Text(' | '),
-                                      Text('05/06/2023'),
-                                    ],
-                                  ),
-                                  SizedBox(height: 10),
-                                  Text('Tên sản phẩm'),
-                                  SizedBox(height: 10),
-                                  Text(
-                                    'Description của đánh giá',
-                                    style: TextStyles.defaultStyle.setColor(
-                                        ColorPalette.textColor
-                                            .withOpacity(0.6)),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
+                      child: Column(
+                        children: [
+                          buildRatingHeader(),
+                          Divider(
+                            thickness: 0.5,
+                            color: ColorPalette.primaryColor,
+                          ),
+                          // List đánh giá
+                          buildFeedbackList(),
+                        ],
                       ),
                     ),
                   ],
@@ -926,6 +1082,9 @@ class _ProductDetailDemoState extends State<ProductDetailDemo> {
                                                     productOwnerName:
                                                         productOwnerModel
                                                             .fullName,
+                                                    productOwnerAddress:
+                                                        productOwnerModel
+                                                            .address,
                                                     productDetailModel: [
                                                   selectedProduct
                                                 ]);
@@ -959,7 +1118,7 @@ class _ProductDetailDemoState extends State<ProductDetailDemo> {
                                         }
                                       } else {
                                         showCustomDialog(context, 'Lỗi',
-                                            'Làm ơn chọn ngày thuê!', true);
+                                            'Vui lòng chọn ngày thuê', true);
                                       }
                                     },
                                     height: 70,
@@ -1043,6 +1202,8 @@ class _ProductDetailDemoState extends State<ProductDetailDemo> {
                                                 .productOwnerID,
                                             productOwnerName:
                                                 productOwnerModel.fullName,
+                                            productOwnerAddress:
+                                                productOwnerModel.address,
                                             productDetailModel: [
                                               widget.productDetailModel!,
                                             ],

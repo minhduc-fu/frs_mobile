@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:frs_mobile/core/constants/color_constants.dart';
+
 import 'package:frs_mobile/core/constants/textstyle_constants.dart';
 import 'package:frs_mobile/representation/widgets/button_widget.dart';
 import 'package:frs_mobile/utils/asset_helper.dart';
@@ -18,14 +20,18 @@ class PaymentMethod {
         return StatefulBuilder(
           builder: (context, setState) {
             return AlertDialog(
+              elevation: 0,
+              backgroundColor: ColorPalette.backgroundScaffoldColor,
               title: Text(
                 "Phương thức thanh toán",
-                style: TextStyles.h4.bold,
+                style: TextStyles.h4.bold.setTextSize(23),
               ),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   DropdownButton<String>(
+                    dropdownColor: Colors.white,
+                    underline: null,
                     elevation: 10,
                     borderRadius: BorderRadius.circular(kDefaultCircle14),
                     value: selectedPaymentMethod,

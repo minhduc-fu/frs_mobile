@@ -27,13 +27,15 @@ void showCustomDialog(BuildContext context, String title, String content,
           // hiệu ứng làm mờ
           opacity: Tween<double>(begin: 0.5, end: 1.0).animate(a1),
           child: AlertDialog(
+            elevation: 0,
+            backgroundColor: Colors.white,
             title: Text(
               title,
-              style: TextStyles.h4.bold,
+              style: TextStyles.h5.bold.setTextSize(18),
             ),
             content: Text(
               content,
-              style: TextStyles.defaultStyle.setTextSize(20),
+              style: TextStyles.defaultStyle.setTextSize(18),
             ),
             shape: OutlineInputBorder(
               borderRadius: BorderRadius.circular(kDefaultCircle14),

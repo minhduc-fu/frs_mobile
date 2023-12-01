@@ -291,7 +291,7 @@ class _BuyCartScreenState extends State<BuyCartScreen> {
                                                       .spaceBetween,
                                               children: [
                                                 Container(
-                                                  width: 180,
+                                                  width: 165,
                                                   child: AutoSizeText(
                                                     product.productName,
                                                     style: TextStyles.h5.bold,

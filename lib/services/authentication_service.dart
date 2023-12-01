@@ -162,6 +162,26 @@ class AuthenticationService {
     }
   }
 
+  static Future<List<ProductModel>?> getAllProductByProductName(
+      String productName) async {
+    final url = Uri.parse(
+        'http://fashionrental.online:8080/product/getallbyproductname/$productName');
+    try {
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        List<dynamic> data = json.decode(response.body);
+        List<ProductModel> products =
+            data.map((json) => ProductModel.fromJson(json)).toList();
+
+        return products;
+      } else {
+        throw Exception('Failed to load product by productName');
+      }
+    } catch (e) {
+      throw Exception('Error: $e');
+    }
+  }
+
   static Future<List<ProductModel>?> getAllProductOnAvailable() async {
     final url =
         Uri.parse('http://fashionrental.online:8080/product/onavailable');

@@ -36,7 +36,7 @@ class _MainCartScreenState extends State<MainCartScreen>
   @override
   Widget build(BuildContext context) {
     return AppBarMain(
-      isCart: false,
+      // isCart: false,
       leading: FractionallySizedBox(
         widthFactor: 0.8,
         heightFactor: 0.8,
@@ -46,7 +46,7 @@ class _MainCartScreenState extends State<MainCartScreen>
       ),
       child: Scaffold(
         body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Column(
             children: [
               Container(

@@ -35,12 +35,14 @@ class _MainOrderHistoryScreen extends State<MainOrderHistoryScreen>
   @override
   Widget build(BuildContext context) {
     return AppBarMain(
-      isCart: true,
+      // isCart: true,
       leading: GestureDetector(
         onTap: () {
           Navigator.of(context).pop();
         },
-        child: Icon(FontAwesomeIcons.angleLeft),
+        child: Container(
+            color: ColorPalette.backgroundScaffoldColor,
+            child: Icon(FontAwesomeIcons.angleLeft)),
       ),
       child: Scaffold(
         body: Column(

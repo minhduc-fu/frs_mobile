@@ -32,7 +32,9 @@ class _InforMationOrderBuyScreenState extends State<InforMationOrderBuyScreen> {
             onTap: () {
               Navigator.pop(context);
             },
-            child: Icon(FontAwesomeIcons.angleLeft),
+            child: Container(
+                color: ColorPalette.backgroundScaffoldColor,
+                child: Icon(FontAwesomeIcons.angleLeft)),
           ),
           title: Center(child: Text('Thông tin đơn hàng')),
           backgroundColor: ColorPalette.backgroundScaffoldColor,
@@ -47,6 +49,10 @@ class _InforMationOrderBuyScreenState extends State<InforMationOrderBuyScreen> {
                   children: [
                     Text(
                       'Thông tin nhận hàng',
+                      style: TextStyles.defaultStyle.setTextSize(20).bold,
+                    ),
+                    Text(
+                      '${widget.order.orderBuyID}',
                       style: TextStyles.defaultStyle.setTextSize(20).bold,
                     ),
                     SizedBox(height: 10),
@@ -167,7 +173,8 @@ class _InforMationOrderBuyScreenState extends State<InforMationOrderBuyScreen> {
                               builder: ((context, snapshot) {
                                 if (snapshot.connectionState ==
                                     ConnectionState.waiting) {
-                                  return CircularProgressIndicator();
+                                  return Center(
+                                      child: CircularProgressIndicator());
                                 } else if (snapshot.hasError) {
                                   return Text('Error: ${snapshot.error}');
                                 } else {

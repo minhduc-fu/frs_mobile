@@ -150,7 +150,7 @@ class _SplashScreenState extends State<SplashScreen> {
         // CircularProgressIndicator(color: Colors.white),
         SpinKitPulse(
           color: Colors.black,
-          size: 500,
+          size: 400,
         ),
       ],
     );

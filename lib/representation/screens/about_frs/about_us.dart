@@ -21,8 +21,10 @@ class AboutUs extends StatelessWidget {
           },
           child: Icon(FontAwesomeIcons.angleLeft),
         ),
-        title: Center(
-          child: Text('Về chúng tôi'),
+        centerTitle: true,
+        title: Text(
+          'Về chúng tôi',
+          style: TextStyles.h5.bold.setTextSize(19),
         ),
       ),
       body: Padding(
@@ -140,7 +142,10 @@ Widget _build(Widget icon, Color color, String title, String subTitle) {
         title,
         style: TextStyles.defaultStyle.bold,
       ),
-      Text(subTitle),
+      Text(
+        subTitle,
+        textAlign: TextAlign.center,
+      ),
     ],
   );
 }

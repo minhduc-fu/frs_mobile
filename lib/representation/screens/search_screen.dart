@@ -1,18 +1,18 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
 import '../../core/constants/color_constants.dart';
 import '../../core/constants/dismension_constants.dart';
 import '../../core/constants/textstyle_constants.dart';
-import '../../models/product.dart';
-import '../../models/search_result.dart';
 import '../../utils/local_storage_helper.dart';
 import '../widgets/app_bar_main.dart';
 
 class SearchScreen extends StatefulWidget {
-  const SearchScreen({super.key, required this.allproducts});
-  final List<Product> allproducts;
+  // const SearchScreen({super.key, required this.allproducts});
+  const SearchScreen({
+    super.key,
+  });
+  // final List<Product> allproducts;
   // final List<ProductModel>
   @override
   State<SearchScreen> createState() => _SearchScreenState();
@@ -23,15 +23,12 @@ class _SearchScreenState extends State<SearchScreen> {
   TextEditingController _searchController = TextEditingController();
   List<String> searchHistory = [];
   String searchTerm = "";
-  List<Product> searchResults = [];
 
   bool showAllSearchHistory = false;
   @override
   void initState() {
     super.initState();
     _focusNode = FocusNode();
-
-// lấy danh sách lịch sử tìm kiếm
     searchHistory = LocalStorageHelper.getSearchHistory();
   }
 
@@ -47,12 +44,6 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   void _onSearch(String searchTerm) {
-    final normalizedSearchTerm = searchTerm.toLowerCase();
-    final List<Product> searchResults = widget.allproducts.where((product) {
-      final normalizedProductName = product.productName.toLowerCase();
-      return normalizedProductName.contains(normalizedSearchTerm);
-    }).toList();
-
     if (searchTerm.isNotEmpty) {
       if (searchHistory.contains(searchTerm)) {
         searchHistory.remove(searchTerm);
@@ -60,14 +51,30 @@ class _SearchScreenState extends State<SearchScreen> {
 
       searchHistory.insert(0, searchTerm);
       LocalStorageHelper.setSearchHistory(searchHistory);
-      // LocalStorageHelper.addToSearchHistory(searchTerm);
     }
 
-    // Trả về kết quả tìm kiếm về màn hình trước (HomeScreen)
-    // Navigator.of(context).pop(searchResults);
-    Navigator.of(context).pop(
-        SearchResults(searchTerm: searchTerm, searchResults: searchResults));
+    Navigator.of(context).pop(searchTerm);
   }
+
+  // void _onSearch(String searchTerm) {
+  //   final normalizedSearchTerm = searchTerm.toLowerCase();
+  //   final List<Product> searchResults = widget.allproducts.where((product) {
+  //     final normalizedProductName = product.productName.toLowerCase();
+  //     return normalizedProductName.contains(normalizedSearchTerm);
+  //   }).toList();
+  //   if (searchTerm.isNotEmpty) {
+  //     if (searchHistory.contains(searchTerm)) {
+  //       searchHistory.remove(searchTerm);
+  //     }
+  //     searchHistory.insert(0, searchTerm);
+  //     LocalStorageHelper.setSearchHistory(searchHistory);
+  //     // LocalStorageHelper.addToSearchHistory(searchTerm);
+  //   }
+  //   // Trả về kết quả tìm kiếm về màn hình trước (HomeScreen)
+  //   // Navigator.of(context).pop(searchResults);
+  //   Navigator.of(context).pop(
+  //       SearchResults(searchTerm: searchTerm, searchResults: searchResults));
+  // }
 
   @override
   Widget build(BuildContext context) {

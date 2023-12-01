@@ -42,7 +42,7 @@ class _RejectingOrderBuyScreenState extends State<RejectingOrderBuyScreen> {
                     AuthProvider.userModel!.customer!.customerID),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CircularProgressIndicator();
+                    return Center(child: CircularProgressIndicator());
                   } else if (snapshot.hasError) {
                     return Text('Error: ${snapshot.error}');
                   } else {
@@ -106,7 +106,9 @@ class _RejectingOrderBuyScreenState extends State<RejectingOrderBuyScreen> {
                                         builder: ((context, snapshot) {
                                           if (snapshot.connectionState ==
                                               ConnectionState.waiting) {
-                                            return CircularProgressIndicator();
+                                            return Center(
+                                                child:
+                                                    CircularProgressIndicator());
                                           } else if (snapshot.hasError) {
                                             return Text(
                                                 'Error: ${snapshot.error}');

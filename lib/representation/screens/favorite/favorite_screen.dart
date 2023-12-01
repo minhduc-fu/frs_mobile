@@ -5,11 +5,13 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:frs_mobile/core/constants/color_constants.dart';
 import 'package:frs_mobile/core/constants/dismension_constants.dart';
 import 'package:frs_mobile/core/constants/textstyle_constants.dart';
+import 'package:frs_mobile/models/feedback_model.dart';
 import 'package:frs_mobile/models/productOwner_model.dart';
 import 'package:frs_mobile/models/product_detail_model.dart';
 import 'package:frs_mobile/models/product_image_model.dart';
 import 'package:frs_mobile/representation/screens/favorite/services/api_favorite.dart';
 import 'package:frs_mobile/representation/screens/product_detail/product_detail_demo.dart';
+import 'package:frs_mobile/representation/screens/product_detail/services/api_product_detail.dart';
 import 'package:frs_mobile/services/authentication_service.dart';
 import 'package:frs_mobile/services/authprovider.dart';
 import 'package:intl/intl.dart';
@@ -47,7 +49,10 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
         backgroundColor: ColorPalette.backgroundScaffoldColor,
         leading: ImageHelper.loadFromAsset(AssetHelper.imageLogoFRS),
         title: Center(
-          child: Text('Yêu thích'),
+          child: Text(
+            'Yêu thích',
+            style: TextStyles.h5.bold.setTextSize(18),
+          ),
         ),
       ),
       body: Padding(
@@ -88,6 +93,9 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                         ProductOwnerModel? productOwnerModel =
                             await AuthenticationService.getProductOwnerByID(
                                 productOwnerID);
+                        List<FeedbackModel> feedbackProduct =
+                            await ApiProductDetail.getFeedbackByProductID(
+                                products[index]['productDTO']['productID']);
                         List<ProductImageModel>? productImages =
                             await AuthenticationService
                                 .getAllProductImgByProductID(
@@ -99,6 +107,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                               productImageModel: productImages!,
                               productOwnerModel: productOwnerModel,
                               productDetailModel: productDetail,
+                              feedbackList: feedbackProduct,
                             ),
                           ),
                         );

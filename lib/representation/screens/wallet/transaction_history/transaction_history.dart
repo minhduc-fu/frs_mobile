@@ -19,7 +19,9 @@ class TransactionHistory extends StatelessWidget {
           onTap: () {
             Navigator.pop(context);
           },
-          child: Icon(FontAwesomeIcons.angleLeft),
+          child: Container(
+              color: ColorPalette.backgroundScaffoldColor,
+              child: Icon(FontAwesomeIcons.angleLeft)),
         ),
         title: Center(child: Text('Lịch sử giao dịch')),
       ),

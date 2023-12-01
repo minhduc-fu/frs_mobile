@@ -64,12 +64,18 @@ class _ConfirmMethodPaymentState extends State<ConfirmMethodPayment> {
           onTap: () {
             Navigator.pop(context);
           },
-          child: Icon(
-            FontAwesomeIcons.angleLeft,
-            size: kDefaultIconSize18,
+          child: Container(
+            color: ColorPalette.backgroundScaffoldColor,
+            child: Icon(
+              FontAwesomeIcons.angleLeft,
+            ),
           ),
         ),
-        title: Center(child: Text("Xác nhận thanh toán")),
+        title: Text(
+          "Xác nhận thanh toán",
+          style: TextStyles.defaultStyle.setTextSize(19).bold,
+        ),
+        centerTitle: true,
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),

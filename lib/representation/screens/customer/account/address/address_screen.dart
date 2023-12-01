@@ -126,7 +126,9 @@ class _AddressScreenState extends State<AddressScreen> {
         onTap: () {
           Navigator.pop(context);
         },
-        child: Icon(FontAwesomeIcons.angleLeft),
+        child: Container(
+            color: ColorPalette.backgroundScaffoldColor,
+            child: Icon(FontAwesomeIcons.angleLeft)),
       ),
       child: Scaffold(
         body: Padding(

@@ -41,6 +41,7 @@ class CartProvider with ChangeNotifier {
       orElse: () => CartItemModel(
         productOwnerID: item.productOwnerID,
         productOwnerName: item.productOwnerName,
+        productOwnerAddress: item.productOwnerAddress,
         productDetailModel: [],
       ),
     );

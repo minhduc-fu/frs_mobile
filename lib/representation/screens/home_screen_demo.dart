@@ -3,13 +3,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:frs_mobile/models/category.dart';
+import 'package:frs_mobile/models/feedback_model.dart';
 import 'package:frs_mobile/models/product_detail_model.dart';
 import 'package:frs_mobile/models/product_image_model.dart';
 import 'package:frs_mobile/representation/screens/about_frs/about_us.dart';
 import 'package:frs_mobile/representation/screens/about_frs/privacy_policy.dart';
 import 'package:frs_mobile/representation/screens/about_frs/terms_of_service.dart';
 import 'package:frs_mobile/representation/screens/product_detail/product_detail_demo.dart';
-
+import 'package:frs_mobile/representation/screens/product_detail/services/api_product_detail.dart';
+import 'package:frs_mobile/representation/screens/search_screen.dart';
 import '../../core/constants/color_constants.dart';
 import '../../core/constants/dismension_constants.dart';
 import '../../core/constants/textstyle_constants.dart';
@@ -37,6 +39,7 @@ class _HomeScreenDemoState extends State<HomeScreenDemo> {
   List<CategoryModel> categories = [];
   CategoryModel? selectedCategory;
   int selectedAllProduct = 0;
+  String searchTerm = '';
 
   Future<List<ProductModel>?> fetchProducts() async {
     switch (selectedAllProduct) {
@@ -54,6 +57,9 @@ class _HomeScreenDemoState extends State<HomeScreenDemo> {
         return await AuthenticationService.getAllProductOnRent();
       case 5:
         return await AuthenticationService.getAllProductOnSale();
+      case 6:
+        return await AuthenticationService.getAllProductByProductName(
+            searchTerm);
     }
   }
 
@@ -71,7 +77,6 @@ class _HomeScreenDemoState extends State<HomeScreenDemo> {
     }
   }
 
-  String searchTerm = '';
   final CarouselController _controller = CarouselController();
   int _currentIndexBanner = 0;
   final List<Widget> _bannerImages = [
@@ -81,7 +86,6 @@ class _HomeScreenDemoState extends State<HomeScreenDemo> {
         fit: BoxFit.cover),
   ];
 
-  String selectedBrand = "";
   FocusNode _focusNode = FocusNode();
   @override
   void initState() {
@@ -97,30 +101,19 @@ class _HomeScreenDemoState extends State<HomeScreenDemo> {
     super.dispose();
   }
 
-  // khi Người dùng click vào thanh search thì nó sẽ truyền allProducts qua cho SearchScreen
-  // push là nó sẽ đẩy thằng SearchScreen lên đầu tiên trong Stack
-  // và nhận lại kết quả khi SearchScreen đóng qua pop
-  // sử dụng async và await để khi push nó sẽ đợi SearchScreen đóng và trả về kết quả
-  // rồi mới thực hiện tiếp mấy lệnh ở dưới push
-  // nếu không dùng thì nó sẽ không chờ mà thay vào đó nó sẽ thực hiện mấy cái còn lại luôn
-  // void _handleSearchTap() async {
-  //   if (_focusNode.hasFocus) {
-  //     _focusNode.unfocus();
-  //   }
-  //   final result = await Navigator.of(context).push(CupertinoPageRoute(
-  //       builder: (context) => SearchScreen(allproducts: allProducts)));
-  //   if (result != null && result is SearchResults) {
-  //     setState(() {
-  //       searchTerm = result.searchTerm;
-  //       filteredProducts = result.searchResults;
-  //     });
-  //   } else if (result == null) {
-  //     setState(() {
-  //       filteredProducts = allProducts;
-  //       searchTerm = '';
-  //     });
-  //   }
-  // }
+  void _handleSearchTap() async {
+    if (_focusNode.hasFocus) {
+      _focusNode.unfocus();
+    }
+    final result = await Navigator.of(context)
+        .push(CupertinoPageRoute(builder: (context) => SearchScreen()));
+    if (result != null && result is String) {
+      setState(() {
+        searchTerm = result;
+        selectedAllProduct = 6;
+      });
+    }
+  }
 
   final GlobalKey<ScaffoldState> _scaffoldKey =
       GlobalKey<ScaffoldState>(); // để gọi Drawer
@@ -455,8 +448,8 @@ class _HomeScreenDemoState extends State<HomeScreenDemo> {
                         child: TextField(
                           controller: TextEditingController(text: searchTerm),
                           focusNode: _focusNode,
-                          // onTap: _handleSearchTap,
-                          onTap: () {},
+                          onTap: _handleSearchTap,
+                          // onTap: () {},
                           decoration: InputDecoration(
                             hintText: 'Bạn muốn tìm tên sản phẩm gì?',
                             hintStyle: TextStyles.defaultStyle,
@@ -529,14 +522,14 @@ class _HomeScreenDemoState extends State<HomeScreenDemo> {
                                     ),
                                     padding: EdgeInsets.symmetric(
                                         vertical: 10.0, horizontal: 20.0),
-                                    child: Text(
-                                      'No. ${index} image',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 20.0,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
+                                    // child: Text(
+                                    //   'No. ${index} image',
+                                    //   style: TextStyle(
+                                    //     color: Colors.white,
+                                    //     fontSize: 20.0,
+                                    //     fontWeight: FontWeight.bold,
+                                    //   ),
+                                    // ),
                                   ),
                                 ),
                               ],
@@ -584,7 +577,7 @@ class _HomeScreenDemoState extends State<HomeScreenDemo> {
                     future: fetchProducts(),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return CircularProgressIndicator();
+                        return Center(child: CircularProgressIndicator());
                       } else if (snapshot.hasError) {
                         return Text('Lỗi: ${snapshot.error}');
                       } else if (snapshot.hasData) {
@@ -594,7 +587,7 @@ class _HomeScreenDemoState extends State<HomeScreenDemo> {
                           gridDelegate:
                               SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2,
-                            mainAxisExtent: 270,
+                            mainAxisExtent: 280,
                             // tỷ lệ giữa chiều rộng và chiều cao
                             // childAspectRatio: 1 / 2,
                             // (MediaQuery.of(context).size.width - 20 - 10) /
@@ -624,7 +617,10 @@ class _HomeScreenDemoState extends State<HomeScreenDemo> {
                                   ProductOwnerModel? productOwnerModel =
                                       await AuthenticationService
                                           .getProductOwnerByID(productOwnerID);
-
+                                  List<FeedbackModel> feedbackProduct =
+                                      await ApiProductDetail
+                                          .getFeedbackByProductID(
+                                              products[index].productID);
                                   List<ProductImageModel>? productImages =
                                       await AuthenticationService
                                           .getAllProductImgByProductID(
@@ -636,6 +632,7 @@ class _HomeScreenDemoState extends State<HomeScreenDemo> {
                                         productImageModel: productImages!,
                                         productOwnerModel: productOwnerModel,
                                         productDetailModel: productDetail,
+                                        feedbackList: feedbackProduct,
                                       ),
                                     ),
                                   );

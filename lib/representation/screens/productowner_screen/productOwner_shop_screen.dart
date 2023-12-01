@@ -5,11 +5,13 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:frs_mobile/core/constants/color_constants.dart';
 import 'package:frs_mobile/core/constants/dismension_constants.dart';
 import 'package:frs_mobile/core/constants/textstyle_constants.dart';
+import 'package:frs_mobile/models/feedback_model.dart';
 import 'package:frs_mobile/models/productOwner_model.dart';
 import 'package:frs_mobile/models/product_detail_model.dart';
 import 'package:frs_mobile/models/product_image_model.dart';
 import 'package:frs_mobile/models/product_model.dart';
 import 'package:frs_mobile/representation/screens/product_detail/product_detail_demo.dart';
+import 'package:frs_mobile/representation/screens/product_detail/services/api_product_detail.dart';
 import 'package:frs_mobile/representation/screens/productowner_screen/services/api_producOwner.dart';
 import 'package:frs_mobile/representation/widgets/product_cart_demo.dart';
 import 'package:frs_mobile/services/authentication_service.dart';
@@ -324,7 +326,10 @@ class _ProductOwnerShopScreenState extends State<ProductOwnerShopScreen> {
                                 ProductOwnerModel? productOwnerModel =
                                     await AuthenticationService
                                         .getProductOwnerByID(productOwnerID);
-
+                                List<FeedbackModel> feedbackProduct =
+                                    await ApiProductDetail
+                                        .getFeedbackByProductID(
+                                            products[index].productID);
                                 List<ProductImageModel>? productImages =
                                     await AuthenticationService
                                         .getAllProductImgByProductID(
@@ -336,6 +341,7 @@ class _ProductOwnerShopScreenState extends State<ProductOwnerShopScreen> {
                                       productImageModel: productImages!,
                                       productOwnerModel: productOwnerModel,
                                       productDetailModel: productDetail,
+                                      feedbackList: feedbackProduct,
                                     ),
                                   ),
                                 );

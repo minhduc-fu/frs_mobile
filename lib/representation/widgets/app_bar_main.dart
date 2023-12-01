@@ -10,14 +10,14 @@ class AppBarMain extends StatelessWidget {
     super.key,
     required this.child,
     this.titleAppbar,
-    this.isCart = true,
+    // this.isCart = true,
     required this.leading,
     // this.onTap,
   });
 
   final Widget child;
   final String? titleAppbar;
-  final bool isCart;
+  // final bool isCart;
   final Widget leading;
   // final Function()? onTap;
 
@@ -31,44 +31,53 @@ class AppBarMain extends StatelessWidget {
             leading: leading,
             title: Text(
               titleAppbar ?? '',
-              style: TextStyles.h4,
+              style: TextStyles.h5.bold.setTextSize(19),
             ),
             backgroundColor: ColorPalette.backgroundScaffoldColor,
             centerTitle: true,
             automaticallyImplyLeading: false,
             elevation: 0,
-            // toolbarHeight: 90,
 
-            flexibleSpace: Stack(
-              children: [
-                Positioned(
-                  top: 18,
-                  right: 60,
-                  child: Icon(
-                    FontAwesomeIcons.bell,
-                    size: kDefaultIconSize18,
-                    color: ColorPalette.primaryColor,
-                  ),
+            actions: [
+              Padding(
+                padding: const EdgeInsets.only(right: 20),
+                child: Icon(
+                  FontAwesomeIcons.bell,
+                  size: 20,
+                  color: ColorPalette.primaryColor,
                 ),
-                Positioned(
-                  top: 18,
-                  right: 20,
-                  child: isCart
-                      ? GestureDetector(
-                          onTap: () {
-                            // Navigator.of(context)
-                            //     .pushNamed(CartFoodScreen.routeName);
-                          },
-                          child: Icon(
-                            FontAwesomeIcons.cartShopping,
-                            size: kDefaultIconSize18,
-                            color: ColorPalette.primaryColor,
-                          ),
-                        )
-                      : SizedBox(),
-                ),
-              ],
-            ),
+              ),
+            ],
+            // flexibleSpace: Stack(
+            //   children: [
+            //     Positioned(
+            //       top: 18,
+            //       right: 60,
+            //       child: Icon(
+            //         FontAwesomeIcons.bell,
+            //         size: kDefaultIconSize18,
+            //         color: ColorPalette.primaryColor,
+            //       ),
+            //     ),
+            //     Positioned(
+            //       top: 18,
+            //       right: 20,
+            //       child: isCart
+            //           ? GestureDetector(
+            //               onTap: () {
+            //                 // Navigator.of(context)
+            //                 //     .pushNamed(CartFoodScreen.routeName);
+            //               },
+            //               child: Icon(
+            //                 FontAwesomeIcons.cartShopping,
+            //                 size: kDefaultIconSize18,
+            //                 color: ColorPalette.primaryColor,
+            //               ),
+            //             )
+            //           : SizedBox(),
+            //     ),
+            //   ],
+            // ),
           ),
         ),
         Container(

@@ -86,8 +86,8 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
         if (_image == null) {
           imageUrl = AuthProvider.userModel?.customer?.avatarUrl;
         } else {
-          imageUrl = await AddImageCloud()
-              .uploadImageToStorage('avatarCustomer', _image!);
+          imageUrl = await AddImageCloud().uploadImageToStorage(
+              'avatarCustomer', _image!, AuthProvider.userModel!.accountID);
         }
         final response = await AuthenticationService.updateCustomer(
             customerID!, imageUrl!, fullName, phone, sex!);
@@ -149,8 +149,8 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
         },
       );
       try {
-        imageUrl = await AddImageCloud()
-            .uploadImageToStorage('avatarCustomer', _image!);
+        imageUrl = await AddImageCloud().uploadImageToStorage(
+            'avatarCustomer', _image!, AuthProvider.userModel!.accountID);
         final response = await AuthenticationService.createCustomer(accountID!,
             fullNameController.text, phoneController.text, isMale!, imageUrl!);
         Navigator.pop(context);
@@ -227,12 +227,14 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
     authProvider = Provider.of<AuthProvider>(context);
     return AppBarMain(
       titleAppbar: 'Thông tin cá nhân',
-      isCart: true,
+      // isCart: true,
       leading: GestureDetector(
         onTap: () {
           Navigator.of(context).pop();
         },
-        child: Icon(FontAwesomeIcons.angleLeft),
+        child: Container(
+            color: ColorPalette.backgroundScaffoldColor,
+            child: Icon(FontAwesomeIcons.angleLeft)),
       ),
       child: Scaffold(
         body: SingleChildScrollView(

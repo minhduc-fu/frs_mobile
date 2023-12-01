@@ -19,8 +19,10 @@ class TermsOfService extends StatelessWidget {
           },
           child: Icon(FontAwesomeIcons.angleLeft),
         ),
-        title: Center(
-          child: Text('Điều khoản dịch vụ'),
+        centerTitle: true,
+        title: Text(
+          'Điều khoản dịch vụ',
+          style: TextStyles.h5.bold.setTextSize(19),
         ),
       ),
       body: Padding(
