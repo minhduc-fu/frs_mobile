@@ -47,7 +47,13 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: ColorPalette.backgroundScaffoldColor,
-        leading: ImageHelper.loadFromAsset(AssetHelper.imageLogoFRS),
+        leading: FractionallySizedBox(
+          widthFactor: 0.8,
+          heightFactor: 0.8,
+          child: ImageHelper.loadFromAsset(
+            AssetHelper.imageLogoFRS,
+          ),
+        ),
         title: Center(
           child: Text(
             'Yêu thích',

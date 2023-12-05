@@ -426,6 +426,7 @@ class _CheckoutForRentState extends State<CheckoutForRent> {
 
     return Scaffold(
         appBar: AppBar(
+          elevation: 0,
           backgroundColor: ColorPalette.backgroundScaffoldColor,
           leading: GestureDetector(
             onTap: () {
@@ -1027,7 +1028,8 @@ class _CheckoutForRentState extends State<CheckoutForRent> {
                                           voucherDiscount;
                                   final total = totalRentPriceProduct +
                                       cocMoneyTotal +
-                                      shippingFee;
+                                      shippingFee +
+                                      10000;
                                   if (voucherID == 0) {
                                     final order = {
                                       'cocMoneyTotal': cocMoneyTotal,

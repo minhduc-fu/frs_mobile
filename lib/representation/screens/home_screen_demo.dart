@@ -582,95 +582,100 @@ class _HomeScreenDemoState extends State<HomeScreenDemo> {
                         return Text('Lỗi: ${snapshot.error}');
                       } else if (snapshot.hasData) {
                         List<ProductModel> products = snapshot.data ?? [];
-                        return GridView.builder(
-                          physics: ScrollPhysics(),
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            mainAxisExtent: 280,
-                            // tỷ lệ giữa chiều rộng và chiều cao
-                            // childAspectRatio: 1 / 2,
-                            // (MediaQuery.of(context).size.width - 20 - 10) /
-                            //     (2 * 260),
-                            mainAxisSpacing: 20,
-                            crossAxisSpacing: 10,
-                          ),
-                          shrinkWrap: true,
-                          itemCount: products.length,
-                          itemBuilder: ((context, index) {
-                            // double aspectRatio = index.isEven ? 1.5 : 1.0;
-                            // return ProductCardDemo(
-                            //   product: products[index],
-                            //   aspectRatio: aspectRatio,
-                            // );
+                        if (products.isEmpty) {
+                          return Center(child: Text('Không có sản phẩm'));
+                        } else {
+                          return GridView.builder(
+                            physics: ScrollPhysics(),
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              mainAxisExtent: 280,
+                              // tỷ lệ giữa chiều rộng và chiều cao
+                              // childAspectRatio: 1 / 2,
+                              // (MediaQuery.of(context).size.width - 20 - 10) /
+                              //     (2 * 260),
+                              mainAxisSpacing: 20,
+                              crossAxisSpacing: 10,
+                            ),
+                            shrinkWrap: true,
+                            itemCount: products.length,
+                            itemBuilder: ((context, index) {
+                              // double aspectRatio = index.isEven ? 1.5 : 1.0;
+                              // return ProductCardDemo(
+                              //   product: products[index],
+                              //   aspectRatio: aspectRatio,
+                              // );
 
-                            return Transform.translate(
-                              offset: Offset(0, index.isOdd ? 50.0 : 0.0),
-                              child: GestureDetector(
-                                onTap: () async {
-                                  ProductDetailModel? productDetail =
-                                      await AuthenticationService
-                                          .getProductByID(
-                                              products[index].productID);
-                                  int productOwnerID =
-                                      productDetail!.productOwnerID;
-                                  ProductOwnerModel? productOwnerModel =
-                                      await AuthenticationService
-                                          .getProductOwnerByID(productOwnerID);
-                                  List<FeedbackModel> feedbackProduct =
-                                      await ApiProductDetail
-                                          .getFeedbackByProductID(
-                                              products[index].productID);
-                                  List<ProductImageModel>? productImages =
-                                      await AuthenticationService
-                                          .getAllProductImgByProductID(
-                                              products[index].productID);
+                              return Transform.translate(
+                                offset: Offset(0, index.isOdd ? 50.0 : 0.0),
+                                child: GestureDetector(
+                                  onTap: () async {
+                                    ProductDetailModel? productDetail =
+                                        await AuthenticationService
+                                            .getProductByID(
+                                                products[index].productID);
+                                    int productOwnerID =
+                                        productDetail!.productOwnerID;
+                                    ProductOwnerModel? productOwnerModel =
+                                        await AuthenticationService
+                                            .getProductOwnerByID(
+                                                productOwnerID);
+                                    List<FeedbackModel> feedbackProduct =
+                                        await ApiProductDetail
+                                            .getFeedbackByProductID(
+                                                products[index].productID);
+                                    List<ProductImageModel>? productImages =
+                                        await AuthenticationService
+                                            .getAllProductImgByProductID(
+                                                products[index].productID);
 
-                                  await Navigator.of(context).push(
-                                    CupertinoPageRoute(
-                                      builder: (context) => ProductDetailDemo(
-                                        productImageModel: productImages!,
-                                        productOwnerModel: productOwnerModel,
-                                        productDetailModel: productDetail,
-                                        feedbackList: feedbackProduct,
+                                    await Navigator.of(context).push(
+                                      CupertinoPageRoute(
+                                        builder: (context) => ProductDetailDemo(
+                                          productImageModel: productImages!,
+                                          productOwnerModel: productOwnerModel,
+                                          productDetailModel: productDetail,
+                                          feedbackList: feedbackProduct,
+                                        ),
                                       ),
-                                    ),
-                                  );
-                                  // print(products[index].productID);
-                                  setState(() {});
-                                },
-                                child: ProductCardDemo(
-                                  product: products[index],
-                                  // aspectRatio: aspectRatio,
+                                    );
+                                    // print(products[index].productID);
+                                    setState(() {});
+                                  },
+                                  child: ProductCardDemo(
+                                    product: products[index],
+                                    // aspectRatio: aspectRatio,
+                                  ),
                                 ),
-                              ),
-                            );
-                            // double aspectRatio = index.isEven ? 1.5 : 1.0;
-                            // if (index % 2 == 0) {
-                            //   return GestureDetector(
-                            //     onTap: () {},
-                            //     child: ProductCardDemo(
-                            //       aspectRatio: aspectRatio,
-                            //       product: products[index],
-                            //     ),
-                            //   );
-                            // }
-                            // return OverflowBox(
-                            //   // maxHeight: 260.0 + 70,
-                            //   maxHeight: 400,
-                            //   child: GestureDetector(
-                            //     onTap: () {},
-                            //     child: Container(
-                            //       margin: EdgeInsets.only(top: 70),
-                            //       child: ProductCardDemo(
-                            //         aspectRatio: aspectRatio,
-                            //         product: products[index],
-                            //       ),
-                            //     ),
-                            //   ),
-                            // );
-                          }),
-                        );
+                              );
+                              // double aspectRatio = index.isEven ? 1.5 : 1.0;
+                              // if (index % 2 == 0) {
+                              //   return GestureDetector(
+                              //     onTap: () {},
+                              //     child: ProductCardDemo(
+                              //       aspectRatio: aspectRatio,
+                              //       product: products[index],
+                              //     ),
+                              //   );
+                              // }
+                              // return OverflowBox(
+                              //   // maxHeight: 260.0 + 70,
+                              //   maxHeight: 400,
+                              //   child: GestureDetector(
+                              //     onTap: () {},
+                              //     child: Container(
+                              //       margin: EdgeInsets.only(top: 70),
+                              //       child: ProductCardDemo(
+                              //         aspectRatio: aspectRatio,
+                              //         product: products[index],
+                              //       ),
+                              //     ),
+                              //   ),
+                              // );
+                            }),
+                          );
+                        }
                       } else {
                         return Text('Không có dữ liệu sản phẩm');
                       }

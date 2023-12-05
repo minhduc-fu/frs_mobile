@@ -96,6 +96,7 @@ class PaymentMethod {
                   onTap: () {
                     if (selectedPaymentMethod !=
                             "Chọn phương thức thanh toán" &&
+                        selectedPaymentMethod != "Khác" &&
                         isPaymentConfirmed) {
                       Navigator.of(context).push(CupertinoPageRoute(
                         builder: (context) => ConfirmMethodPayment(),

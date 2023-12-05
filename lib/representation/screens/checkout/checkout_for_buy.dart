@@ -959,8 +959,9 @@ class _CheckoutForBuyState extends State<CheckoutForBuy> {
                                                   previous + element['price'] ??
                                                   0) -
                                           voucherDiscount;
-                                  final total =
-                                      totalBuyPriceProduct + shippingFee;
+                                  final total = totalBuyPriceProduct +
+                                      shippingFee +
+                                      10000;
                                   if (voucherID == 0) {
                                     final order = {
                                       'customerAddress': customerAddress,

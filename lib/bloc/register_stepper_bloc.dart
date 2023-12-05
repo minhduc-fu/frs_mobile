@@ -8,25 +8,33 @@ class RegisterStepperBloc {
   static Future<String?> showRoleBottomSheet(BuildContext context) async {
     String selectedRole = 'Chọn vai trò';
     final result = await showModalBottomSheet<String>(
-      backgroundColor: ColorPalette.primaryColor,
+      elevation: 0,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(kDefaultCircle14),
-          topRight: Radius.circular(kDefaultCircle14),
-        ),
-      ),
+          borderRadius: BorderRadius.circular(kDefaultCircle14)),
+      backgroundColor: ColorPalette.backgroundScaffoldColor,
       context: context,
       builder: (BuildContext context) {
         return Container(
-          height: 150,
+          height: 250,
           child: Column(
             children: [
+              SizedBox(height: 20),
+              Center(
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: ColorPalette.primaryColor,
+                      borderRadius: BorderRadius.circular(kDefaultCircle14)),
+                  height: 7,
+                  width: 50,
+                ),
+              ),
+              SizedBox(height: 20),
               Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 25, vertical: 8),
                 child: Container(
                   decoration: BoxDecoration(
-                    color: ColorPalette.backgroundScaffoldColor,
+                    color: Colors.white,
                     borderRadius: BorderRadius.circular(kDefaultCircle14),
                     border: Border.all(color: ColorPalette.textHide),
                   ),
@@ -45,7 +53,7 @@ class RegisterStepperBloc {
                     const EdgeInsets.symmetric(horizontal: 25, vertical: 8),
                 child: Container(
                   decoration: BoxDecoration(
-                    color: ColorPalette.backgroundScaffoldColor,
+                    color: Colors.white,
                     borderRadius: BorderRadius.circular(kDefaultCircle14),
                     border: Border.all(color: ColorPalette.textHide),
                   ),
@@ -73,30 +81,38 @@ class RegisterStepperBloc {
   static Future<bool?> showGenderBottomSheet(BuildContext context) async {
     bool? isMale;
     final result = await showModalBottomSheet(
-      backgroundColor: ColorPalette.primaryColor,
+      elevation: 0,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(kDefaultCircle14),
-          topRight: Radius.circular(kDefaultCircle14),
-        ),
-      ),
+          borderRadius: BorderRadius.circular(kDefaultCircle14)),
+      backgroundColor: ColorPalette.backgroundScaffoldColor,
       context: context,
       builder: (BuildContext context) {
         return Container(
-          height: 150,
+          height: 250,
           child: Column(
             children: [
+              SizedBox(height: 20),
+              Center(
+                child: Container(
+                  decoration: BoxDecoration(
+                      color: ColorPalette.primaryColor,
+                      borderRadius: BorderRadius.circular(kDefaultCircle14)),
+                  height: 7,
+                  width: 50,
+                ),
+              ),
+              SizedBox(height: 20),
               Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 25, vertical: 8),
                 child: Container(
                   decoration: BoxDecoration(
-                    color: ColorPalette.backgroundScaffoldColor,
+                    color: Colors.white,
                     borderRadius: BorderRadius.circular(kDefaultCircle14),
                     border: Border.all(color: ColorPalette.textHide),
                   ),
                   child: ListTile(
-                    title: Text('Nam'),
+                    title: Center(child: Text('Nam')),
                     onTap: () {
                       Navigator.pop(context, false); // chọn giới tính là Nam
                     },
@@ -108,12 +124,12 @@ class RegisterStepperBloc {
                     const EdgeInsets.symmetric(horizontal: 25, vertical: 8),
                 child: Container(
                   decoration: BoxDecoration(
-                    color: ColorPalette.backgroundScaffoldColor,
+                    color: Colors.white,
                     borderRadius: BorderRadius.circular(kDefaultCircle14),
                     border: Border.all(color: ColorPalette.textHide),
                   ),
                   child: ListTile(
-                    title: Text('Nữ'),
+                    title: Center(child: Text('Nữ')),
                     onTap: () {
                       Navigator.pop(context, true);
                     },

@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/buy_order_history/model/productDTO_model.dart';
 
 class OrderRentDetailModel {
@@ -9,6 +11,9 @@ class OrderRentDetailModel {
   // double price;
   ProductDTOModel productDTOModel;
   int orderRentID;
+  double? ratingFeedback;
+  String? descriptionFeedback;
+  List<Uint8List>? imagesFeedback;
 
   OrderRentDetailModel({
     required this.orderRentDetailID,
@@ -19,6 +24,9 @@ class OrderRentDetailModel {
     // required this.price,
     required this.productDTOModel,
     required this.orderRentID,
+    this.ratingFeedback = 5.0,
+    this.descriptionFeedback = 'Tuyệt vời',
+    this.imagesFeedback,
   });
 
   factory OrderRentDetailModel.fromJson(Map<String, dynamic> json) {

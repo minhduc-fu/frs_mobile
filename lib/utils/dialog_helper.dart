@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:frs_mobile/core/constants/color_constants.dart';
+import 'package:frs_mobile/representation/widgets/button_widget.dart';
 
 import '../core/constants/dismension_constants.dart';
 import '../core/constants/textstyle_constants.dart';
@@ -28,10 +30,10 @@ void showCustomDialog(BuildContext context, String title, String content,
           opacity: Tween<double>(begin: 0.5, end: 1.0).animate(a1),
           child: AlertDialog(
             elevation: 0,
-            backgroundColor: Colors.white,
+            backgroundColor: ColorPalette.grey3a,
             title: Text(
               title,
-              style: TextStyles.h5.bold.setTextSize(18),
+              style: TextStyles.h5.bold.setTextSize(20),
             ),
             content: Text(
               content,
@@ -41,6 +43,19 @@ void showCustomDialog(BuildContext context, String title, String content,
               borderRadius: BorderRadius.circular(kDefaultCircle14),
               borderSide: BorderSide.none,
             ),
+            actions: [
+              barrierDismissible
+                  ? ButtonWidget(
+                      title: "OK",
+                      size: 18,
+                      height: 40,
+                      width: 120,
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                    )
+                  : SizedBox(),
+            ],
           ),
         ),
       );

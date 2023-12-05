@@ -51,6 +51,36 @@ class RentalCartProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  bool areSelectedProductsSameDate() {
+    final selectedProductsMap = <int, List<ProductDetailModel>>{};
+
+    for (var cartItem in _rentalCartItems) {
+      for (var product in cartItem.productDetailModel) {
+        if (product.isChecked) {
+          final ownerID = cartItem.productOwnerID;
+
+          if (!selectedProductsMap.containsKey(ownerID)) {
+            selectedProductsMap[ownerID] = [];
+          }
+
+          selectedProductsMap[ownerID]!.add(product);
+        }
+      }
+    }
+
+    return selectedProductsMap.values.every(
+      (selectedProducts) {
+        final startDate = selectedProducts.first.startDate;
+        final endDate = selectedProducts.first.endDate;
+
+        return selectedProducts.every(
+          (product) =>
+              product.startDate == startDate && product.endDate == endDate,
+        );
+      },
+    );
+  }
+
   bool isProductInRentalCart(int productId) {
     return _rentalCartItems.any((rentalCartItem) {
       return rentalCartItem.productDetailModel.any((product) {

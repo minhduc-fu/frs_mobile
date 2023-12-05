@@ -43,4 +43,28 @@ class AddImageCloud {
       return [];
     }
   }
+
+  Future<List<String>> uploadListImageFeedbackToStorage(String folderName,
+      List<Uint8List> files, int orderRentID, int feedbackID) async {
+    List<String> imageUrls = [];
+    try {
+      for (int i = 0; i < files.length; i++) {
+        Uint8List file = files[i];
+        String childName =
+            '$folderName/imagesByOrderRentID$orderRentID/feedbackID$feedbackID/image_$i.jpg';
+        // String childName = '$folderName/image_$i.jpg';
+        Reference ref = _storage.ref().child(childName);
+
+        UploadTask uploadTask = ref.putData(file);
+        TaskSnapshot snapshot = await uploadTask;
+        String imageUrl = await snapshot.ref.getDownloadURL();
+        imageUrls.add(imageUrl);
+      }
+
+      return imageUrls;
+    } catch (e) {
+      print('Lỗi khi tải ảnh lên: $e');
+      return [];
+    }
+  }
 }

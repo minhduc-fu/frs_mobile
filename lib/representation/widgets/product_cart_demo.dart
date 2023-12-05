@@ -176,11 +176,8 @@ class _ProductCardDemoState extends State<ProductCardDemo> {
                           return Future.value(!isLiked);
                         }
                       } else {
-                        showCustomDialog(
-                            context,
-                            "Lỗi",
-                            "Vui lòng 'Đăng nhập' vào hệ thống để 'Đặt hàng'",
-                            true);
+                        showCustomDialog(context, "Lỗi",
+                            "Vui lòng 'Đăng nhập' vào hệ thống", true);
                         return Future.value(false);
                       }
                     },

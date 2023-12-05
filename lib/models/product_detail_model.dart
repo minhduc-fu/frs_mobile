@@ -10,6 +10,7 @@ class ProductDetailModel {
   String? productAvt;
   String productCondition;
   String description;
+  String term;
   double price;
   String status;
   String checkType;
@@ -29,6 +30,7 @@ class ProductDetailModel {
     this.productAvt,
     required this.productCondition,
     required this.description,
+    required this.term,
     required this.price,
     required this.status,
     required this.checkType,
@@ -136,6 +138,7 @@ class ProductDetailModel {
       productAvt: json['productAvt'],
       productCondition: json['productCondition'],
       description: json['description'],
+      term: json['term'] != null ? json['term'] : '',
       price: json['price'].toDouble(),
       status: json['status'],
       checkType: json['checkType'],

@@ -39,9 +39,11 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
       _image; // lưu trữ dữ liệu của ảnh đã chọn. Uint8List là 1 mảng byte không dấu
   void selectImage() async {
     Uint8List img = await pickAImage(ImageSource.gallery);
-    setState(() {
-      _image = img;
-    });
+    if (img.isNotEmpty) {
+      setState(() {
+        _image = img;
+      });
+    }
   }
 
   late AuthProvider authProvider;

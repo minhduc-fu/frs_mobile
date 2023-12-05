@@ -6,6 +6,7 @@ import 'package:frs_mobile/core/constants/color_constants.dart';
 import 'package:frs_mobile/core/constants/dismension_constants.dart';
 import 'package:frs_mobile/core/constants/textstyle_constants.dart';
 import 'package:frs_mobile/models/productOwner_model.dart';
+// import 'package:frs_mobile/models/productOwner_model.dart';
 import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/rental_order_history/models/order_rent_detail_model.dart';
 import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/rental_order_history/models/order_rent_model.dart';
 import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/rental_order_history/services/api_order_rent_history.dart';
@@ -55,10 +56,10 @@ class _InforMationOrderRentScreenState
                       'Thông tin nhận hàng',
                       style: TextStyles.defaultStyle.setTextSize(20).bold,
                     ),
-                    Text(
-                      '${widget.order.orderRentID}',
-                      style: TextStyles.defaultStyle.setTextSize(20).bold,
-                    ),
+                    // Text(
+                    //   '${widget.order.orderRentID}',
+                    //   style: TextStyles.defaultStyle.setTextSize(20).bold,
+                    // ),
                     SizedBox(height: 10),
                     Container(
                       padding: EdgeInsets.all(10),
@@ -369,7 +370,7 @@ class _InforMationOrderRentScreenState
                               children: [
                                 Text('Thành tiền'),
                                 Text(
-                                  '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(widget.order.total + 10000)}',
+                                  '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(widget.order.total)}',
                                 ),
                               ],
                             ),

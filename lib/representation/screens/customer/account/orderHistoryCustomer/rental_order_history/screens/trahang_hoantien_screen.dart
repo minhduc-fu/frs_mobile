@@ -470,7 +470,7 @@ class _TraHangHoanTienOrderRentScreenState
                               children: [
                                 Text('Thành tiền'),
                                 Text(
-                                  '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(widget.order.total + 10000)}',
+                                  '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(widget.order.total)}',
                                 ),
                               ],
                             ),
@@ -606,7 +606,7 @@ class _TraHangHoanTienOrderRentScreenState
                                 padding: const EdgeInsets.all(10.0),
                                 child: Column(
                                   children: [
-                                    Icon(FontAwesomeIcons.plus),
+                                    Icon(FontAwesomeIcons.camera),
                                     Text(
                                       'Thêm',
                                       style: TextStyles.defaultStyle,

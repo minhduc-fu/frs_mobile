@@ -3,6 +3,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:expandable_text/expandable_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:frs_mobile/models/cart_item_model.dart';
 import 'package:frs_mobile/models/feedback_model.dart';
@@ -59,8 +60,9 @@ class _ProductDetailDemoState extends State<ProductDetailDemo> {
   DateTime? endDate;
   double selectedRenPrice = 0;
 
-  bool? isRenting = null;
   bool isAccept = false;
+
+  bool? isRenting = null;
   void toggleRenting(bool? value) {
     setState(() {
       isRenting = value ?? false;
@@ -178,13 +180,27 @@ class _ProductDetailDemoState extends State<ProductDetailDemo> {
   }
 
   Widget buildFeedbackList() {
-    return ListView.builder(
-      shrinkWrap: true,
-      itemCount: widget.feedbackList.length,
-      itemBuilder: (context, index) {
-        return buildFeedbackItem(widget.feedbackList[index]);
-      },
-    );
+    if (widget.feedbackList.isEmpty) {
+      return Column(
+        children: [
+          Row(
+            children: [
+              SizedBox(width: 10),
+              Text('Chưa có đánh giá nào'),
+            ],
+          ),
+          SizedBox(height: 10),
+        ],
+      );
+    } else {
+      return ListView.builder(
+        shrinkWrap: true,
+        itemCount: widget.feedbackList.length,
+        itemBuilder: (context, index) {
+          return buildFeedbackItem(widget.feedbackList[index]);
+        },
+      );
+    }
   }
 
   Widget buildFeedbackItem(FeedbackModel feedback) {
@@ -224,13 +240,30 @@ class _ProductDetailDemoState extends State<ProductDetailDemo> {
             SizedBox(height: 10),
             Row(
               children: [
-                Icon(
-                  FontAwesomeIcons.solidStar,
-                  size: 16,
-                  color: Colors.amber,
+                RatingBar(
+                  itemSize: 18,
+                  initialRating: feedback.ratingPoint.toDouble(),
+                  minRating: 1,
+                  direction: Axis.horizontal,
+                  allowHalfRating: false,
+                  itemCount: 5,
+                  itemPadding: EdgeInsets.symmetric(horizontal: 2.0),
+                  ratingWidget: RatingWidget(
+                    full: Icon(
+                      FontAwesomeIcons.solidStar,
+                      color: Colors.amber,
+                      size: 18,
+                    ),
+                    half: Icon(FontAwesomeIcons.solidStar),
+                    empty: Icon(
+                      FontAwesomeIcons.star,
+                      color: Colors.amber,
+                      size: 18,
+                    ),
+                  ),
+                  onRatingUpdate: (value) {},
+                  ignoreGestures: true,
                 ),
-                SizedBox(width: 10),
-                Text('${feedback.ratingPoint}'),
               ],
             ),
             SizedBox(height: 10),
@@ -608,58 +641,67 @@ class _ProductDetailDemoState extends State<ProductDetailDemo> {
                       ),
                     ),
                     SizedBox(height: 20),
-                    if (checkType == "RENT" || checkType == "SALE_RENT")
-                      Container(
-                        decoration: BoxDecoration(
-                            borderRadius:
-                                BorderRadius.circular(kDefaultCircle14),
-                            color: ColorPalette.hideColor),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 10),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  Icon(
-                                    FontAwesomeIcons.rectangleList,
-                                    size: 20,
+                    Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(kDefaultCircle14),
+                          color: ColorPalette.hideColor),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 10),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Icon(
+                                  FontAwesomeIcons.rectangleList,
+                                  size: 20,
+                                ),
+                                SizedBox(width: 10),
+                                Text(
+                                  checkType == "RENT"
+                                      ? "Điều khoản thuê"
+                                      : 'Điều khoản mua',
+                                  style: TextStyles.h5.bold.setTextSize(15),
+                                ),
+                              ],
+                            ),
+                            SizedBox(height: 20),
+                            productDetailModel.term == ''
+                                ? Text('Chưa có quy định thuê')
+                                : ExpandableText(
+                                    '${productDetailModel.term.replaceAll('@', '\n')}',
+                                    expandText: 'Xem thêm',
+                                    linkColor: Colors.blue,
+                                    collapseText: 'Thu gọn',
+                                    maxLines: 5,
                                   ),
-                                  SizedBox(width: 10),
-                                  Text(
-                                    "Điều khoản thuê",
-                                    style: TextStyles.h5.bold.setTextSize(15),
+                            Row(
+                              children: [
+                                SizedBox(
+                                  width: 20,
+                                  child: Checkbox(
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(14)),
+                                    value: isAccept,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        isAccept = value ?? false;
+                                      });
+                                      print('${isAccept}');
+                                    },
                                   ),
-                                ],
-                              ),
-                              SizedBox(height: 10),
-                              Text('1. Giao hàng nhanh toàn quốc'),
-                              Text('2. Giao hàng nhanh toàn quốc'),
-                              Text('3. Giao hàng nhanh toàn quốc'),
-                              Text('4. Giao hàng nhanh toàn quốc'),
-                              Row(
-                                children: [
-                                  SizedBox(
-                                    width: 20,
-                                    child: Radio(
-                                      materialTapTargetSize:
-                                          MaterialTapTargetSize.shrinkWrap,
-                                      activeColor: ColorPalette.primaryColor,
-                                      value: true,
-                                      groupValue: isAccept,
-                                      onChanged: (value) {},
-                                    ),
-                                  ),
-                                  SizedBox(width: 10),
-                                  Text('Tôi đã đọc và đồng ý với các quy định',
-                                      style: TextStyles.defaultStyle.bold),
-                                ],
-                              ),
-                            ],
-                          ),
+                                ),
+                                SizedBox(width: 10),
+                                Text('Tôi đã đọc và đồng ý với các quy định',
+                                    style: TextStyles.defaultStyle.bold),
+                              ],
+                            ),
+                          ],
                         ),
                       ),
+                    ),
                     SizedBox(height: 20),
                     // information PO
                     Container(
@@ -799,6 +841,7 @@ class _ProductDetailDemoState extends State<ProductDetailDemo> {
                           borderRadius: BorderRadius.circular(kDefaultCircle14),
                           color: ColorPalette.hideColor),
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           buildRatingHeader(),
                           Divider(
@@ -853,7 +896,22 @@ class _ProductDetailDemoState extends State<ProductDetailDemo> {
                                     // Những radio có cùng giá trị với groupValue thì là cùng nhóm
                                     groupValue: isRenting,
                                     // onChanged sẽ truyền value vào toggleRenting
-                                    onChanged: toggleRenting,
+                                    onChanged: (value) {
+                                      if (widget.productDetailModel!.term !=
+                                          '') {
+                                        if (isAccept) {
+                                          toggleRenting(value);
+                                        } else {
+                                          showCustomDialog(
+                                              context,
+                                              'Lỗi',
+                                              "Vui lòng đọc và đồng ý quy định thuê",
+                                              true);
+                                        }
+                                      } else {
+                                        toggleRenting(value);
+                                      }
+                                    },
                                   ),
                                   Text(
                                     'Thuê',
@@ -884,6 +942,8 @@ class _ProductDetailDemoState extends State<ProductDetailDemo> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: productDetailModel.rentalPrices!
+                                        .where((rentalPrice) =>
+                                            rentalPrice!.mockDay != 1)
                                         .map((rentalPrice) {
                                       final index = productDetailModel
                                               .rentalPrices!
@@ -1055,6 +1115,8 @@ class _ProductDetailDemoState extends State<ProductDetailDemo> {
                                                 description: widget
                                                     .productDetailModel!
                                                     .description,
+                                                term: widget
+                                                    .productDetailModel!.term,
                                                 price: widget
                                                     .productDetailModel!.price,
                                                 status: widget
@@ -1068,9 +1130,8 @@ class _ProductDetailDemoState extends State<ProductDetailDemo> {
                                                 rentalPrices: widget
                                                     .productDetailModel!
                                                     .rentalPrices,
-                                                productAvt: widget
-                                                    .productDetailModel!
-                                                    .productAvt,
+                                                productAvt:
+                                                    widget.productDetailModel!.productAvt,
                                                 startDate: startDate,
                                                 endDate: endDate,
                                                 selectedRentPrice: selectedRenPrice);
@@ -1150,12 +1211,29 @@ class _ProductDetailDemoState extends State<ProductDetailDemo> {
                               Row(
                                 children: [
                                   Radio(
-                                      materialTapTargetSize:
-                                          MaterialTapTargetSize.shrinkWrap,
-                                      activeColor: ColorPalette.primaryColor,
-                                      value: false,
-                                      groupValue: isRenting,
-                                      onChanged: toggleRenting),
+                                    materialTapTargetSize:
+                                        MaterialTapTargetSize.shrinkWrap,
+                                    activeColor: ColorPalette.primaryColor,
+                                    value: false,
+                                    groupValue: isRenting,
+                                    onChanged: (value) {
+                                      if (widget.productDetailModel!.term !=
+                                          '') {
+                                        if (isAccept) {
+                                          toggleRenting(value);
+                                        } else {
+                                          showCustomDialog(
+                                              context,
+                                              'Lỗi',
+                                              "Vui lòng đọc và đồng ý quy định mua",
+                                              true);
+                                        }
+                                      } else {
+                                        toggleRenting(value);
+                                      }
+                                    },
+                                    // onChanged: toggleRenting
+                                  ),
                                   Text(
                                     'Mua',
                                     style: TextStyles.defaultStyle.bold,

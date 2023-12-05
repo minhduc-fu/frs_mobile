@@ -31,63 +31,72 @@ class _RentalCartScreenState extends State<RentalCartScreen> {
   double totalAmount = 0.0;
 
   void placeOrder() async {
+    final rentalCartProvider =
+        Provider.of<RentalCartProvider>(context, listen: false);
     final accountID = AuthProvider.userModel!.accountID;
     final wallet = await AuthenticationService.getWalletByAccountID(accountID);
-
-    if (wallet != null && wallet.balance >= totalAmount) {
-      Navigator.of(context)
-          .push(CupertinoPageRoute(builder: ((context) => CheckoutForRent())));
-    } else {
-      showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text(
-              'Số dư của ví không đủ',
-              style: TextStyles.h4.bold,
-            ),
-            content: Container(
-              height: 50,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Số dư hiện tại của ví: ${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(wallet!.balance)}',
-                    style: TextStyles.h5,
-                  ),
-                  Text(
-                    'Bạn cần nạp thêm: ${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(totalAmount - wallet.balance)}',
-                    style: TextStyles.h5,
-                  ),
-                ],
+    if (rentalCartProvider.areSelectedProductsSameDate()) {
+      if (wallet != null && wallet.balance >= totalAmount) {
+        Navigator.of(context).push(
+            CupertinoPageRoute(builder: ((context) => CheckoutForRent())));
+      } else {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text(
+                'Số dư của ví không đủ',
+                style: TextStyles.h4.bold,
               ),
-            ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: Text(
-                  'Hủy',
-                  style: TextStyles.defaultStyle.bold
-                      .setColor(Colors.red)
-                      .setTextSize(18),
+              content: Container(
+                height: 50,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Số dư hiện tại của ví: ${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(wallet!.balance)}',
+                      style: TextStyles.h5,
+                    ),
+                    Text(
+                      'Bạn cần nạp thêm: ${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(totalAmount - wallet.balance)}',
+                      style: TextStyles.h5,
+                    ),
+                  ],
                 ),
               ),
-              ButtonWidget(
-                title: "Nạp tiền vào ví",
-                size: 18,
-                height: 40,
-                width: 160,
-                onTap: () {
-                  Navigator.pop(context);
-                  Navigator.of(context).pushNamed(WalletScreen.routeName);
-                },
-              ),
-            ],
-          );
-        },
-      );
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text(
+                    'Hủy',
+                    style: TextStyles.defaultStyle.bold
+                        .setColor(Colors.red)
+                        .setTextSize(18),
+                  ),
+                ),
+                ButtonWidget(
+                  title: "Nạp tiền vào ví",
+                  size: 18,
+                  height: 40,
+                  width: 160,
+                  onTap: () {
+                    Navigator.pop(context);
+                    Navigator.of(context).pushNamed(WalletScreen.routeName);
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      }
+    } else {
+      showCustomDialog(
+          context,
+          'Lỗi',
+          "Vui lòng chọn những sản phẩm có cùng Ngày bắt đầu và Ngày kết thúc",
+          true);
     }
   }
 
@@ -428,7 +437,7 @@ class _RentalCartScreenState extends State<RentalCartScreen> {
                               placeOrder();
                             } else {
                               showCustomDialog(context, "Lỗi",
-                                  "Làm ơn hãy chọn sản phẩm!", true);
+                                  "Vui lòng chọn sản phẩm!", true);
                             }
                           } else {
                             showCustomDialog(context, "Lỗi",

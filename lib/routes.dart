@@ -10,7 +10,7 @@ import 'package:frs_mobile/representation/screens/wallet/wallet_screen.dart';
 import 'representation/screens/guest/account_screen.dart';
 import 'representation/screens/cart/main_cart_screen.dart';
 import 'representation/screens/chat_screen.dart';
-import 'representation/screens/customer/account/account_screen_true.dart';
+import 'representation/screens/customer/account/account_screen_customer.dart';
 import 'representation/screens/customer/account/orderHistoryCustomer/main_order_history_screen.dart';
 import 'representation/screens/customer/account/profile/customer_profile_screen.dart';
 import 'representation/screens/customer/customer_main_screen.dart';

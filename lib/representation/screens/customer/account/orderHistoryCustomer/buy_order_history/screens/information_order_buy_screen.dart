@@ -317,7 +317,7 @@ class _InforMationOrderBuyScreenState extends State<InforMationOrderBuyScreen> {
                                 //       decoration: TextDecoration.lineThrough),
                                 // ),
                                 Text(
-                                  '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(widget.order.total + 10000)}',
+                                  '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(widget.order.total)}',
                                 ),
                               ],
                             ),

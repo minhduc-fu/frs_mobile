@@ -254,7 +254,7 @@ class _ReturnOrderRentScreenState extends State<ReturnOrderRentScreen> {
                                         children: [
                                           Text('Thành tiền'),
                                           Text(
-                                            '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(orders[index].total + 10000)}',
+                                            '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(orders[index].total)}',
                                           ),
                                         ],
                                       ),

@@ -14,6 +14,8 @@ class TransactionHistory extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
+        elevation: 0,
         backgroundColor: ColorPalette.backgroundScaffoldColor,
         leading: GestureDetector(
           onTap: () {
@@ -23,7 +25,10 @@ class TransactionHistory extends StatelessWidget {
               color: ColorPalette.backgroundScaffoldColor,
               child: Icon(FontAwesomeIcons.angleLeft)),
         ),
-        title: Center(child: Text('Lịch sử giao dịch')),
+        title: Text(
+          'Lịch sử giao dịch',
+          style: TextStyles.defaultStyle.bold.setTextSize(19),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20),

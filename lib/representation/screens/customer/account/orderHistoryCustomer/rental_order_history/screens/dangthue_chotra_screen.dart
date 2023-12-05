@@ -396,7 +396,7 @@ class _DangthueChotraScreenState extends State<DangthueChotraScreen> {
                               children: [
                                 Text('Thành tiền'),
                                 Text(
-                                  '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(widget.order.total + 10000)}',
+                                  '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(widget.order.total)}',
                                 ),
                               ],
                             ),
@@ -468,7 +468,7 @@ class _DangthueChotraScreenState extends State<DangthueChotraScreen> {
                                 padding: const EdgeInsets.all(10.0),
                                 child: Column(
                                   children: [
-                                    Icon(FontAwesomeIcons.plus),
+                                    Icon(FontAwesomeIcons.camera),
                                     Text(
                                       'Thêm',
                                       style: TextStyles.defaultStyle,

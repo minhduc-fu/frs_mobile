@@ -59,7 +59,7 @@ class _PendingOrderRentScreenState extends State<PendingOrderRentScreen> {
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: AuthProvider.userModel!.status == "NOT_VERIFIED"
-            ? Text('Làm ơn Cập nhật thông tin cá nhân')
+            ? Text('Vui lòng Cập nhật thông tin cá nhân')
             : FutureBuilder(
                 future: ApiOderRentHistory.getAllPendingOrderRentByCustomerID(
                     AuthProvider.userModel!.customer!.customerID),
@@ -275,7 +275,7 @@ class _PendingOrderRentScreenState extends State<PendingOrderRentScreen> {
                                       children: [
                                         Text('Thành tiền'),
                                         Text(
-                                          '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(orders[index].total + 10000)}',
+                                          '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(orders[index].total)}',
                                         ),
                                       ],
                                     ),

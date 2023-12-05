@@ -11,7 +11,6 @@ import 'package:frs_mobile/representation/screens/customer/account/orderHistoryC
 import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/rental_order_history/services/api_order_rent_history.dart';
 import 'package:frs_mobile/representation/widgets/button_widget.dart';
 import 'package:frs_mobile/services/authprovider.dart';
-import 'package:frs_mobile/utils/dialog_helper.dart';
 import 'package:intl/intl.dart';
 
 class CompletedOrderRentScreen extends StatefulWidget {
@@ -32,11 +31,11 @@ class _CompletedOrderRentScreenState extends State<CompletedOrderRentScreen> {
     );
   }
 
-  void _feedbackOrder() async {
+  void _feedbackOrder(OrderRentModel order) async {
     Navigator.push(
       context,
       CupertinoPageRoute(
-        builder: (context) => FeedbackScreen(),
+        builder: (context) => FeedbackScreen(order: order),
       ),
     );
   }
@@ -105,12 +104,12 @@ class _CompletedOrderRentScreenState extends State<CompletedOrderRentScreen> {
                                             orders[index].productOwnerName,
                                             style: TextStyles.h5.bold,
                                           ),
-                                          Text(
-                                            orders[index].status == 'COMPLETED'
-                                                ? "Hoàn thành"
-                                                : "",
-                                            style: TextStyles.h5.bold,
-                                          ),
+                                          if (orders[index].status ==
+                                              'COMPLETED')
+                                            Text(
+                                              "Hoàn thành",
+                                              style: TextStyles.h5.bold,
+                                            ),
                                         ],
                                       ),
                                     ),
@@ -276,7 +275,7 @@ class _CompletedOrderRentScreenState extends State<CompletedOrderRentScreen> {
                                         children: [
                                           Text('Thành tiền'),
                                           Text(
-                                            '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(orders[index].total + 10000)}',
+                                            '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(orders[index].total)}',
                                           ),
                                         ],
                                       ),
@@ -290,7 +289,7 @@ class _CompletedOrderRentScreenState extends State<CompletedOrderRentScreen> {
                                       children: [
                                         ButtonWidget(
                                           onTap: () {
-                                            _feedbackOrder();
+                                            _feedbackOrder(orders[index]);
                                           },
                                           title: 'Đánh giá',
                                           size: 18,
