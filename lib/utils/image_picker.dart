@@ -9,6 +9,8 @@ pickAImage(ImageSource source) async {
   if (_file != null) {
     return await _file
         .readAsBytes(); // đọc dữ liệu từ_file và trả về dưới dạng mảng byte(Uint8List). lưu trữ hoặc xử lý ảnh sau khi nó được chọn
+  } else {
+    print('No Image Selected!');
+    return null;
   }
-  print('No Image Selected!');
 }

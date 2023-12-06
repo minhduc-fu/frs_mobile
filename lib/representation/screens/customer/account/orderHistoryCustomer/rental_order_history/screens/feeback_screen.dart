@@ -43,8 +43,8 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
 
   void selectImage(int orderDetailIndex) async {
     if (imagesList[orderDetailIndex].length < 3) {
-      Uint8List img = await pickAImage(ImageSource.gallery);
-      if (img.isNotEmpty) {
+      Uint8List? img = await pickAImage(ImageSource.gallery);
+      if (img != null && img.isNotEmpty) {
         setState(() {
           imagesList[orderDetailIndex].add(img);
           if (imagesList[orderDetailIndex].length == 3) {
@@ -56,25 +56,19 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
         if (imagesList[orderDetailIndex].length == 3) {
           print("${orderDetails![orderDetailIndex].imagesFeedback}");
         }
-        if (imagesList[orderDetailIndex].isEmpty) {
-          print('empty');
-        } else {
-          print('notEmpty');
-        }
-        Navigator.pop(context);
-      } else {
-        print('No Image Selected');
       }
     }
   }
 
   void retakeImage(int orderDetailIndex, int imageIndex) async {
     Uint8List img = await pickAImage(ImageSource.gallery);
-    setState(() {
-      imagesList[orderDetailIndex][imageIndex] = img;
-    });
-    orderDetails![orderDetailIndex].imagesFeedback =
-        imagesList[orderDetailIndex];
+    if (img.isNotEmpty) {
+      setState(() {
+        imagesList[orderDetailIndex][imageIndex] = img;
+      });
+      orderDetails![orderDetailIndex].imagesFeedback =
+          imagesList[orderDetailIndex];
+    }
   }
 
   String getRatingDescription(double rating) {
@@ -122,27 +116,35 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
   }
 
   Future<void> sendFeedback() async {
+    bool allOrderDetailsValid = true;
     for (int i = 0; i < orderDetails!.length; i++) {
-      var product = orderDetails![i];
-      int productID = product.productDTOModel.productID;
-      int customerID = AuthProvider.userModel!.customer!.customerID;
-      if (descriptionControllers[i].text.isEmpty) {
-        showCustomDialog(context, 'Lỗi', 'Vui lòng nhập đầy đủ mô tả".', true);
-      } else if (imagesList[i].isEmpty) {
-        showCustomDialog(
-            context, 'Lỗi', 'Vui lòng gửi ít nhất một ảnh".', true);
-      } else {
-        showDialog(
-          context: context,
-          builder: (context) {
-            return Center(
-              child: CircularProgressIndicator(
-                color: ColorPalette.primaryColor,
-              ),
-            );
-          },
-        );
-        try {
+      if (imagesList[i].isEmpty) {
+        showCustomDialog(context, 'Lỗi', 'Vui lòng gửi ít nhất một ảnh.', true);
+        allOrderDetailsValid = false;
+        break;
+      } else if (descriptionControllers[i].text.isEmpty) {
+        showCustomDialog(context, 'Lỗi', 'Vui lòng nhập đầy đủ mô tả.', true);
+        allOrderDetailsValid = false;
+        break;
+      }
+    }
+
+    if (allOrderDetailsValid) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return Center(
+            child: CircularProgressIndicator(
+              color: ColorPalette.primaryColor,
+            ),
+          );
+        },
+      );
+      try {
+        for (int i = 0; i < orderDetails!.length; i++) {
+          var product = orderDetails![i];
+          int productID = product.productDTOModel.productID;
+          int customerID = AuthProvider.userModel!.customer!.customerID;
           String descriptionFeedback = descriptionControllers[i].text;
           int ratingPoint = product.ratingFeedback!.toInt();
           int feedBackID = await ApiProductDetail.createFeedbackProduct(
@@ -163,10 +165,11 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
             await ApiProductDetail.unVoteReputation(
                 widget.order.productownerID);
           }
-        } catch (e) {
-          showCustomDialog(context, "Lỗi", e.toString(), true);
-          return;
+          Navigator.pop(context);
         }
+      } catch (e) {
+        showCustomDialog(context, "Lỗi", e.toString(), true);
+        return;
       }
     }
   }
