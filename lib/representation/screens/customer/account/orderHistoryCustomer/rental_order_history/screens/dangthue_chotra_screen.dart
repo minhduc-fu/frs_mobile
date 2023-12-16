@@ -31,7 +31,6 @@ class DangthueChotraScreen extends StatefulWidget {
 
 class _DangthueChotraScreenState extends State<DangthueChotraScreen> {
   int? accountID = AuthProvider.userModel?.accountID;
-  // comment vui
   List<Uint8List> _images = [];
   void selectImage() async {
     if (_images.length < 9) {
@@ -42,6 +41,7 @@ class _DangthueChotraScreenState extends State<DangthueChotraScreen> {
     }
   }
 
+  //
   Future<void> received() async {
     if (_images.isEmpty) {
       showCustomDialog(context, 'Lỗi', 'Bạn chưa chọn "Thêm hình ảnh".', true);
