@@ -25,11 +25,12 @@ class ApiProductDetail {
   }
 
   static Future<int> createFeedbackProduct(int customerID, String description,
-      int productID, int ratingPoint) async {
+      int orderRentID, int productID, int ratingPoint) async {
     final url = Uri.parse('http://fashionrental.online:8080/feedback');
     final Map<String, dynamic> requestData = {
       'customerID': customerID,
       'description': description,
+      'orderRentID': orderRentID,
       'productID': productID,
       'ratingPoint': ratingPoint,
     };

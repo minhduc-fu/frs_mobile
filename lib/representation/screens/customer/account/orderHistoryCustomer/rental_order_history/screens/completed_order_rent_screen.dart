@@ -40,6 +40,14 @@ class _CompletedOrderRentScreenState extends State<CompletedOrderRentScreen> {
     );
   }
 
+  Future<bool> checkIsFeedback(int orderRentID) async {
+    try {
+      return await ApiOderRentHistory.checkIsFeedback(orderRentID);
+    } catch (e) {
+      print('Error checking feedback status: $e');
+      return false;
+    }
+  }
   // void _navigateToTraHangHoanTienScreen(OrderRentModel order) {
   //   Navigator.push(
   //     context,
@@ -287,14 +295,53 @@ class _CompletedOrderRentScreenState extends State<CompletedOrderRentScreen> {
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
-                                        ButtonWidget(
-                                          onTap: () {
-                                            _feedbackOrder(orders[index]);
+                                        FutureBuilder(
+                                          future: checkIsFeedback(
+                                              orders[index].orderRentID),
+                                          builder: (context, snapshot) {
+                                            if (snapshot.connectionState ==
+                                                ConnectionState.waiting) {
+                                              return Center(
+                                                  child:
+                                                      CircularProgressIndicator());
+                                            } else if (snapshot.hasError) {
+                                              return Text(
+                                                  'Error: ${snapshot.error}');
+                                            } else {
+                                              bool notFeedback =
+                                                  snapshot.data as bool;
+                                              if (notFeedback) {
+                                                return ButtonWidget(
+                                                  onTap: () {
+                                                    _feedbackOrder(
+                                                        orders[index]);
+                                                  },
+                                                  title: 'Đánh giá',
+                                                  size: 18,
+                                                  width: 150,
+                                                );
+                                              } else {
+                                                return Padding(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                      horizontal: 10),
+                                                  child: Text(
+                                                    'Đã đánh giá',
+                                                    style: TextStyles.h5.bold,
+                                                  ),
+                                                );
+                                              }
+                                            }
                                           },
-                                          title: 'Đánh giá',
-                                          size: 18,
-                                          width: 150,
                                         ),
+                                        // ButtonWidget(
+                                        //   onTap: () {
+                                        //     _feedbackOrder(orders[index]);
+                                        //   },
+                                        //   title: 'Đánh giá',
+                                        //   size: 18,
+                                        //   width: 150,
+                                        // ),
                                       ],
                                     ),
                                   ],

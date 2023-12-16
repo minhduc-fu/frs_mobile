@@ -45,7 +45,7 @@ class _RentingOrderRentScreenState extends State<RentingOrderRentScreen> {
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: AuthProvider.userModel!.status == "NOT_VERIFIED"
-            ? Text('Làm ơn Cập nhật thông tin cá nhân')
+            ? Text('Vui lòng cập nhật thông tin cá nhân')
             : FutureBuilder(
                 future: ApiOderRentHistory.getAllRentingOrderRentByCustomerID(
                     AuthProvider.userModel!.customer!.customerID),
@@ -103,6 +103,7 @@ class _RentingOrderRentScreenState extends State<RentingOrderRentScreen> {
                                         ],
                                       ),
                                     ),
+
                                     Divider(
                                       thickness: 0.5,
                                       color: ColorPalette.textHide,
@@ -127,121 +128,140 @@ class _RentingOrderRentScreenState extends State<RentingOrderRentScreen> {
                                                   CrossAxisAlignment.start,
                                               children:
                                                   orderDetails!.map((detail) {
-                                                return Container(
-                                                  margin:
-                                                      EdgeInsets.only(top: 10),
-                                                  height: 140,
-                                                  decoration: BoxDecoration(
-                                                    border: Border.all(
-                                                        color: ColorPalette
-                                                            .textHide),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            kDefaultCircle14),
-                                                  ),
-                                                  child: Row(
-                                                    children: [
-                                                      SizedBox(width: 10),
-                                                      ClipRRect(
+                                                return Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Container(
+                                                      margin: EdgeInsets.only(
+                                                          top: 10),
+                                                      height: 170,
+                                                      decoration: BoxDecoration(
+                                                        border: Border.all(
+                                                            color: ColorPalette
+                                                                .textHide),
                                                         borderRadius:
                                                             BorderRadius.circular(
                                                                 kDefaultCircle14),
-                                                        child: Image.network(
-                                                          cacheHeight: 80,
-                                                          cacheWidth: 80,
-                                                          detail.productDTOModel
-                                                              .productAvt,
-                                                          fit: BoxFit.cover,
-                                                        ),
                                                       ),
-                                                      SizedBox(width: 10),
-                                                      // productName, price
-                                                      Padding(
-                                                        padding: EdgeInsets
-                                                            .symmetric(
-                                                                vertical: 20),
-                                                        child: Column(
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .start,
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .spaceBetween,
-                                                          children: [
-                                                            Container(
-                                                              width: 230,
-                                                              child:
-                                                                  AutoSizeText(
-                                                                detail
-                                                                    .productDTOModel
-                                                                    .productName,
-                                                                minFontSize: 16,
-                                                                style:
-                                                                    TextStyles
-                                                                        .h5
-                                                                        .bold,
-                                                                maxLines: 1,
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis,
-                                                              ),
+                                                      child: Row(
+                                                        children: [
+                                                          SizedBox(width: 10),
+                                                          ClipRRect(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        kDefaultCircle14),
+                                                            child:
+                                                                Image.network(
+                                                              cacheHeight: 80,
+                                                              cacheWidth: 80,
+                                                              detail
+                                                                  .productDTOModel
+                                                                  .productAvt,
+                                                              fit: BoxFit.cover,
                                                             ),
-                                                            Text(
-                                                              '${DateFormat('dd/MM/yyyy').format(detail.startDate)} - ${DateFormat('dd/MM/yyyy').format(detail.endDate)}',
-                                                            ),
-                                                            AutoSizeText.rich(
-                                                              minFontSize: 14,
-                                                              overflow:
-                                                                  TextOverflow
-                                                                      .ellipsis,
-                                                              maxLines: 1,
-                                                              TextSpan(
-                                                                children: [
-                                                                  TextSpan(
-                                                                    text:
-                                                                        'Cọc: ',
+                                                          ),
+                                                          SizedBox(width: 10),
+                                                          // productName, price
+                                                          Padding(
+                                                            padding: EdgeInsets
+                                                                .symmetric(
+                                                                    vertical:
+                                                                        20),
+                                                            child: Column(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .start,
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .spaceBetween,
+                                                              children: [
+                                                                Container(
+                                                                  width: 230,
+                                                                  child:
+                                                                      AutoSizeText(
+                                                                    detail
+                                                                        .productDTOModel
+                                                                        .productName,
+                                                                    minFontSize:
+                                                                        16,
+                                                                    style:
+                                                                        TextStyles
+                                                                            .h5
+                                                                            .bold,
+                                                                    maxLines: 1,
+                                                                    overflow:
+                                                                        TextOverflow
+                                                                            .ellipsis,
                                                                   ),
+                                                                ),
+                                                                Text(
+                                                                  '${DateFormat('dd/MM/yyyy').format(detail.startDate)} - ${DateFormat('dd/MM/yyyy').format(detail.endDate)}',
+                                                                ),
+                                                                AutoSizeText
+                                                                    .rich(
+                                                                  minFontSize:
+                                                                      14,
+                                                                  overflow:
+                                                                      TextOverflow
+                                                                          .ellipsis,
+                                                                  maxLines: 1,
                                                                   TextSpan(
-                                                                    text:
-                                                                        '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(detail.cocMoney)}',
-                                                                    style: TextStyles
-                                                                        .defaultStyle
-                                                                        .bold
-                                                                        .setColor(
-                                                                            Colors.red),
-                                                                  )
-                                                                ],
-                                                              ),
-                                                            ),
-                                                            AutoSizeText.rich(
-                                                              minFontSize: 14,
-                                                              overflow:
-                                                                  TextOverflow
-                                                                      .ellipsis,
-                                                              maxLines: 1,
-                                                              TextSpan(
-                                                                children: [
-                                                                  TextSpan(
-                                                                    text:
-                                                                        'Thuê: ',
+                                                                    children: [
+                                                                      TextSpan(
+                                                                        text:
+                                                                            'Cọc: ',
+                                                                      ),
+                                                                      TextSpan(
+                                                                        text:
+                                                                            '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(detail.cocMoney)}',
+                                                                        style: TextStyles
+                                                                            .defaultStyle
+                                                                            .bold
+                                                                            .setColor(Colors.red),
+                                                                      )
+                                                                    ],
                                                                   ),
+                                                                ),
+                                                                AutoSizeText
+                                                                    .rich(
+                                                                  minFontSize:
+                                                                      14,
+                                                                  overflow:
+                                                                      TextOverflow
+                                                                          .ellipsis,
+                                                                  maxLines: 1,
                                                                   TextSpan(
-                                                                    text:
-                                                                        '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(detail.rentPrice)}',
-                                                                    style: TextStyles
-                                                                        .defaultStyle
-                                                                        .bold
-                                                                        .setColor(
-                                                                            Colors.red),
+                                                                    children: [
+                                                                      TextSpan(
+                                                                        text:
+                                                                            'Thuê: ',
+                                                                      ),
+                                                                      TextSpan(
+                                                                        text:
+                                                                            '${NumberFormat.currency(locale: 'vi_VN', symbol: 'vnđ').format(detail.rentPrice)}',
+                                                                        style: TextStyles
+                                                                            .defaultStyle
+                                                                            .bold
+                                                                            .setColor(Colors.red),
+                                                                      ),
+                                                                    ],
                                                                   ),
-                                                                ],
-                                                              ),
+                                                                ),
+                                                                Text(
+                                                                  'Còn ${detail.dayRemaining} ngày tới hạn trả',
+                                                                  style: TextStyles
+                                                                      .defaultStyle
+                                                                      .bold,
+                                                                ),
+                                                              ],
                                                             ),
-                                                          ],
-                                                        ),
+                                                          ),
+                                                        ],
                                                       ),
-                                                    ],
-                                                  ),
+                                                    ),
+                                                  ],
                                                 );
                                               }).toList(),
                                             );

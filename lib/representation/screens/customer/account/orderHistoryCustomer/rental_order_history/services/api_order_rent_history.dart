@@ -4,6 +4,25 @@ import 'package:frs_mobile/representation/screens/customer/account/orderHistoryC
 import 'package:http/http.dart' as http;
 
 class ApiOderRentHistory {
+  static Future<bool> checkIsFeedback(int orderRentID) async {
+    final url = Uri.parse(
+        'http://fashionrental.online:8080/feedback/check/$orderRentID');
+
+    try {
+      final response = await http.get(url);
+
+      if (response.statusCode == 200) {
+        return true;
+      } else if (response.statusCode == 400) {
+        return false;
+      } else {
+        throw Exception('Kiểm tra trạng thái đánh giá thất bại.');
+      }
+    } catch (e) {
+      throw Exception('Lỗi: $e');
+    }
+  }
+
   static Future<List<OrderRentModel>?> getAllPendingOrderRentByCustomerID(
       int customerID) async {
     final url = Uri.parse(

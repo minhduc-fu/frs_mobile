@@ -150,6 +150,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
           int feedBackID = await ApiProductDetail.createFeedbackProduct(
             customerID,
             descriptionFeedback,
+            widget.order.orderRentID,
             productID,
             ratingPoint,
           );

@@ -8,6 +8,7 @@ class OrderRentDetailModel {
   double rentPrice;
   DateTime startDate;
   DateTime endDate;
+  int dayRemaining;
   // double price;
   ProductDTOModel productDTOModel;
   int orderRentID;
@@ -21,6 +22,7 @@ class OrderRentDetailModel {
     required this.rentPrice,
     required this.startDate,
     required this.endDate,
+    required this.dayRemaining,
     // required this.price,
     required this.productDTOModel,
     required this.orderRentID,
@@ -44,6 +46,7 @@ class OrderRentDetailModel {
         json['endDate'][1],
         json['endDate'][2],
       ),
+      dayRemaining: json['dayRemaining'],
       // price: json['price'].toDouble(),
       productDTOModel: ProductDTOModel.fromJson(json['productDTO']),
       orderRentID: json['orderRentID'],
