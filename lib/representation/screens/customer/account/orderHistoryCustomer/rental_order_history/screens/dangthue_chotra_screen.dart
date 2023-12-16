@@ -1,5 +1,4 @@
 import 'dart:typed_data';
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +31,7 @@ class DangthueChotraScreen extends StatefulWidget {
 
 class _DangthueChotraScreenState extends State<DangthueChotraScreen> {
   int? accountID = AuthProvider.userModel?.accountID;
-
+  // comment vui
   List<Uint8List> _images = [];
   void selectImage() async {
     if (_images.length < 9) {
