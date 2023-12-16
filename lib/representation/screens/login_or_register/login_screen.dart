@@ -20,6 +20,7 @@ import '../../widgets/button_widget.dart';
 import '../customer/customer_main_screen.dart';
 import '../productowner_screen/productowner_main_screen.dart';
 import 'forgot_password_screen.dart';
+import '../../../api/firebase_api.dart';
 
 class LoginScreen extends StatefulWidget {
   final Function()? onTap;
@@ -135,6 +136,9 @@ class _LoginScreenState extends State<LoginScreen> {
             final authProvider =
                 Provider.of<AuthProvider>(context, listen: false);
             authProvider.setUser(userModel);
+
+            await FirebaseApi.initNotifications();
+
             if (userModel.role.roleName == 'Customer') {
               Navigator.of(context).pushNamed(CustomerMainScreen.routeName);
             } else if (userModel.role.roleName == "ProductOwner") {
