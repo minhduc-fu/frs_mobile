@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:typed_data';
+import 'package:country_code_picker/country_code_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -56,6 +57,8 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
   String verificationId = "";
   FirebaseAuth _auth = FirebaseAuth.instance;
 
+  CountryCode selectedCountry = CountryCode.fromCountryCode('VN');
+
   @override
   void initState() {
     super.initState();
@@ -85,7 +88,7 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
     );
     try {
       await _auth.verifyPhoneNumber(
-          phoneNumber: '${phone}',
+          phoneNumber: '${selectedCountry}${phone}',
           verificationCompleted: (PhoneAuthCredential credential) async {
             await _auth.signInWithCredential(credential);
             setState(() {
@@ -144,8 +147,8 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
       showCustomDialog(context, 'Lỗi', 'Họ và tên không hợp lệ.', true);
     } else if (phoneController.text.isEmpty) {
       showCustomDialog(context, 'Lỗi', 'Bạn chưa nhập "Số điện thoại".', true);
-    } else if (validatePhoneNumber(phoneController.text) != null) {
-      showCustomDialog(context, 'Lỗi', 'Số điện thoại không hợp lệ.', true);
+      // } else if (validatePhoneNumber(phoneController.text) != null) {
+      //   showCustomDialog(context, 'Lỗi', 'Số điện thoại không hợp lệ.', true);
     } else if (isMale == null) {
       showCustomDialog(context, 'Lỗi', 'Bạn chưa chọn "Giới tính".', true);
     } else if (isMyTextFormFieldChanged && isPhoneNumberVerified == false) {
@@ -217,8 +220,8 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
       showCustomDialog(context, 'Lỗi', 'Họ và tên không hợp lệ.', true);
     } else if (phoneController.text.isEmpty) {
       showCustomDialog(context, 'Lỗi', 'Bạn chưa nhập "Số điện thoại".', true);
-    } else if (validatePhoneNumber(phoneController.text) != null) {
-      showCustomDialog(context, 'Lỗi', 'Số điện thoại không hợp lệ.', true);
+      // } else if (validatePhoneNumber(phoneController.text) != null) {
+      //   showCustomDialog(context, 'Lỗi', 'Số điện thoại không hợp lệ.', true);
     } else if (isMale == null) {
       showCustomDialog(context, 'Lỗi', 'Bạn chưa chọn "Giới tính".', true);
     } else if (isPhoneNumberVerified == false) {
@@ -237,8 +240,12 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
       try {
         imageUrl = await AddImageCloud().uploadImageToStorage(
             'avatarCustomer', _image!, AuthProvider.userModel!.accountID);
-        final response = await AuthenticationService.createCustomer(accountID!,
-            fullNameController.text, phoneController.text, isMale!, imageUrl!);
+        final response = await AuthenticationService.createCustomer(
+            accountID!,
+            fullNameController.text,
+            '${selectedCountry}${phoneController.text}',
+            isMale!,
+            imageUrl!);
         Navigator.pop(context);
         if (response != null) {
           final responseStatus =
@@ -430,26 +437,70 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                             .setColor(ColorPalette.textHide),
                       ),
                       SizedBox(height: 10),
-
-                      MyTextFormField(
-                        suffixIcon: isPhoneNumberVerified
-                            ? Icon(
-                                FontAwesomeIcons.check,
-                                color: Colors.green,
-                              )
-                            : null,
-                        onChanged: (value) {
-                          phone = value;
-                          setState(() {
-                            isMyTextFormFieldChanged = true;
-                          });
-                        },
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        controller: phoneController,
-                        hintText: 'Số điện thoại',
-                        keyboardType: TextInputType.phone,
-                        validator: validatePhoneNumber,
+                      Row(
+                        children: [
+                          CountryCodePicker(
+                            dialogTextStyle: TextStyles.defaultStyle,
+                            searchDecoration: InputDecoration(
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.circular(kDefaultCircle14),
+                                borderSide:
+                                    BorderSide(color: ColorPalette.textHide),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: ColorPalette.primaryColor),
+                                borderRadius:
+                                    BorderRadius.circular(kDefaultCircle14),
+                              ),
+                              fillColor: Colors.white,
+                              filled: true,
+                            ),
+                            padding: EdgeInsets.zero,
+                            boxDecoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius:
+                                  BorderRadius.circular(kDefaultCircle14),
+                            ),
+                            onChanged: (CountryCode code) {
+                              setState(() {
+                                selectedCountry = code;
+                              });
+                            },
+                            initialSelection: 'VN',
+                            favorite: ['+84', 'VN'],
+                            showCountryOnly: false,
+                            flagWidth: 20,
+                            showOnlyCountryWhenClosed: false,
+                            alignLeft: false,
+                          ),
+                          Container(
+                            width: 260,
+                            child: MyTextFormField(
+                              suffixIcon: isPhoneNumberVerified
+                                  ? Icon(
+                                      FontAwesomeIcons.check,
+                                      color: Colors.green,
+                                    )
+                                  : null,
+                              onChanged: (value) {
+                                phone = value;
+                                setState(() {
+                                  isMyTextFormFieldChanged = true;
+                                });
+                              },
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
+                              controller: phoneController,
+                              hintText: 'Số điện thoại',
+                              keyboardType: TextInputType.phone,
+                              // validator: validatePhoneNumber,
+                            ),
+                          ),
+                        ],
                       ),
+
                       SizedBox(height: 10),
                       ButtonWidget(
                         onTap: () {
@@ -620,24 +671,45 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                       ),
                       SizedBox(height: 10),
 
-                      MyTextFormField(
-                        suffixIcon: isPhoneNumberVerified
-                            ? Icon(
-                                FontAwesomeIcons.check,
-                                color: Colors.green,
-                              )
-                            : null,
-                        onChanged: (value) {
-                          phone = value;
-                          setState(() {
-                            isMyTextFormFieldChanged = true;
-                          });
-                        },
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        controller: phoneController,
-                        hintText: 'Số điện thoại',
-                        keyboardType: TextInputType.phone,
-                        validator: validatePhoneNumber,
+                      Row(
+                        children: [
+                          CountryCodePicker(
+                            onChanged: (CountryCode code) {
+                              setState(() {
+                                selectedCountry = code;
+                              });
+                            },
+                            initialSelection: 'VN',
+                            favorite: ['+84', 'VN'],
+                            showCountryOnly: false,
+                            flagWidth: 12,
+                            showOnlyCountryWhenClosed: false,
+                            alignLeft: false,
+                          ),
+                          Container(
+                            width: 260,
+                            child: MyTextFormField(
+                              suffixIcon: isPhoneNumberVerified
+                                  ? Icon(
+                                      FontAwesomeIcons.check,
+                                      color: Colors.green,
+                                    )
+                                  : null,
+                              onChanged: (value) {
+                                phone = value;
+                                setState(() {
+                                  isMyTextFormFieldChanged = true;
+                                });
+                              },
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
+                              controller: phoneController,
+                              hintText: 'Số điện thoại',
+                              keyboardType: TextInputType.phone,
+                              validator: validatePhoneNumber,
+                            ),
+                          ),
+                        ],
                       ),
                       SizedBox(height: 10),
                       isMyTextFormFieldChanged

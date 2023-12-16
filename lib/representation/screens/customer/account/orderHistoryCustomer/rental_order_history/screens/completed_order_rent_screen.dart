@@ -334,14 +334,6 @@ class _CompletedOrderRentScreenState extends State<CompletedOrderRentScreen> {
                                             }
                                           },
                                         ),
-                                        // ButtonWidget(
-                                        //   onTap: () {
-                                        //     _feedbackOrder(orders[index]);
-                                        //   },
-                                        //   title: 'Đánh giá',
-                                        //   size: 18,
-                                        //   width: 150,
-                                        // ),
                                       ],
                                     ),
                                   ],

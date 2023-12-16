@@ -137,7 +137,7 @@ class AuthenticationService {
 
     if (response.statusCode == 200) {
       return json.decode(response.body);
-    } else {
+    } else if (response.statusCode == 400) {
       throw Exception('Cập nhật không thành công');
     }
   }
