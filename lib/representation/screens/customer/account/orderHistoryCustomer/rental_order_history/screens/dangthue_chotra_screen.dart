@@ -469,6 +469,7 @@ class _DangthueChotraScreenState extends State<DangthueChotraScreen> {
                               ),
                               height: 80,
                               width: double.infinity,
+                              //
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 mainAxisAlignment: MainAxisAlignment.center,
