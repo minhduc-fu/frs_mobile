@@ -41,7 +41,6 @@ class _DangthueChotraScreenState extends State<DangthueChotraScreen> {
     }
   }
 
-  //
   Future<void> received() async {
     if (_images.isEmpty) {
       showCustomDialog(context, 'Lỗi', 'Bạn chưa chọn "Thêm hình ảnh".', true);
