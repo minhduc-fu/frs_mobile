@@ -1,14 +1,15 @@
 import 'dart:async';
-
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:frs_mobile/models/feedback_model.dart';
 import 'package:frs_mobile/representation/screens/favorite/services/api_favorite.dart';
+import 'package:frs_mobile/representation/screens/product_detail/services/api_product_detail.dart';
 import 'package:frs_mobile/services/authprovider.dart';
 import 'package:frs_mobile/utils/dialog_helper.dart';
 import 'package:intl/intl.dart';
 import 'package:like_button/like_button.dart';
-
 import '../../core/constants/color_constants.dart';
 import '../../core/constants/dismension_constants.dart';
 import '../../core/constants/textstyle_constants.dart';
@@ -30,6 +31,7 @@ class _ProductCardDemoState extends State<ProductCardDemo> {
   bool isFavorite = false;
   late Completer<void> _favoriteStatusCompleter;
   final AutoSizeGroup autoSizeGroup = AutoSizeGroup();
+  List<FeedbackModel> feedbackList = [];
 
   @override
   void initState() {
@@ -39,13 +41,14 @@ class _ProductCardDemoState extends State<ProductCardDemo> {
     if (userModel != null) {
       checkFavoriteStatus();
     }
+    loadFeedbackData();
   }
 
   @override
   void dispose() {
     if (!_favoriteStatusCompleter.isCompleted) {
-      _favoriteStatusCompleter.complete(); // Complete the task when disposing
-    } // Complete the task when disposing
+      _favoriteStatusCompleter.complete();
+    }
     super.dispose();
   }
 
@@ -56,7 +59,7 @@ class _ProductCardDemoState extends State<ProductCardDemo> {
             await ApiFavorite.getFavoriteByCusID(
                 AuthProvider.userModel!.customer!.customerID);
         if (_favoriteStatusCompleter.isCompleted) {
-          return; // Do nothing if the widget is already disposed
+          return;
         }
 
         if (favoriteProducts != null && favoriteProducts.isNotEmpty) {
@@ -132,12 +135,36 @@ class _ProductCardDemoState extends State<ProductCardDemo> {
     }
   }
 
+  Future<void> loadFeedbackData() async {
+    try {
+      List<FeedbackModel> feedbacks =
+          await ApiProductDetail.getFeedbackByProductID(
+              widget.product.productID);
+      setState(() {
+        feedbackList = feedbacks;
+      });
+    } catch (e) {
+      print('Error loading feedback data: $e');
+    }
+  }
+
+  double calculateAverageRating(List<FeedbackModel> feedbacks) {
+    if (feedbacks.isEmpty) {
+      return 0.0;
+    }
+
+    double totalRating = 0.0;
+    for (var feedback in feedbacks) {
+      totalRating += feedback.ratingPoint;
+    }
+
+    return totalRating / feedbacks.length;
+  }
+
   @override
   Widget build(BuildContext context) {
     final bool isForSale = widget.product.checkType.contains('SALE');
     final bool isForRent = widget.product.checkType.contains('RENT');
-    final bool isForSaleAndRent =
-        widget.product.checkType.contains('SALE_RENT');
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(kDefaultCircle14),
@@ -268,7 +295,7 @@ class _ProductCardDemoState extends State<ProductCardDemo> {
                   SizedBox(height: 2),
 
                   //Price
-                  if (isForSale || isForSaleAndRent)
+                  if (isForSale)
                     Container(
                       width: 160,
                       child: AutoSizeText.rich(
@@ -290,7 +317,7 @@ class _ProductCardDemoState extends State<ProductCardDemo> {
                   else
                     SizedBox.shrink(),
                   // SizedBox(height: 5),
-                  if (isForRent || isForSaleAndRent)
+                  if (isForRent)
                     Container(
                       width: 160,
                       child: AutoSizeText.rich(
@@ -314,16 +341,38 @@ class _ProductCardDemoState extends State<ProductCardDemo> {
                   SizedBox(height: 2),
                   Row(
                     children: [
-                      Icon(
-                        FontAwesomeIcons.solidStar,
-                        size: kDefaultCircle14,
-                        color: Colors.amber,
+                      RatingBar(
+                        itemSize: 10,
+                        initialRating: calculateAverageRating(feedbackList),
+                        minRating: 0,
+                        direction: Axis.horizontal,
+                        allowHalfRating: true,
+                        itemCount: 5,
+                        itemPadding: EdgeInsets.symmetric(horizontal: 2.0),
+                        ratingWidget: RatingWidget(
+                          full: Icon(
+                            FontAwesomeIcons.solidStar,
+                            color: Colors.amber,
+                          ),
+                          half: Icon(
+                            FontAwesomeIcons.starHalfStroke,
+                            color: Colors.amber,
+                          ),
+                          empty: Icon(
+                            FontAwesomeIcons.star,
+                            color: Colors.amber,
+                          ),
+                        ),
+                        onRatingUpdate: (value) {},
+                        ignoreGestures: true,
                       ),
                       SizedBox(
-                        width: 15,
+                        width: 10,
                       ),
                       Text(
-                        '5.0',
+                        calculateAverageRating(feedbackList) == 0.0
+                            ? 'Chưa có'
+                            : calculateAverageRating(feedbackList).toString(),
                       ),
                     ],
                   ),

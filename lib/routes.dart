@@ -5,12 +5,13 @@ import 'package:frs_mobile/representation/screens/about_frs/terms_of_service.dar
 import 'package:frs_mobile/representation/screens/cart/buy_cart_screen.dart';
 import 'package:frs_mobile/representation/screens/customer/account/address/address_screen.dart';
 import 'package:frs_mobile/representation/screens/customer/account/address/new_address_screen.dart';
+import 'package:frs_mobile/representation/screens/customer/account/contact_support/contact_support_screen.dart';
 import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/rental_order_history/screens/confirm_order_rent_screen.dart';
 import 'package:frs_mobile/representation/screens/wallet/wallet_screen.dart';
 import 'representation/screens/guest/account_screen.dart';
 import 'representation/screens/cart/main_cart_screen.dart';
 import 'representation/screens/chat_screen.dart';
-import 'representation/screens/customer/account/account_screen_customer.dart';
+import 'representation/screens/customer/account/account_customer_screen.dart';
 import 'representation/screens/customer/account/orderHistoryCustomer/main_order_history_screen.dart';
 import 'representation/screens/customer/account/profile/customer_profile_screen.dart';
 import 'representation/screens/customer/customer_main_screen.dart';
@@ -43,7 +44,7 @@ final Map<String, WidgetBuilder> routes = {
   FavoriteScreen.routeName: (context) => const FavoriteScreen(),
   ChatScreen.routeName: (context) => const ChatScreen(),
   AccountScreen.routeName: (context) => const AccountScreen(),
-  AccountScreenTrue.routeName: (context) => const AccountScreenTrue(),
+  AccountCustomerScreen.routeName: (context) => const AccountCustomerScreen(),
   ForgotPasswordScreen.routeName: (context) => ForgotPasswordScreen(),
   CustomerMainScreen.routeName: (context) => const CustomerMainScreen(),
   ProductOwnerMainScreen.routeName: (context) => const ProductOwnerMainScreen(),
@@ -59,4 +60,5 @@ final Map<String, WidgetBuilder> routes = {
   PrivacyPolicy.routeName: (context) => PrivacyPolicy(),
   TermsOfService.routeName: (context) => TermsOfService(),
   AboutUs.routeName: (context) => AboutUs(),
+  ContactSupportScreen.routeName: (context) => ContactSupportScreen(),
 };

@@ -13,7 +13,7 @@ import 'package:frs_mobile/models/product_model.dart';
 import 'package:frs_mobile/representation/screens/product_detail/product_detail_demo.dart';
 import 'package:frs_mobile/representation/screens/product_detail/services/api_product_detail.dart';
 import 'package:frs_mobile/representation/screens/productowner_screen/services/api_producOwner.dart';
-import 'package:frs_mobile/representation/widgets/product_cart_demo.dart';
+import 'package:frs_mobile/representation/widgets/product_card_demo.dart';
 import 'package:frs_mobile/services/authentication_service.dart';
 
 class ProductOwnerShopScreen extends StatefulWidget {
@@ -193,27 +193,15 @@ class _ProductOwnerShopScreenState extends State<ProductOwnerShopScreen> {
                             Row(
                               children: [
                                 Icon(
-                                  FontAwesomeIcons.solidStar,
-                                  color: Colors.amber,
-                                  size: kDefaultPadding16,
-                                ),
-                                SizedBox(width: 10),
-                                Text(
-                                  '5.0',
-                                  style: TextStyles.defaultStyle.whiteTextColor,
-                                ),
-                                Text(' | ',
-                                    style:
-                                        TextStyles.defaultStyle.whiteTextColor),
-                                Icon(
+                                  FontAwesomeIcons.solidThumbsUp,
                                   color: Colors.white,
-                                  FontAwesomeIcons.solidMessage,
                                   size: 14,
                                 ),
                                 SizedBox(width: 10),
-                                Text('99.0%',
-                                    style:
-                                        TextStyles.defaultStyle.whiteTextColor),
+                                Text(
+                                  '${widget.productOwnerModel!.reputationPoint}',
+                                  style: TextStyles.defaultStyle.whiteTextColor,
+                                ),
                               ],
                             ),
                             Row(

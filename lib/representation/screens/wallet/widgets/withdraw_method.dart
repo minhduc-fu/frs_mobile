@@ -1,15 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:frs_mobile/core/constants/color_constants.dart';
-
 import 'package:frs_mobile/core/constants/textstyle_constants.dart';
+import 'package:frs_mobile/representation/screens/wallet/withdraw_screen.dart';
 import 'package:frs_mobile/representation/widgets/button_widget.dart';
 import 'package:frs_mobile/utils/asset_helper.dart';
 import 'package:frs_mobile/utils/image_helper.dart';
 import '../../../../core/constants/dismension_constants.dart';
-import '../recharge_screen.dart';
 
-class PaymentMethod {
+class WithdrawMethod {
   static void showPaymentMethodDialog(BuildContext context) {
     String selectedPaymentMethod = "Chọn phương thức thanh toán";
     bool isPaymentConfirmed = false;
@@ -99,7 +98,7 @@ class PaymentMethod {
                         selectedPaymentMethod != "Khác" &&
                         isPaymentConfirmed) {
                       Navigator.of(context).push(CupertinoPageRoute(
-                        builder: (context) => RechargeScreen(),
+                        builder: (context) => WithdrawScreen(),
                       ));
                     }
                   },

@@ -13,4 +13,5 @@ class AssetHelper {
   static const String imageGanGui = 'assets/images/ganGui.png';
   static const String imageVuiVe = 'assets/images/vuiVe.png';
   static const String imageDongLong = 'assets/images/dongLong.png';
+  static const String imageVerified = 'assets/images/verifi.png';
 }

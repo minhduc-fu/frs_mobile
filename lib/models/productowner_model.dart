@@ -4,6 +4,7 @@ class ProductOwnerModel {
   String phone;
   String avatarUrl;
   String address;
+  int reputationPoint;
 
   ProductOwnerModel({
     required this.productOwnerID,
@@ -11,6 +12,7 @@ class ProductOwnerModel {
     required this.phone,
     required this.avatarUrl,
     required this.address,
+    required this.reputationPoint,
   });
 
   factory ProductOwnerModel.fromJson(Map<dynamic, dynamic> json) {
@@ -20,6 +22,7 @@ class ProductOwnerModel {
       phone: json['phone'],
       avatarUrl: json['avatarUrl'],
       address: json['address'],
+      reputationPoint: json['reputationPoint'],
     );
   }
   Map<dynamic, dynamic> toJson() {
@@ -29,6 +32,7 @@ class ProductOwnerModel {
       'phone': phone,
       'avatarUrl': avatarUrl,
       'address': address,
+      'reputationPoint': reputationPoint,
     };
   }
 }

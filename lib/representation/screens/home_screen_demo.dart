@@ -22,7 +22,7 @@ import '../../utils/asset_helper.dart';
 import '../../utils/image_helper.dart';
 import '../widgets/app_bar_main.dart';
 import '../widgets/indicator_widget.dart';
-import '../widgets/product_cart_demo.dart';
+import '../widgets/product_card_demo.dart';
 
 class HomeScreenDemo extends StatefulWidget {
   const HomeScreenDemo({
@@ -75,6 +75,19 @@ class _HomeScreenDemoState extends State<HomeScreenDemo> {
     } catch (e) {
       print('Error loading categories: $e');
     }
+  }
+
+  Map<String, String> translationMap = {
+    // 'Watch': 'Đồng hồ',
+    'Hat': 'Mũ',
+    'Jewelry': 'Trang sức',
+    'Bag': 'Túi xách',
+    'Sunglasses': 'Kính',
+    'Shoe': 'Giày',
+  };
+
+  String translateCategory(String categoryName) {
+    return translationMap[categoryName] ?? categoryName;
   }
 
   final CarouselController _controller = CarouselController();
@@ -170,7 +183,8 @@ class _HomeScreenDemoState extends State<HomeScreenDemo> {
                                           kDefaultCircle14),
                                     ),
                                     child: Text(
-                                      category.categoryName,
+                                      // category.categoryName,
+                                      translateCategory(category.categoryName),
                                       style: TextStyles
                                           .defaultStyle.whiteTextColor,
                                     ),
@@ -417,20 +431,6 @@ class _HomeScreenDemoState extends State<HomeScreenDemo> {
                       ),
                     ),
                   ],
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25),
-                  child: ListTile(
-                    leading: Icon(
-                      FontAwesomeIcons.rightFromBracket,
-                      size: kDefaultIconSize18,
-                      color: ColorPalette.primaryColor,
-                    ),
-                    title: Text(
-                      'Đăng xuất',
-                      style: TextStyles.defaultStyle.setTextSize(18),
-                    ),
-                  ),
                 ),
               ],
             ),

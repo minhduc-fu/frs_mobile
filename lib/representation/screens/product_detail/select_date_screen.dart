@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:frs_mobile/core/constants/textstyle_constants.dart';
 import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 import '../../../core/constants/color_constants.dart';
 import '../../../core/constants/dismension_constants.dart';
 import '../../widgets/button_widget.dart';
 
 class SelectDateScreen extends StatefulWidget {
-  const SelectDateScreen({super.key, this.selectedRentalPeriod});
+  const SelectDateScreen(
+      {super.key, this.selectedRentalPeriod, this.rentingDate});
   final int? selectedRentalPeriod;
+  final Map<String, List<int>>? rentingDate;
   static const String routeName = '/select_date_screen';
 
   @override
@@ -21,32 +22,58 @@ class _SelectDateScreenState extends State<SelectDateScreen> {
   int? selectedRentalPeriod;
   DateRangePickerController controller = DateRangePickerController();
 
-  List<Map<String, List<int>>> apiResponse = [
-    {
-      "startDate": [2023, 12, 20],
-      "endDate": [2023, 12, 26],
-    },
-    {
-      "startDate": [2024, 1, 10],
-      "endDate": [2024, 1, 15],
-    },
-  ];
-
   List<DateTime> bookedDates = [];
   @override
   void initState() {
     super.initState();
     selectedRentalPeriod = widget.selectedRentalPeriod ?? 0;
-    for (var period in apiResponse) {
-      DateTime startDate = DateTime(period["startDate"]![0],
-          period["startDate"]![1], period["startDate"]![2]);
+    if (widget.rentingDate != null && widget.rentingDate!.isNotEmpty) {
+      updateBookedDates(widget.rentingDate!);
+    }
+    // for (var period in apiResponse) {
+    //   DateTime startDate = DateTime(period["startDate"]![0],
+    //       period["startDate"]![1], period["startDate"]![2]);
+    //   DateTime endDate = DateTime(
+    //       period["endDate"]![0], period["endDate"]![1], period["endDate"]![2]);
+    //   for (int i = 1; i <= 4; i++) {
+    //     DateTime disabledDate = endDate.add(Duration(days: i));
+    //     bookedDates.add(disabledDate);
+    //   }
+    //   for (DateTime date = startDate;
+    //       date.isBefore(endDate.add(Duration(days: 1)));
+    //       date = date.add(Duration(days: 1))) {
+    //     bookedDates.add(date);
+    //   }
+    // }
+  }
+
+  void updateBookedDates(Map<String, List<int>>? rentingDate) {
+    bookedDates.clear();
+
+    if (rentingDate != null) {
+      DateTime startDate = DateTime(
+        rentingDate["startDate"]![0],
+        rentingDate["startDate"]![1],
+        rentingDate["startDate"]![2],
+      );
 
       DateTime endDate = DateTime(
-          period["endDate"]![0], period["endDate"]![1], period["endDate"]![2]);
+        rentingDate["endDate"]![0],
+        rentingDate["endDate"]![1],
+        rentingDate["endDate"]![2],
+      );
+
+      // -
+      for (int i = 1; i <= 2; i++) {
+        DateTime disabledDate = startDate.subtract(Duration(days: i));
+        bookedDates.add(disabledDate);
+      }
+
       for (int i = 1; i <= 4; i++) {
         DateTime disabledDate = endDate.add(Duration(days: i));
         bookedDates.add(disabledDate);
       }
+
       for (DateTime date = startDate;
           date.isBefore(endDate.add(Duration(days: 1)));
           date = date.add(Duration(days: 1))) {
@@ -86,19 +113,21 @@ class _SelectDateScreenState extends State<SelectDateScreen> {
       body: Column(
         children: [
           SizedBox(height: 10),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
-            child: Text(
-              'Chúng tôi khuyên bạn nên chọn ngày giao hàng ít nhất 2 ngày trước sự kiện của bạn.',
-              style: TextStyles.defaultStyle.bold,
-              textAlign: TextAlign.center,
-            ),
-          ),
+          // Padding(
+          //   padding: const EdgeInsets.symmetric(horizontal: 10),
+          //   child: Text(
+          //     'Chúng tôi khuyên bạn nên chọn ngày giao hàng ít nhất 2 ngày trước sự kiện của bạn.',
+          //     style: TextStyles.defaultStyle.bold,
+          //     textAlign: TextAlign.center,
+          //   ),
+          // ),
           SizedBox(height: 10),
           SfDateRangePicker(
             selectableDayPredicate: (DateTime date) {
               // Kiểm tra xem ngày có thể chọn không
-              return !bookedDates.contains(date);
+
+              // return !bookedDates.contains(date);
+              return widget.rentingDate == null || !bookedDates.contains(date);
             },
             controller: controller, // sử dụng controller để quản lý ngày
             minDate: DateTime.now()

@@ -3,6 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:frs_mobile/core/constants/dismension_constants.dart';
 import 'package:frs_mobile/representation/screens/about_frs/about_us.dart';
 import 'package:frs_mobile/representation/screens/customer/account/address/address_screen.dart';
+import 'package:frs_mobile/representation/screens/customer/account/contact_support/contact_support_screen.dart';
 import 'package:frs_mobile/representation/screens/wallet/wallet_screen.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
@@ -18,14 +19,14 @@ import 'account_tile.dart';
 import 'orderHistoryCustomer/main_order_history_screen.dart';
 import 'profile/customer_profile_screen.dart';
 
-class AccountScreenTrue extends StatefulWidget {
-  const AccountScreenTrue({super.key});
-  static const String routeName = '/account_screen_true';
+class AccountCustomerScreen extends StatefulWidget {
+  const AccountCustomerScreen({super.key});
+  static const String routeName = '/account_customer_screen';
   @override
-  State<AccountScreenTrue> createState() => _AccountScreenTrueState();
+  State<AccountCustomerScreen> createState() => _AccountCustomerScreenState();
 }
 
-class _AccountScreenTrueState extends State<AccountScreenTrue> {
+class _AccountCustomerScreenState extends State<AccountCustomerScreen> {
   late AuthProvider authProvider;
 
   final List _title = [
@@ -38,7 +39,6 @@ class _AccountScreenTrueState extends State<AccountScreenTrue> {
   ];
   final List _tienIch = [
     'Liên hệ hỗ trợ',
-    'Về chúng tôi',
   ];
 
   final List<IconData> _iconData = [
@@ -51,7 +51,6 @@ class _AccountScreenTrueState extends State<AccountScreenTrue> {
   ];
   final List<IconData> _iconTienIch = [
     FontAwesomeIcons.headset,
-    FontAwesomeIcons.users,
   ];
   void _handleLogout(BuildContext context) {
     var box = Hive.box('userBox');
@@ -233,8 +232,9 @@ class _AccountScreenTrueState extends State<AccountScreenTrue> {
                     itemBuilder: (context, index) {
                       return AccountTile(
                         onTap: () {
-                          if (index == 1) {
-                            Navigator.of(context).pushNamed(AboutUs.routeName);
+                          if (index == 0) {
+                            Navigator.of(context)
+                                .pushNamed(ContactSupportScreen.routeName);
                           }
                         },
                         icons: _iconTienIch[index],

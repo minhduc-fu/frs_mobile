@@ -10,6 +10,7 @@ class MyTextFormField extends StatelessWidget {
   final Widget? prefixIcon;
   final Widget? suffixIcon;
   final String? Function(String?)? validator;
+  final void Function(String)? onChanged;
   final TextInputType? keyboardType;
   final AutovalidateMode? autovalidateMode;
 
@@ -23,6 +24,7 @@ class MyTextFormField extends StatelessWidget {
     this.suffixIcon,
     this.keyboardType,
     this.autovalidateMode,
+    this.onChanged,
   });
 
   @override
@@ -31,6 +33,7 @@ class MyTextFormField extends StatelessWidget {
       obscureText: obscureText!,
       keyboardType: keyboardType,
       controller: controller,
+      onChanged: onChanged,
       validator: validator,
       autovalidateMode: autovalidateMode,
       decoration: InputDecoration(

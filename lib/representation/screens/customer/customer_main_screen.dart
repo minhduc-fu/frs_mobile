@@ -10,7 +10,7 @@ import '../chat_screen.dart';
 import '../favorite/favorite_screen.dart';
 import '../home_screen_demo.dart';
 import '../login_or_register/register_screen.dart';
-import 'account/account_screen_customer.dart';
+import 'account/account_customer_screen.dart';
 
 class CustomerMainScreen extends StatefulWidget {
   const CustomerMainScreen({super.key});
@@ -55,7 +55,7 @@ class _CustomerMainScreen extends State<CustomerMainScreen> {
           // MenuScreen(),
           MainCartScreen(),
           // CartFoodScreen(),
-          AccountScreenTrue(),
+          AccountCustomerScreen(),
         ],
         // child: user != null ? Text('${user!.email}') : Text("Chưa đăng nhập"),
       ),

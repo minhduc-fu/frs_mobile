@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'dart:typed_data';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:frs_mobile/core/constants/my_textformfield.dart';
+import 'package:frs_mobile/representation/screens/customer/account/profile/otp_screen.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -47,14 +49,92 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
   }
 
   late AuthProvider authProvider;
+  bool isPhoneNumberVerified = false;
+  bool isMyTextFormFieldChanged = false;
+
+  var phone = "";
+  String verificationId = "";
+  FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
   void initState() {
     super.initState();
+
     fullNameController.text = AuthProvider.userModel?.customer?.fullName ?? '';
     phoneController.text = AuthProvider.userModel?.customer?.phone ?? '';
     isMale = AuthProvider.userModel?.customer?.sex ?? null;
     imageUrl = AuthProvider.userModel?.customer?.avatarUrl ?? null;
+  }
+
+  void setPhoneNumberVerified(bool value) {
+    setState(() {
+      isPhoneNumberVerified = value;
+    });
+  }
+
+  Future<void> sendOTP() async {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return Center(
+          child: CircularProgressIndicator(
+            color: ColorPalette.primaryColor,
+          ),
+        );
+      },
+    );
+    try {
+      await _auth.verifyPhoneNumber(
+          phoneNumber: '${phone}',
+          verificationCompleted: (PhoneAuthCredential credential) async {
+            await _auth.signInWithCredential(credential);
+            setState(() {
+              isPhoneNumberVerified = true;
+            });
+            print('Verification Completed');
+          },
+          verificationFailed: (FirebaseAuthException e) {
+            print('Error sending OTP: $e');
+            if (e.code == 'firebase_auth/too-many-requests') {
+              showCustomDialog(
+                  context,
+                  "Lỗi",
+                  "Bạn nhập sai quá nhiều mã otp. Vui lòng quay lại sau!",
+                  true);
+            } else {
+              Navigator.pop(context);
+            }
+
+            // Navigator.pop(context);
+          },
+          codeSent: (String vId, int? resendToken) async {
+            Navigator.pop(context);
+            // Mã OTP đã được gửi, lưu `verificationId` để sử dụng sau này
+            setState(() {
+              verificationId = vId;
+              isPhoneNumberVerified = false;
+            });
+            print(verificationId);
+            // Chuyển người dùng sang màn hình nhập mã OTP
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => OTPScreen(
+                  verificationId: verificationId,
+                  setPhoneNumberVerified: setPhoneNumberVerified,
+                  phone: phoneController.text,
+                ),
+              ),
+            );
+          },
+          codeAutoRetrievalTimeout: (String vId) {
+            vId = vId;
+          },
+          timeout: Duration(seconds: 45));
+    } catch (e) {
+      Navigator.pop(context);
+      print('Error sending OTP: $e');
+    }
   }
 
   Future<void> updateCustomerProfile() async {
@@ -68,6 +148,8 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
       showCustomDialog(context, 'Lỗi', 'Số điện thoại không hợp lệ.', true);
     } else if (isMale == null) {
       showCustomDialog(context, 'Lỗi', 'Bạn chưa chọn "Giới tính".', true);
+    } else if (isMyTextFormFieldChanged && isPhoneNumberVerified == false) {
+      showCustomDialog(context, 'Lỗi', 'Vui lòng xác thực mã OTP', true);
     } else if (AuthProvider.userModel != null &&
         AuthProvider.userModel?.customer != null) {
       final customerID = AuthProvider.userModel?.customer?.customerID;
@@ -139,6 +221,8 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
       showCustomDialog(context, 'Lỗi', 'Số điện thoại không hợp lệ.', true);
     } else if (isMale == null) {
       showCustomDialog(context, 'Lỗi', 'Bạn chưa chọn "Giới tính".', true);
+    } else if (isPhoneNumberVerified == false) {
+      showCustomDialog(context, 'Lỗi', 'Vui lòng xác thực mã otp', true);
     } else {
       showDialog(
         context: context,
@@ -209,17 +293,13 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
   }
 
   String? validatePhoneNumber(String? value) {
-    String pattern = r'(^(?:[+0]9)?[0-9]{10,11}$)';
+    // String pattern = r'(^(?:[+0]9)?[0-9]{10,11}$)';
+    String pattern = r'^\+84[0-9]{9,10}$';
     RegExp regex = RegExp(pattern);
 
     if (value == null || !regex.hasMatch(value)) {
       return 'Số điện thoại không hợp lệ';
     }
-
-    if (value.length > 11) {
-      return 'Số điện thoại không được quá 11 số';
-    }
-
     return null;
   }
 
@@ -229,7 +309,6 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
     authProvider = Provider.of<AuthProvider>(context);
     return AppBarMain(
       titleAppbar: 'Thông tin cá nhân',
-      // isCart: true,
       leading: GestureDetector(
         onTap: () {
           Navigator.of(context).pop();
@@ -249,6 +328,22 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      Center(
+                        child: Container(
+                          width: 110,
+                          padding: EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(14),
+                              color: Colors.white),
+                          child: Center(
+                              child: Text(
+                            'Chưa xác thực',
+                            style: TextStyles.defaultStyle.bold
+                                .setColor(Colors.red),
+                          )),
+                        ),
+                      ),
+                      SizedBox(height: 10),
                       Center(
                         child: Stack(
                           children: [
@@ -328,13 +423,42 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                         'Số điện thoại',
                         style: TextStyles.h5.bold,
                       ),
+                      SizedBox(height: 5),
+                      Text(
+                        'VD: 0916xxxxxx thì bạn nhập +84916xxxxxx',
+                        style: TextStyles.defaultStyle
+                            .setColor(ColorPalette.textHide),
+                      ),
                       SizedBox(height: 10),
+
                       MyTextFormField(
+                        suffixIcon: isPhoneNumberVerified
+                            ? Icon(
+                                FontAwesomeIcons.check,
+                                color: Colors.green,
+                              )
+                            : null,
+                        onChanged: (value) {
+                          phone = value;
+                          setState(() {
+                            isMyTextFormFieldChanged = true;
+                          });
+                        },
                         autovalidateMode: AutovalidateMode.onUserInteraction,
                         controller: phoneController,
                         hintText: 'Số điện thoại',
-                        keyboardType: TextInputType.number,
+                        keyboardType: TextInputType.phone,
                         validator: validatePhoneNumber,
+                      ),
+                      SizedBox(height: 10),
+                      ButtonWidget(
+                        onTap: () {
+                          sendOTP();
+                          print('${phoneController.text}');
+                        },
+                        title: 'Gửi otp',
+                        size: 18,
+                        width: 200,
                       ),
                       SizedBox(height: 10),
                       Text(
@@ -393,6 +517,22 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      Center(
+                        child: Container(
+                          width: 100,
+                          padding: EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(14),
+                              color: Colors.white),
+                          child: Center(
+                              child: Text(
+                            'Đã xác thực',
+                            style: TextStyles.defaultStyle.bold
+                                .setColor(Colors.green),
+                          )),
+                        ),
+                      ),
+                      SizedBox(height: 10),
                       Center(
                         child: Stack(
                           children: [
@@ -472,14 +612,45 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                         'Số điện thoại',
                         style: TextStyles.h5.bold,
                       ),
+                      SizedBox(height: 5),
+                      Text(
+                        'VD: 0916xxxxxx thì bạn nhập +84916xxxxxx',
+                        style: TextStyles.defaultStyle
+                            .setColor(ColorPalette.textHide),
+                      ),
                       SizedBox(height: 10),
+
                       MyTextFormField(
+                        suffixIcon: isPhoneNumberVerified
+                            ? Icon(
+                                FontAwesomeIcons.check,
+                                color: Colors.green,
+                              )
+                            : null,
+                        onChanged: (value) {
+                          phone = value;
+                          setState(() {
+                            isMyTextFormFieldChanged = true;
+                          });
+                        },
                         autovalidateMode: AutovalidateMode.onUserInteraction,
                         controller: phoneController,
                         hintText: 'Số điện thoại',
-                        keyboardType: TextInputType.number,
+                        keyboardType: TextInputType.phone,
                         validator: validatePhoneNumber,
                       ),
+                      SizedBox(height: 10),
+                      isMyTextFormFieldChanged
+                          ? ButtonWidget(
+                              onTap: () {
+                                sendOTP();
+                                print('${phoneController.text}');
+                              },
+                              title: 'Gửi otp',
+                              size: 18,
+                              width: 200,
+                            )
+                          : Container(),
                       SizedBox(height: 10),
                       Text(
                         'Giới tính',

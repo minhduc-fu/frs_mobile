@@ -68,6 +68,33 @@ class ApiProductDetail {
     }
   }
 
+  static Future<Map<String, List<int>>>
+      getOrderRentDetailByProductIDAndOrderRentStatusRenting(
+          int productID) async {
+    final url = Uri.parse(
+        'http://fashionrental.online:8080/orderrentdetail/$productID/date');
+    try {
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        Map<String, dynamic> data = json.decode(response.body);
+
+        if (data.containsKey("startDate") && data.containsKey("endDate")) {
+          List<int> startDate = List<int>.from(data["startDate"]);
+          List<int> endDate = List<int>.from(data["endDate"]);
+          return {"startDate": startDate, "endDate": endDate};
+        } else {
+          // Handle the case when the response structure is not as expected
+          return {};
+        }
+      } else {
+        print('Error: ${response.statusCode}');
+        return {};
+      }
+    } catch (e) {
+      throw Exception('Error: $e');
+    }
+  }
+
   // static Future<void> createFeedbackImg(int feedBackID, ){
 
   // }

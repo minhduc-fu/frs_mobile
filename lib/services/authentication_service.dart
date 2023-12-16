@@ -401,10 +401,6 @@ class AuthenticationService {
       int accountID, int amount, String orderInfo) async {
     final url = Uri.parse(
         'http://fashionrental.online:8080/VNPaycontroller/submitOrder?accountID=$accountID&amount=$amount&orderInfo=$orderInfo');
-    // final Map<String, dynamic> requestData = {
-    //   'amount': amount,
-    //   'orderInfo': orderInfo,
-    // };
     try {
       final response = await http.post(url);
 

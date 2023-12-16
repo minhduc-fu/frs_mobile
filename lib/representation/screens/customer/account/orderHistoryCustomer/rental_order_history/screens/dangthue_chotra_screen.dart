@@ -462,31 +462,49 @@ class _DangthueChotraScreenState extends State<DangthueChotraScreen> {
                           GestureDetector(
                             onTap: selectImage,
                             child: Container(
-                              height: 80,
-                              width: 80,
-                              child: Padding(
-                                padding: const EdgeInsets.all(10.0),
-                                child: Column(
-                                  children: [
-                                    Icon(FontAwesomeIcons.camera),
-                                    Text(
-                                      'Thêm',
-                                      style: TextStyles.defaultStyle,
-                                    ),
-                                    Text(
-                                      'hình ảnh',
-                                      style: TextStyles.defaultStyle,
-                                    )
-                                  ],
-                                ),
-                              ),
+                              padding: EdgeInsets.all(10),
                               decoration: BoxDecoration(
-                                border:
-                                    Border.all(color: ColorPalette.textHide),
-                                borderRadius:
-                                    BorderRadius.circular(kDefaultCircle14),
+                                border: Border.all(color: Colors.grey),
+                                borderRadius: BorderRadius.circular(14),
+                              ),
+                              height: 80,
+                              width: double.infinity,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(FontAwesomeIcons.camera, size: 20),
+                                  SizedBox(height: 10),
+                                  Text('Thêm Hình ảnh'),
+                                ],
                               ),
                             ),
+                            // Container(
+                            //   height: 80,
+                            //   width: 80,
+                            //   child: Padding(
+                            //     padding: const EdgeInsets.all(10.0),
+                            //     child: Column(
+                            //       children: [
+                            //         Icon(FontAwesomeIcons.camera),
+                            //         Text(
+                            //           'Thêm',
+                            //           style: TextStyles.defaultStyle,
+                            //         ),
+                            //         Text(
+                            //           'hình ảnh',
+                            //           style: TextStyles.defaultStyle,
+                            //         )
+                            //       ],
+                            //     ),
+                            //   ),
+                            //   decoration: BoxDecoration(
+                            //     border:
+                            //         Border.all(color: ColorPalette.textHide),
+                            //     borderRadius:
+                            //         BorderRadius.circular(kDefaultCircle14),
+                            //   ),
+                            // ),
                           ),
                         ],
                       ),

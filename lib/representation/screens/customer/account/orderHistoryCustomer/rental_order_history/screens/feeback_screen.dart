@@ -296,7 +296,6 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                               SizedBox(width: 10),
                               RatingBar(
                                 itemSize: 18,
-                                // initialRating: ratingProduct,
                                 initialRating: product.ratingFeedback!,
                                 minRating: 1,
                                 direction: Axis.horizontal,
@@ -308,13 +307,11 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                                   full: Icon(
                                     FontAwesomeIcons.solidStar,
                                     color: Colors.amber,
-                                    size: 18,
                                   ),
                                   half: Icon(FontAwesomeIcons.solidStar),
                                   empty: Icon(
                                     FontAwesomeIcons.star,
                                     color: Colors.amber,
-                                    size: 18,
                                   ),
                                 ),
                                 onRatingUpdate: (rating) {

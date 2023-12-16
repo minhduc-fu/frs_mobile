@@ -10,14 +10,12 @@ import 'package:frs_mobile/representation/widgets/button_widget.dart';
 import 'package:frs_mobile/services/authentication_service.dart';
 import 'package:frs_mobile/services/authprovider.dart';
 
-import '../../../core/constants/dismension_constants.dart';
-
-class ConfirmMethodPayment extends StatefulWidget {
+class RechargeScreen extends StatefulWidget {
   @override
-  State<ConfirmMethodPayment> createState() => _ConfirmMethodPaymentState();
+  State<RechargeScreen> createState() => _RechargeScreenState();
 }
 
-class _ConfirmMethodPaymentState extends State<ConfirmMethodPayment> {
+class _RechargeScreenState extends State<RechargeScreen> {
   TextEditingController _moneyToDeposit = TextEditingController();
   late AuthProvider authProvider;
 
@@ -29,7 +27,7 @@ class _ConfirmMethodPaymentState extends State<ConfirmMethodPayment> {
         amount > 0 &&
         validateAmount(_moneyToDeposit.text) == null) {
       final response = await AuthenticationService.submitOrder(
-          accountID, amount, 'Nap $amount vnd');
+          accountID, amount, 'nap tien');
 
       if (response != null) {
         Navigator.of(context).push(CupertinoPageRoute(
@@ -83,6 +81,7 @@ class _ConfirmMethodPaymentState extends State<ConfirmMethodPayment> {
           children: [
             Expanded(
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text('Số tiền cần nạp', style: TextStyles.h5.bold),
                   SizedBox(height: 10),

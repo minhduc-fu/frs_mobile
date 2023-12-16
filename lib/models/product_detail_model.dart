@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:frs_mobile/models/detail_item.dart';
 import 'category.dart';
 import 'rental_price_model.dart';
 
@@ -11,6 +11,7 @@ class ProductDetailModel {
   String productCondition;
   String description;
   String term;
+  String? serialNumber;
   double price;
   String status;
   String checkType;
@@ -22,6 +23,7 @@ class ProductDetailModel {
   DateTime? startDate;
   DateTime? endDate;
   double? selectedRentPrice;
+  List<DetailItem>? details;
 
   ProductDetailModel({
     required this.productID,
@@ -31,6 +33,7 @@ class ProductDetailModel {
     required this.productCondition,
     required this.description,
     required this.term,
+    this.serialNumber,
     required this.price,
     required this.status,
     required this.checkType,
@@ -42,6 +45,7 @@ class ProductDetailModel {
     this.endDate,
     this.startDate,
     this.selectedRentPrice,
+    this.details,
   });
   String getBrandName() {
     switch (category!.categoryID) {
@@ -131,6 +135,18 @@ class ProductDetailModel {
         );
       }).toList();
     }
+
+    final List<dynamic>? detailsJson = json['details'];
+    List<DetailItem> productDetails = [];
+    if (detailsJson != null) {
+      productDetails = detailsJson.map((detail) {
+        return DetailItem(
+          productDetailID: detail['productDetailID'],
+          detailName: detail['detailName'],
+          value: detail['value'],
+        );
+      }).toList();
+    }
     return ProductDetailModel(
       productID: json['productID'],
       productName: json['productName'],
@@ -139,6 +155,7 @@ class ProductDetailModel {
       productCondition: json['productCondition'],
       description: json['description'],
       term: json['term'] != null ? json['term'] : '',
+      serialNumber: json['serialNumber'],
       price: json['price'].toDouble(),
       status: json['status'],
       checkType: json['checkType'],
@@ -150,6 +167,7 @@ class ProductDetailModel {
       rentalPrices: rentalPrices,
       startDate: null,
       endDate: null,
+      details: productDetails,
     );
   }
 }

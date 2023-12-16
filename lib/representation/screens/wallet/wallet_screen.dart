@@ -4,6 +4,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:frs_mobile/core/constants/color_constants.dart';
 import 'package:frs_mobile/core/constants/textstyle_constants.dart';
 import 'package:frs_mobile/representation/screens/wallet/transaction_history/transaction_history.dart';
+import 'package:frs_mobile/representation/screens/wallet/widgets/withdraw_method.dart';
 import 'package:frs_mobile/services/authentication_service.dart';
 import 'package:frs_mobile/services/authprovider.dart';
 import 'package:intl/intl.dart';
@@ -138,14 +139,23 @@ class _WalletScreenState extends State<WalletScreen> {
             ),
             SizedBox(height: 20),
             ButtonWidget(
-              title: 'Nạp tiền vào ví',
+              title: 'Nạp tiền',
               onTap: () {
                 PaymentMethod.showPaymentMethodDialog(context);
               },
               height: 70,
               size: 18,
             ),
-            SizedBox(height: 20)
+            SizedBox(height: 20),
+            ButtonWidget(
+              title: 'Rút tiền',
+              onTap: () {
+                WithdrawMethod.showPaymentMethodDialog(context);
+              },
+              height: 70,
+              size: 18,
+            ),
+            SizedBox(height: 20),
           ],
         ),
       ),
