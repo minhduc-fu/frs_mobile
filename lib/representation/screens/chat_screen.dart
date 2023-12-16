@@ -14,6 +14,7 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   Widget build(BuildContext context) {
     return AppBarMain(
+        titleAppbar: 'Chat',
         leading: FractionallySizedBox(
           widthFactor: 0.8,
           heightFactor: 0.8,
