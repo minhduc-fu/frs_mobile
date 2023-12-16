@@ -74,13 +74,13 @@ class AboutUs extends StatelessWidget {
                   ],
                 ),
               ),
-              SizedBox(height: 10),
+              SizedBox(height: 11),
               Text(
                 'Đặc điểm về con người chúng tôi',
                 style: TextStyles.h5.bold,
                 textAlign: TextAlign.center,
               ),
-              SizedBox(height: 10),
+              SizedBox(height: 11),
               Row(
                 children: [
                   Expanded(
