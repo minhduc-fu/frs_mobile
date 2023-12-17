@@ -3,6 +3,7 @@ import '../../utils/asset_helper.dart';
 import '../../utils/image_helper.dart';
 import '../widgets/app_bar_main.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:frs_mobile/services/authprovider.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
@@ -16,9 +17,11 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void initState() {
     super.initState();
+    int? accountID = AuthProvider.userModel?.accountID;
+    print('code : $accountID');
     controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..loadRequest(Uri.parse('http')); // thay thế url của cậu vào
+      ..loadRequest(Uri.parse('http://fashionrental.online/$accountID/chat')); // thay thế url của cậu vào
   }
 
   @override
