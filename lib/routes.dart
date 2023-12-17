@@ -7,6 +7,7 @@ import 'package:frs_mobile/representation/screens/customer/account/address/addre
 import 'package:frs_mobile/representation/screens/customer/account/address/new_address_screen.dart';
 import 'package:frs_mobile/representation/screens/customer/account/contact_support/contact_support_screen.dart';
 import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/rental_order_history/screens/confirm_order_rent_screen.dart';
+import 'package:frs_mobile/representation/screens/notification_screen.dart';
 import 'package:frs_mobile/representation/screens/wallet/wallet_screen.dart';
 import 'representation/screens/guest/account_screen.dart';
 import 'representation/screens/cart/main_cart_screen.dart';
@@ -61,4 +62,5 @@ final Map<String, WidgetBuilder> routes = {
   TermsOfService.routeName: (context) => TermsOfService(),
   AboutUs.routeName: (context) => AboutUs(),
   ContactSupportScreen.routeName: (context) => ContactSupportScreen(),
+  NotificationScreen.routeName: (context) => NotificationScreen(),
 };

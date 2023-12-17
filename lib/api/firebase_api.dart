@@ -18,8 +18,8 @@ class FirebaseApi {
     // Register the onBackgroundMessage handler
     FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 
-
-    final url = Uri.parse('http://fashionrental.online:8080/notification/register');
+    final url =
+        Uri.parse('http://fashionrental.online:8080/notification/register');
 
     int? accountID = AuthProvider.userModel?.accountID;
     print('accountid: $accountID'); // Updated this line
@@ -37,6 +37,23 @@ class FirebaseApi {
     } catch (e) {
       print(e);
       print('error: $e');
+    }
+  }
+
+  static Future<List<dynamic>> getNotifications(int accountID) async {
+    final url =
+        Uri.parse('http://fashionrental.online:8080/notification/$accountID');
+
+    try {
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        return json.decode(response.body);
+      } else {
+        throw Exception('Failed to load notifications');
+      }
+    } catch (e) {
+      print('Error fetching notifications: $e');
+      throw Exception('Failed to load notifications');
     }
   }
 }
