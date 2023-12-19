@@ -35,21 +35,24 @@ class AuthService {
       if (googleUser == null) {
         throw Exception('Đăng nhập bằng Google đã bị hủy bỏ.');
       }
+      print('googleUser accessToken: ${googleUser.id}');
+
       final GoogleSignInAuthentication googleAuth =
           await googleUser.authentication;
-      print('tokenGoogleLogin: ${googleAuth.accessToken}');
+      print('googleAuth accessToken: ${googleAuth.accessToken}');
+      print('googleAuth idToken: ${googleAuth.idToken}');
       final credential = GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
-      UserCredential userCredential =
-          await FirebaseAuth.instance.signInWithCredential(credential);
+      // UserCredential userCredential =
+      //     await FirebaseAuth.instance.signInWithCredential(credential);
 
-      // Lấy thông tin user từ UserCredential
-      User? user = userCredential.user;
+      // // Lấy thông tin user từ UserCredential
+      // User? user = userCredential.user;
 
       Map<String, dynamic>? response =
-          await AuthenticationService.checkLoginGoogle(googleAuth.accessToken!);
+          await AuthenticationService.checkLoginGoogle(googleAuth.idToken!);
       if (response != null) {
         print('Đăng nhập thành công');
       } else {
