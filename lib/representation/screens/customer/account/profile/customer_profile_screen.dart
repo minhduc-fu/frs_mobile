@@ -476,7 +476,7 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                             alignLeft: false,
                           ),
                           Container(
-                            width: 260,
+                            width: 250,
                             child: MyTextFormField(
                               suffixIcon: isPhoneNumberVerified
                                   ? Icon(
@@ -687,7 +687,7 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                             alignLeft: false,
                           ),
                           Container(
-                            width: 260,
+                            width: 250,
                             child: MyTextFormField(
                               suffixIcon: isPhoneNumberVerified
                                   ? Icon(

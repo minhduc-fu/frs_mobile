@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:frs_mobile/api/firebase_api.dart';
 import 'package:frs_mobile/services/address_provider.dart';
 import 'package:frs_mobile/services/rental_cart_provider.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -23,10 +24,13 @@ void main() async {
   // khởi tạo LoalStorageHelper
   await LocalStorageHelper.initLocalStorageHelper();
   await LocalStorageHelper.initSearchBox();
-  await Hive.openBox('userBox');
+  var userBox = await Hive.openBox('userBox');
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  if (userBox.isNotEmpty) {
+    await FirebaseApi.initNotifications();
+  }
 // Khởi tạo định dạng ngôn ngữ "vi_VN"
   await initializeDateFormatting('vi_VN', null);
 

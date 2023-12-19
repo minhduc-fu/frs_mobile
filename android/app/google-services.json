@@ -12,7 +12,12 @@
           "package_name": "com.example.demo_frs_app"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "1062952416923-135gn0sd869b4m5985f44gorpllgt295.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBMGSNW-61ZhVHhDYrMmqcrGM2f2lcXvuE"
@@ -20,7 +25,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1062952416923-135gn0sd869b4m5985f44gorpllgt295.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

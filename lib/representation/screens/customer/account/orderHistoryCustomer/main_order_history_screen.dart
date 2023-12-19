@@ -35,7 +35,6 @@ class _MainOrderHistoryScreen extends State<MainOrderHistoryScreen>
   @override
   Widget build(BuildContext context) {
     return AppBarMain(
-      // isCart: true,
       leading: GestureDetector(
         onTap: () {
           Navigator.of(context).pop();

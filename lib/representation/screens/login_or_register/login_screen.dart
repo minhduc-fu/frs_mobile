@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:frs_mobile/core/constants/my_textformfield.dart';
+import 'package:frs_mobile/services/auth_service.dart';
 import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 import '../../../core/constants/color_constants.dart';
@@ -331,7 +332,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                   // google  sign in buttons
                   GestureDetector(
-                    onTap: () {},
+                    onTap: () => AuthService().signInWithGoogle(),
                     child:
                         ImageHelper.loadFromAsset(AssetHelper.imageLogoGoogle),
                   ),

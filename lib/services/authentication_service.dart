@@ -38,6 +38,28 @@ class AuthenticationService {
     }
   }
 
+  static Future<Map<String, dynamic>?> checkLoginGoogle(String token) async {
+    final url = Uri.parse('http://fashionrental.online:8080/account/login-gg');
+
+    try {
+      final response = await http.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({'token': token}),
+      );
+
+      if (response.statusCode == 200) {
+        return json.decode(response.body);
+      } else {
+        return null;
+      }
+    } catch (e) {
+      throw Exception('Error: $e');
+    }
+  }
+
   static Future<Map<String, dynamic>?> createAccount(
       String email, String password, int roleID) async {
     final url = Uri.parse(
