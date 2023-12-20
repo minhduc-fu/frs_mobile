@@ -1,8 +1,10 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:frs_mobile/models/user_model.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:frs_mobile/services/authprovider.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:hive/hive.dart';
 
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   print("Handling a background message");
@@ -24,15 +26,21 @@ class FirebaseApi {
     final url =
         Uri.parse('http://fashionrental.online:8080/notification/register');
 
-    int? accountID = AuthProvider.userModel?.accountID;
-    print('accountid: $accountID'); // Updated this line
+    // int? accountID = AuthProvider.userModel?.accountID;
+    var box = await Hive.openBox('userBox');
+    int? accountId = box.get('user') != null
+        ? UserModel.fromJson(json.decode(box.get('user'))).accountID
+        : null;
+    // print('accountid: $accountID');
+    print('accountid: $accountId');
 
     try {
       final response = await http.post(
         url,
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
-          'accountID': accountID,
+          // 'accountID': accountID,
+          'accountID': accountId,
           'fcm': FCMToken,
         }),
       );

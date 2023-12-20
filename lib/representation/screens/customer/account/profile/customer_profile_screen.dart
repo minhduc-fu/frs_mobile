@@ -125,7 +125,7 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                 builder: (context) => OTPScreen(
                   verificationId: verificationId,
                   setPhoneNumberVerified: setPhoneNumberVerified,
-                  phone: phoneController.text,
+                  phone: '${selectedCountry}${phone}',
                 ),
               ),
             );
@@ -145,8 +145,8 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
       showCustomDialog(context, 'Lỗi', 'Bạn chưa nhập "Họ và tên".', true);
     } else if (validateFullName(fullNameController.text) != null) {
       showCustomDialog(context, 'Lỗi', 'Họ và tên không hợp lệ.', true);
-    } else if (phoneController.text.isEmpty) {
-      showCustomDialog(context, 'Lỗi', 'Bạn chưa nhập "Số điện thoại".', true);
+      // } else if (phoneController.text.isEmpty) {
+      //   showCustomDialog(context, 'Lỗi', 'Bạn chưa nhập "Số điện thoại".', true);
       // } else if (validatePhoneNumber(phoneController.text) != null) {
       //   showCustomDialog(context, 'Lỗi', 'Số điện thoại không hợp lệ.', true);
     } else if (isMale == null) {
@@ -157,7 +157,7 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
         AuthProvider.userModel?.customer != null) {
       final customerID = AuthProvider.userModel?.customer?.customerID;
       final fullName = fullNameController.text;
-      final phone = phoneController.text;
+      // final phone = phoneController.text;
       final sex = isMale;
       showDialog(
         context: context,
@@ -176,8 +176,10 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
           imageUrl = await AddImageCloud().uploadImageToStorage(
               'avatarCustomer', _image!, AuthProvider.userModel!.accountID);
         }
+        // final response = await AuthenticationService.updateCustomer(
+        //     customerID!, imageUrl!, fullName, phone, sex!);
         final response = await AuthenticationService.updateCustomer(
-            customerID!, imageUrl!, fullName, phone, sex!);
+            customerID!, imageUrl!, fullName, sex!);
         Navigator.pop(context);
 
         if (response != null) {
@@ -240,6 +242,11 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
       try {
         imageUrl = await AddImageCloud().uploadImageToStorage(
             'avatarCustomer', _image!, AuthProvider.userModel!.accountID);
+        print('${accountID}');
+        print('${fullNameController.text}');
+        print('${selectedCountry}${phoneController.text}');
+        print('${isMale}');
+        print('${imageUrl}');
         final response = await AuthenticationService.createCustomer(
             accountID!,
             fullNameController.text,
@@ -248,29 +255,69 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
             imageUrl!);
         Navigator.pop(context);
         if (response != null) {
-          final responseStatus =
-              await AuthenticationService.updateStatus(accountID!, "VERIFIED");
-          if (responseStatus != null) {
-            final updateUserModel = AuthProvider.userModel?.copyWith(
-                customer: CustomerModel.fromJson(response), status: 'VERIFIED');
-            if (updateUserModel != null) {
-              authProvider.setUser(updateUserModel);
-              var box = Hive.box('userBox');
-              box.put('user', json.encode(updateUserModel.toJson()));
-              setState(() {
-                fullNameController.text =
-                    AuthProvider.userModel?.customer?.fullName ?? '';
-                phoneController.text =
-                    AuthProvider.userModel?.customer?.phone ?? '';
-                isMale = AuthProvider.userModel?.customer?.sex ?? null;
-                imageUrl = AuthProvider.userModel?.customer?.avatarUrl ?? '';
-              });
+          if (response.containsKey('error')) {
+            final errorMessage = response['error'];
+
+            if (errorMessage == 'This phone number is used by someone else') {
+              showCustomDialog(
+                  context, 'Lỗi', 'Số điện thoại này đã được sử dụng.', true);
+            } else if (errorMessage == 'This account had been registered') {
+              showCustomDialog(context, 'Lỗi',
+                  'Tài khoản này đã được đăng ký Customer.', true);
+            } else {
+              showCustomDialog(
+                  context, 'Lỗi', 'Xin lỗi! Xác minh không thành công.', true);
             }
+          } else {
+            final responseStatus = await AuthenticationService.updateStatus(
+                accountID!, "VERIFIED");
+            if (responseStatus != null) {
+              final updateUserModel = AuthProvider.userModel?.copyWith(
+                  customer: CustomerModel.fromJson(response),
+                  status: 'VERIFIED');
+              if (updateUserModel != null) {
+                authProvider.setUser(updateUserModel);
+                var box = Hive.box('userBox');
+                box.put('user', json.encode(updateUserModel.toJson()));
+                setState(() {
+                  fullNameController.text =
+                      AuthProvider.userModel?.customer?.fullName ?? '';
+                  phoneController.text =
+                      AuthProvider.userModel?.customer?.phone ?? '';
+                  isMale = AuthProvider.userModel?.customer?.sex ?? null;
+                  imageUrl = AuthProvider.userModel?.customer?.avatarUrl ?? '';
+                });
+              }
+            }
+            print('ok');
+            print(AuthProvider.userModel?.status);
+            showCustomDialog(context, 'Thành công',
+                'Chúc mừng bạn đã xác minh thành công!', true);
           }
-          print('ok');
-          print(AuthProvider.userModel?.status);
-          showCustomDialog(context, 'Thành công',
-              'Chúc mừng bạn đã xác minh thành công!', true);
+
+          // final responseStatus =
+          //     await AuthenticationService.updateStatus(accountID!, "VERIFIED");
+          // if (responseStatus != null) {
+          //   final updateUserModel = AuthProvider.userModel?.copyWith(
+          //       customer: CustomerModel.fromJson(response), status: 'VERIFIED');
+          //   if (updateUserModel != null) {
+          //     authProvider.setUser(updateUserModel);
+          //     var box = Hive.box('userBox');
+          //     box.put('user', json.encode(updateUserModel.toJson()));
+          //     setState(() {
+          //       fullNameController.text =
+          //           AuthProvider.userModel?.customer?.fullName ?? '';
+          //       phoneController.text =
+          //           AuthProvider.userModel?.customer?.phone ?? '';
+          //       isMale = AuthProvider.userModel?.customer?.sex ?? null;
+          //       imageUrl = AuthProvider.userModel?.customer?.avatarUrl ?? '';
+          //     });
+          //   }
+          // }
+          // print('ok');
+          // print(AuthProvider.userModel?.status);
+          // showCustomDialog(context, 'Thành công',
+          //     'Chúc mừng bạn đã xác minh thành công!', true);
         } else {
           print('faild');
           showCustomDialog(
@@ -432,7 +479,7 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                       ),
                       SizedBox(height: 5),
                       Text(
-                        'VD: 0916xxxxxx thì bạn nhập +84916xxxxxx',
+                        'VD: 0916xxxxxx thì bạn nhập +916xxxxxx',
                         style: TextStyles.defaultStyle
                             .setColor(ColorPalette.textHide),
                       ),
@@ -488,6 +535,7 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                                 phone = value;
                                 setState(() {
                                   isMyTextFormFieldChanged = true;
+                                  isPhoneNumberVerified = false;
                                 });
                               },
                               autovalidateMode:
@@ -663,66 +711,85 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                         'Số điện thoại',
                         style: TextStyles.h5.bold,
                       ),
-                      SizedBox(height: 5),
-                      Text(
-                        'VD: 0916xxxxxx thì bạn nhập +84916xxxxxx',
-                        style: TextStyles.defaultStyle
-                            .setColor(ColorPalette.textHide),
-                      ),
+                      // SizedBox(height: 5),
+                      // Text(
+                      //   'VD: 0916xxxxxx thì bạn nhập +84916xxxxxx',
+                      //   style: TextStyles.defaultStyle
+                      //       .setColor(ColorPalette.textHide),
+                      // ),
                       SizedBox(height: 10),
+                      MyTextFormField(
+                        enable: false,
+                        // suffixIcon: isPhoneNumberVerified
+                        //     ? Icon(
+                        //         FontAwesomeIcons.check,
+                        //         color: Colors.green,
+                        //       )
+                        //     : null,
+                        // onChanged: (value) {
+                        //   phone = value;
+                        //   setState(() {
+                        //     isMyTextFormFieldChanged = true;
+                        //     isPhoneNumberVerified = false;
+                        //   });
+                        // },
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        controller: phoneController,
+                        hintText: 'Số điện thoại',
+                        keyboardType: TextInputType.phone,
+                        validator: validatePhoneNumber,
+                      ),
+                      // Row(
+                      //   children: [
+                      //     CountryCodePicker(
+                      //       onChanged: (CountryCode code) {
+                      //         setState(() {
+                      //           selectedCountry = code;
+                      //         });
+                      //       },
+                      //       initialSelection: 'VN',
+                      //       favorite: ['+84', 'VN'],
+                      //       showCountryOnly: false,
+                      //       flagWidth: 12,
+                      //       showOnlyCountryWhenClosed: false,
+                      //       alignLeft: false,
+                      //     ),
+                      //     MyTextFormField(
 
-                      Row(
-                        children: [
-                          CountryCodePicker(
-                            onChanged: (CountryCode code) {
-                              setState(() {
-                                selectedCountry = code;
-                              });
-                            },
-                            initialSelection: 'VN',
-                            favorite: ['+84', 'VN'],
-                            showCountryOnly: false,
-                            flagWidth: 12,
-                            showOnlyCountryWhenClosed: false,
-                            alignLeft: false,
-                          ),
-                          Container(
-                            width: 250,
-                            child: MyTextFormField(
-                              suffixIcon: isPhoneNumberVerified
-                                  ? Icon(
-                                      FontAwesomeIcons.check,
-                                      color: Colors.green,
-                                    )
-                                  : null,
-                              onChanged: (value) {
-                                phone = value;
-                                setState(() {
-                                  isMyTextFormFieldChanged = true;
-                                });
-                              },
-                              autovalidateMode:
-                                  AutovalidateMode.onUserInteraction,
-                              controller: phoneController,
-                              hintText: 'Số điện thoại',
-                              keyboardType: TextInputType.phone,
-                              validator: validatePhoneNumber,
-                            ),
-                          ),
-                        ],
-                      ),
+                      //       suffixIcon: isPhoneNumberVerified
+                      //           ? Icon(
+                      //               FontAwesomeIcons.check,
+                      //               color: Colors.green,
+                      //             )
+                      //           : null,
+                      //       onChanged: (value) {
+                      //         phone = value;
+                      //         setState(() {
+                      //           isMyTextFormFieldChanged = true;
+                      //           isPhoneNumberVerified = false;
+                      //         });
+                      //       },
+                      //       autovalidateMode:
+                      //           AutovalidateMode.onUserInteraction,
+                      //       controller: phoneController,
+                      //       hintText: 'Số điện thoại',
+                      //       keyboardType: TextInputType.phone,
+                      //       validator: validatePhoneNumber,
+                      //     ),
+                      //   ],
+                      // ),
                       SizedBox(height: 10),
-                      isMyTextFormFieldChanged
-                          ? ButtonWidget(
-                              onTap: () {
-                                sendOTP();
-                                print('${phoneController.text}');
-                              },
-                              title: 'Gửi otp',
-                              size: 18,
-                              width: 200,
-                            )
-                          : Container(),
+                      // isMyTextFormFieldChanged
+                      //     ? ButtonWidget(
+                      //         onTap: () {
+                      //           sendOTP();
+                      //           print('${phoneController.text}');
+                      //         },
+                      //         title: 'Gửi otp',
+                      //         size: 18,
+                      //         width: 200,
+                      //       )
+                      //     : Container(),
                       SizedBox(height: 10),
                       Text(
                         'Giới tính',

@@ -13,6 +13,7 @@ class MyTextFormField extends StatelessWidget {
   final void Function(String)? onChanged;
   final TextInputType? keyboardType;
   final AutovalidateMode? autovalidateMode;
+  final bool? enable;
 
   const MyTextFormField({
     super.key,
@@ -25,11 +26,13 @@ class MyTextFormField extends StatelessWidget {
     this.keyboardType,
     this.autovalidateMode,
     this.onChanged,
+    this.enable = true,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      enabled: enable,
       obscureText: obscureText!,
       keyboardType: keyboardType,
       controller: controller,
@@ -40,6 +43,10 @@ class MyTextFormField extends StatelessWidget {
         hintText: hintText,
         prefixIcon: prefixIcon,
         suffixIcon: suffixIcon,
+        disabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(kDefaultCircle14),
+          borderSide: BorderSide(color: Colors.grey),
+        ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(kDefaultCircle14),
           borderSide: BorderSide(color: ColorPalette.textHide),

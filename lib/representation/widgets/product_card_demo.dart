@@ -157,8 +157,12 @@ class _ProductCardDemoState extends State<ProductCardDemo> {
     for (var feedback in feedbacks) {
       totalRating += feedback.ratingPoint;
     }
+    double averageRating = totalRating / feedbacks.length;
 
-    return totalRating / feedbacks.length;
+    double roundedAverageRating =
+        double.parse(averageRating.toStringAsFixed(1));
+
+    return roundedAverageRating;
   }
 
   @override

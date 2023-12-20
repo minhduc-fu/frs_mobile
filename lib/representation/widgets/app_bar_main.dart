@@ -5,6 +5,7 @@ import 'package:frs_mobile/api/firebase_api.dart';
 import 'package:frs_mobile/representation/screens/notification_screen.dart';
 import 'package:frs_mobile/services/authprovider.dart';
 import 'package:badges/badges.dart' as badges;
+import 'package:frs_mobile/utils/dialog_helper.dart';
 import '../../core/constants/color_constants.dart';
 import '../../core/constants/textstyle_constants.dart';
 
@@ -27,8 +28,10 @@ class _AppBarMainState extends State<AppBarMain> {
   @override
   void initState() {
     super.initState();
-    fetchNotifications();
-    FirebaseMessaging.onMessage.listen(handleForegroundNotification);
+    if (AuthProvider.userModel != null) {
+      fetchNotifications();
+      FirebaseMessaging.onMessage.listen(handleForegroundNotification);
+    }
   }
 
   Future<void> updateNotifications() async {
@@ -85,46 +88,31 @@ class _AppBarMainState extends State<AppBarMain> {
                 child: GestureDetector(
                   onTap: () async {
                     // fetchNotifications();
-                    await Navigator.pushNamed(
-                        context, NotificationScreen.routeName);
-                    await updateNotifications();
+                    if (AuthProvider.userModel != null) {
+                      await Navigator.pushNamed(
+                          context, NotificationScreen.routeName);
+                      await updateNotifications();
+                    } else {
+                      showCustomDialog(context, "Lỗi",
+                          "Vui lòng đăng nhập vào hệ thống", true);
+                    }
                   },
-                  // child: badges.Badge(
-                  //   position: badges.BadgePosition.topEnd(top: -10, end: -12),
-                  //   showBadge: true,
-                  //   ignorePointer: false,
-                  //   onTap: () {},
-                  //   badgeContent:
-                  //       Icon(Icons.check, color: Colors.white, size: 10),
-                  //   badgeAnimation: badges.BadgeAnimation.rotation(
-                  //     animationDuration: Duration(seconds: 1),
-                  //     colorChangeAnimationDuration: Duration(seconds: 1),
-                  //     loopAnimation: false,
-                  //     curve: Curves.fastOutSlowIn,
-                  //     colorChangeAnimationCurve: Curves.easeInCubic,
-                  //   ),
-                  //   badgeStyle: badges.BadgeStyle(
-                  //     shape: badges.BadgeShape.square,
-                  //     badgeColor: Colors.blue,
-                  //     padding: EdgeInsets.all(5),
-                  //     borderRadius: BorderRadius.circular(4),
-                  //     borderSide: BorderSide(color: Colors.white, width: 2),
-                  //     borderGradient: badges.BadgeGradient.linear(
-                  //         colors: [Colors.red, Colors.black]),
-                  //     badgeGradient: badges.BadgeGradient.linear(
-                  //       colors: [Colors.blue, Colors.yellow],
-                  //       begin: Alignment.topCenter,
-                  //       end: Alignment.bottomCenter,
-                  //     ),
-                  //     elevation: 0,
-                  //   ),
-                  //   child: Text('Badge'),
-                  // )
                   child: badges.Badge(
-                    position: badges.BadgePosition.topEnd(top: 0, end: 3),
+                    showBadge: unreadNotificationCount == 0 ? false : true,
+                    // position: badges.BadgePosition.topEnd(top: 6, end: 0),
                     badgeContent: Text(
                       unreadNotificationCount.toString(),
                       style: TextStyle(color: Colors.white),
+                    ),
+                    badgeAnimation: badges.BadgeAnimation.rotation(
+                      animationDuration: Duration(seconds: 1),
+                      colorChangeAnimationDuration: Duration(seconds: 1),
+                      loopAnimation: false,
+                      curve: Curves.fastOutSlowIn,
+                      colorChangeAnimationCurve: Curves.easeInCubic,
+                    ),
+                    badgeStyle: badges.BadgeStyle(
+                      badgeColor: Colors.blue,
                     ),
                     child: Icon(
                       FontAwesomeIcons.bell,

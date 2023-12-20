@@ -25,7 +25,7 @@ class AuthenticationService {
         // cho server biết content của request là object JSON
         'Content-Type': 'application/json',
       },
-      // chuyển đổi Map<email, password> thành chuỗi JSON
+      // chuyển đổi Map<email, password> thành chuỗi JSONcrea
       // và gửi nó đến body của request POST
       body: jsonEncode({'email': email, 'password': password}),
     );
@@ -106,10 +106,54 @@ class AuthenticationService {
 
     if (response.statusCode == 200) {
       return json.decode(response.body);
-    } else {
-      return null;
+    } else if (response.statusCode == 400) {
+      final Map<String, dynamic> errorBody = json.decode(response.body);
+      final String status = errorBody['status'];
+      final String message = errorBody['message'];
+
+      // Xử lý các trường hợp cụ thể
+      if (message == 'This phone number is used by someone else') {
+        return {'error': 'This phone number is used by someone else'};
+      } else if (message == 'This account had been registered') {
+        return {'error': 'This account had been registered'};
+      } else {
+        return {'error': 'Other error'};
+      }
     }
+
+    return null;
   }
+
+  // static Future<Map<String, dynamic>?> createCustomer(
+  //   int accountID,
+  //   String fullName,
+  //   String phone,
+  //   bool sex,
+  //   String avatarUrl,
+  // ) async {
+  //   final url = Uri.parse(
+  //       'http://fashionrental.online:8080/customer/sign-up?accountID=${accountID}&fullName=${fullName}&phone=${phone}&sex=${sex}&avatarUrl=${avatarUrl}');
+
+  //   final response = await http.post(
+  //     url,
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //     body: jsonEncode({
+  //       'accountID': accountID,
+  //       'avatarUrl': avatarUrl,
+  //       'fullName': fullName,
+  //       'phone': phone,
+  //       'sex': sex,
+  //     }),
+  //   );
+
+  //   if (response.statusCode == 200) {
+  //     return json.decode(response.body);
+  //   } else {
+  //     return null;
+  //   }
+  // }
 
   static Future<Map<String, dynamic>?> updateStatus(
       int accountID, String status) async {
@@ -137,7 +181,7 @@ class AuthenticationService {
     int customerID,
     String avatarUrl,
     String fullName,
-    String phone,
+    // String phone,
     bool sex,
   ) async {
     final url = Uri.parse(
@@ -145,7 +189,7 @@ class AuthenticationService {
     final Map<String, dynamic> requestPayload = {
       'avatarUrl': avatarUrl,
       'fullName': fullName,
-      'phone': phone,
+      // 'phone': phone,
       'sex': sex,
     };
 

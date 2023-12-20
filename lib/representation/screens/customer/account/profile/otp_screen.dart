@@ -1,11 +1,9 @@
 import 'dart:async';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:frs_mobile/core/constants/color_constants.dart';
 import 'package:frs_mobile/core/constants/dismension_constants.dart';
-
 import 'package:frs_mobile/core/constants/textstyle_constants.dart';
 import 'package:frs_mobile/representation/widgets/button_widget.dart';
 import 'package:frs_mobile/utils/asset_helper.dart';
@@ -123,8 +121,6 @@ class _OTPScreenState extends State<OTPScreen> {
           child: Padding(
             padding: EdgeInsets.symmetric(vertical: 25, horizontal: 35),
             child: Column(
-              // mainAxisAlignment: MainAxisAlignment.center,
-
               children: [
                 Container(
                   width: 200,

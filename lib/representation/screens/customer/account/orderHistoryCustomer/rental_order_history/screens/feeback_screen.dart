@@ -8,6 +8,7 @@ import 'package:frs_mobile/core/constants/dismension_constants.dart';
 import 'package:frs_mobile/core/constants/my_textformfield.dart';
 import 'package:frs_mobile/core/constants/textstyle_constants.dart';
 import 'package:frs_mobile/models/productOwner_model.dart';
+import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/main_order_history_screen.dart';
 import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/rental_order_history/models/order_rent_detail_model.dart';
 import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/rental_order_history/models/order_rent_model.dart';
 import 'package:frs_mobile/representation/screens/customer/account/orderHistoryCustomer/rental_order_history/services/api_order_rent_history.dart';
@@ -167,6 +168,9 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                 widget.order.productownerID);
           }
           Navigator.pop(context);
+          Navigator.of(context).pushReplacement(CupertinoPageRoute(
+            builder: (context) => MainOrderHistoryScreen(),
+          ));
         }
       } catch (e) {
         showCustomDialog(context, "Lỗi", e.toString(), true);

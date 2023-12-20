@@ -90,7 +90,6 @@ class _LoginScreenState extends State<LoginScreen> {
   //     Navigator.pop(context);
   //     //show error message
   //     showErrorMsg(e.code);
-
   //     // Wrong email
   //     // if (e.code == 'user-not-found') {
   //     //   // email không tồn tại
