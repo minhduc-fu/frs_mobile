@@ -2,7 +2,9 @@
 
 # FRS_MOBILE
 
-A new Flutter project.
+Platform providing services for buying, selling and renting high-end fashion brands.
+✨ Features
+
 
 ## Getting Started
 
